@@ -2,28 +2,15 @@
 #define PACMAN_MAINFORM_H
 
 #include "Application.h"
+#include "Form.h"
 
-class MainForm {
-public:
-    MainForm();
-
-    ~MainForm();
-
-    void display();
-
+class MainForm : public Form {
 private:
-    sf::RenderWindow *window;
-    sf::Event event;
+    void pollEvents() override;
 
-    bool isRunning() const;
+    void update() override;
 
-    void pollEvents();
-
-    void update();
-
-    void render();
-
-    void initWindow();
+    void render() override;
 };
 
 

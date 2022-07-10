@@ -3,7 +3,7 @@ project(Pacman)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Pacman main.cpp src/MainForm.cpp src/Application.cpp)
+add_executable(Pacman main.cpp src/MainForm.cpp src/Application.cpp src/Form.cpp)
 include_directories(/usr/local/include include)
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS})
