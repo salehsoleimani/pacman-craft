@@ -1,9 +1,9 @@
 #include <iostream>
-#include "GameForm.h"
+#include "MainForm.h"
 
 int main() {
-    GameForm game("src/map.txt");
-    game.display();
+    MainForm mainForm;
+    mainForm.display();
 
     return 0;
 }
