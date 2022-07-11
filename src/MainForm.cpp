@@ -17,5 +17,10 @@ void MainForm::update() {
 
 void MainForm::render() {
     window->clear(Application::colorBlue);
+
     window->display();
+}
+
+MainForm::~MainForm() {
+    delete textView;
 }
