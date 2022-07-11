@@ -56,7 +56,7 @@ void GameForm::initWalls(string fileName) {
 }
 
 void GameForm::initTexts() {
-    txtScore = new TextView("score\n1200", sf::Vector2f(238, 22));
+    txtScore = new TextView("score\n1200", sf::Vector2f(251, 22));
     txtRecord = new TextView("high score\n3421", sf::Vector2f(380, 22));
     txtScore->setFontSize(Application::smallFontSize);
     txtRecord->setFontSize(Application::smallFontSize);
