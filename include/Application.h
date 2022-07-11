@@ -36,6 +36,9 @@ public:
     static const int WALL_ROW;
     static const int WALL_COL;
 
+    //font
+    static const int smallFontSize;
+
     const sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
 
     //colors

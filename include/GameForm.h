@@ -15,15 +15,24 @@ public:
     GameForm(string);
 
 private:
+    //views
+    std::vector<Wall *> walls;
+    TextView *txtScore;
+    TextView *txtRecord;
+
     array<array<char, 19>, 22> board;
 
-    std::vector<Wall *> walls;
 
+    //methods
     void pollEvents() override;
 
     void update() override;
 
     void render() override;
+
+    void initWalls(string);
+
+    void initTexts();
 };
 
 #endif //PACMAN_GAMEFORM_H

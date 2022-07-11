@@ -8,6 +8,9 @@ const sf::Vector2f Application::wallSize = {30, 30};
 const int Application::WALL_ROW = 22;
 const int Application::WALL_COL = 19;
 
+const int Application::smallFontSize = 20;
+
+
 Application &Application::getInstance() {
     static Application instance;
     return instance;

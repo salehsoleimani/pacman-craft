@@ -1,6 +1,38 @@
 #include "GameForm.h"
 
 GameForm::GameForm(string fileName) {
+    //intialize wall
+    initWalls(fileName);
+    initTexts();
+}
+
+
+void GameForm::pollEvents() {
+    while (window->pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                window->close();
+                break;
+        }
+
+    }
+}
+
+void GameForm::update() {
+    pollEvents();
+}
+
+void GameForm::render() {
+    window->clear(Application::colorBlue);
+
+    for (Wall *wall: walls) wall->render(window);
+    txtRecord->render(window);
+    txtScore->render(window);
+
+    window->display();
+}
+
+void GameForm::initWalls(string fileName) {
     File file(fileName);
     file.open(ios::in);
     string line;
@@ -23,25 +55,9 @@ GameForm::GameForm(string fileName) {
 
 }
 
-void GameForm::pollEvents() {
-    while (window->pollEvent(event)) {
-        switch (event.type) {
-            case sf::Event::Closed:
-                window->close();
-                break;
-        }
-
-    }
-}
-
-void GameForm::update() {
-    pollEvents();
-}
-
-void GameForm::render() {
-    window->clear(Application::colorBlue);
-
-    for (Wall *wall: walls) wall->render(window);
-
-    window->display();
+void GameForm::initTexts() {
+    txtScore = new TextView("score\n1200", sf::Vector2f(238, 22));
+    txtRecord = new TextView("high score\n3421", sf::Vector2f(380, 22));
+    txtScore->setFontSize(Application::smallFontSize);
+    txtRecord->setFontSize(Application::smallFontSize);
 }

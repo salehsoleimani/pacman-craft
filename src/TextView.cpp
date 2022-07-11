@@ -10,7 +10,7 @@ TextView::TextView(string txt,sf::Vector2f position): View(position) {
     txtView = dynamic_cast<sf::Text *>(view);
     txtView->setFillColor(textColor);
     txtView->setPosition(position);
-    txtView->setOrigin(txtView->getLocalBounds().width/2.0f,txtView->getLocalBounds().height/2.0f);
+//    txtView->setOrigin(txtView->getLocalBounds().width/2.0f,0);
 }
 
 TextView::~TextView() {
