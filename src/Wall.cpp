@@ -1,8 +1,8 @@
 #include "Wall.h"
 
-Wall::Wall(sf::Vector2f position) : View(position) {
-    view = new sf::RectangleShape;
-    wall = dynamic_cast<sf::RectangleShape *>(view);
+Wall::Wall(sf::Vector2f position){
+    this->position = position;
+    wall = new sf::RectangleShape;
     wall->setPosition(position);
     wall->setOrigin(wall->getSize().x / 2, wall->getSize().y / 2);
     wall->setFillColor(Application::colorWall);
@@ -17,4 +17,8 @@ void Wall::update(sf::RenderTarget *target) {
 
 Wall::~Wall() {
     delete wall;
+}
+
+void Wall::render(sf::RenderTarget *target) {
+    target->draw(*wall);
 }

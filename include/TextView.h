@@ -5,17 +5,21 @@
 
 using namespace std;
 
-class TextView : public View {
+class TextView {
 public:
+    TextView(string, sf::Vector2f);
+
     ~TextView();
-
-    TextView(string,sf::Vector2f);
-
-    void update(sf::RenderTarget *) override;
 
     void setFontSize(int);
 
+    void update(sf::RenderTarget *);
+
+    void render(sf::RenderTarget *);
+
 private:
+    sf::Vector2f position;
+
     sf::Text *txtView;
     sf::Font font;
     sf::Color textColor = sf::Color::White;

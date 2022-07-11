@@ -5,19 +5,22 @@
 
 using namespace std;
 
-class Wall : public View {
+class Wall{
 public:
 
     Wall(sf::Vector2f);
 
     ~Wall();
 
-    void update(sf::RenderTarget *) override;
+    void update(sf::RenderTarget *);
+
+
+    void render(sf::RenderTarget *);
 
 private:
+    sf::Vector2f position;
 
     sf::RectangleShape *wall;
-
 };
 
 

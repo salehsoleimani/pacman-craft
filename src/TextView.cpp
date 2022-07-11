@@ -4,10 +4,10 @@ void TextView::update(sf::RenderTarget *target) {
 
 }
 
-TextView::TextView(string txt,sf::Vector2f position): View(position) {
+TextView::TextView(string txt, sf::Vector2f position){
+    this->position = position;
     font.loadFromFile("../res/fonts/bungee.ttf");
-    view = new sf::Text(txt, font);
-    txtView = dynamic_cast<sf::Text *>(view);
+    txtView = new sf::Text(txt, font);
     txtView->setFillColor(textColor);
     txtView->setPosition(position);
 //    txtView->setOrigin(txtView->getLocalBounds().width/2.0f,0);
@@ -19,4 +19,8 @@ TextView::~TextView() {
 
 void TextView::setFontSize(int fontSize) {
     txtView->setCharacterSize(fontSize);
+}
+
+void TextView::render(sf::RenderTarget *target) {
+    target->draw(*txtView);
 }
