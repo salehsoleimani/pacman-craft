@@ -1,9 +1,9 @@
 #ifndef PACMAN_TEXTVIEW_H
 #define PACMAN_TEXTVIEW_H
 
-#include "View.h"
-
 using namespace std;
+
+#include "Application.h"
 
 class TextView {
 public:
@@ -16,6 +16,8 @@ public:
     void update(sf::RenderTarget *);
 
     void render(sf::RenderTarget *);
+
+    sf::Vector2f getPosition() const;
 
 private:
     sf::Vector2f position;

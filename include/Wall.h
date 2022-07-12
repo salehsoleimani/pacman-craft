@@ -1,7 +1,7 @@
 #ifndef PACMAN_WALL_H
 #define PACMAN_WALL_H
 
-#include "View.h"
+#include "Application.h"
 
 using namespace std;
 

@@ -8,17 +8,27 @@
 
 class MainForm : public Form {
 public:
+    MainForm();
+
     ~MainForm();
 
 private:
+    TextView *btnPlay;
+    TextView *btnOptions;
+    TextView *btnQuit;
+    TextView *txtCredits;
 
-    TextView *textView;
 
     void pollEvents() override;
 
     void update() override;
 
     void render() override;
+
+    void initTexts();
+
+    void initWalls();
+
 };
 
 

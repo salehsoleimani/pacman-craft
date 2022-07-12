@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
+#include <array>
+#include "File.h"
+#include "Wall.h"
 
 using namespace std;
 
@@ -27,7 +30,7 @@ public:
     static Application &getInstance();
 
     // Window params.
-    const sf::VideoMode videoMode = {570, 782};
+    const sf::VideoMode videoMode = {570, 780};
     const int windowFrameRate = 60;
     const string appName = "Pacman";
 
@@ -38,11 +41,14 @@ public:
 
     //font
     static const int smallFontSize;
+    static const int bigFontSize;
+    static const int mediumFontSize;
 
     const sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
 
     //colors
     static const sf::Color colorBlue;
+    static const sf::Color colorCyan;
     static const sf::Color colorWall;
 
 private:

@@ -5,7 +5,7 @@
 
 class Form {
 public:
-    Form();
+    Form(string mapFileName);
 
     ~Form();
 
@@ -24,6 +24,15 @@ protected:
     virtual void render() = 0;
 
     void initWindow();
+
+private:
+    string mapFileName;
+
+    void initGrid();
+
+    vector<Wall *> walls;
+
+    array<array<char, 19>, 26> board;
 };
 
 

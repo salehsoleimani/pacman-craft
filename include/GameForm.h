@@ -6,7 +6,6 @@
 #include "TextView.h"
 #include "Form.h"
 #include "File.h"
-#include <array>
 
 using namespace std;
 
@@ -16,7 +15,7 @@ public:
 
 private:
     //views
-    std::vector<Wall *> walls;
+    vector<Wall *> walls;
     TextView *txtScore;
     TextView *txtRecord;
 

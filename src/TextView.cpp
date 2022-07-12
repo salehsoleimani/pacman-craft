@@ -24,3 +24,7 @@ void TextView::setFontSize(int fontSize) {
 void TextView::render(sf::RenderTarget *target) {
     target->draw(*txtView);
 }
+
+sf::Vector2f TextView::getPosition() const{
+    return position;
+}
