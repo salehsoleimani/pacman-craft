@@ -45,4 +45,5 @@ void MainForm::initTexts() {
     btnOptions->setFontSize(Application::mediumFontSize);
     btnQuit->setFontSize(Application::mediumFontSize);
     txtCredits->setFontSize(Application::smallFontSize);
+    txtCredits->setTextColor(Application::colorCyan);
 }

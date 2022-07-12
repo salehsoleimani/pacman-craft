@@ -1,8 +1,6 @@
 #ifndef PACMAN_TEXTVIEW_H
 #define PACMAN_TEXTVIEW_H
 
-using namespace std;
-
 #include "Application.h"
 
 class TextView {
@@ -12,6 +10,8 @@ public:
     ~TextView();
 
     void setFontSize(int);
+
+    void setTextColor(const sf::Color &color);
 
     void update(sf::RenderTarget *);
 

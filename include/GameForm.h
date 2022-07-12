@@ -21,15 +21,12 @@ private:
 
     array<array<char, 19>, 22> board;
 
-
     //methods
     void pollEvents() override;
 
     void update() override;
 
     void render() override;
-
-    void initWalls(string);
 
     void initTexts();
 };
