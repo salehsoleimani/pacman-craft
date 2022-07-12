@@ -28,6 +28,6 @@ void GameForm::render() {
 void GameForm::initTexts() {
     txtScore = new TextView("score\n1200", sf::Vector2f(251, 21));
     txtRecord = new TextView("high score\n3421", sf::Vector2f(380, 21));
-    txtScore->setFontSize(Application::smallFontSize);
-    txtRecord->setFontSize(Application::smallFontSize);
+    txtScore->setCharacterSize(Application::smallFontSize);
+    txtRecord->setCharacterSize(Application::smallFontSize);
 }

@@ -1,7 +1,7 @@
 #include "MainForm.h"
 
 
-MainForm::MainForm():Form("../res/map_menu.txt") {
+MainForm::MainForm() : Form("../res/map_menu.txt") {
     initTexts();
 }
 
@@ -41,9 +41,9 @@ void MainForm::initTexts() {
     btnOptions = new TextView("options", sf::Vector2f(198, 428));
     btnQuit = new TextView("quit", sf::Vector2f(236, 501));
     txtCredits = new TextView("made with <3 by saleh", sf::Vector2f(155, 629));
-    btnPlay->setFontSize(Application::mediumFontSize);
-    btnOptions->setFontSize(Application::mediumFontSize);
-    btnQuit->setFontSize(Application::mediumFontSize);
-    txtCredits->setFontSize(Application::smallFontSize);
-    txtCredits->setTextColor(Application::colorCyan);
+    btnPlay->setCharacterSize(Application::mediumFontSize);
+    btnOptions->setCharacterSize(Application::mediumFontSize);
+    btnQuit->setCharacterSize(Application::mediumFontSize);
+    txtCredits->setCharacterSize(Application::smallFontSize);
+    txtCredits->setFillColor(Application::colorCyan);
 }
