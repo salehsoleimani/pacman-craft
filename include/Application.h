@@ -5,12 +5,15 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 #include <array>
+#include <unordered_map>
+#include <functional>
 #include "File.h"
 #include "Wall.h"
+#include "TextView.h"
 
 using namespace std;
 
-enum class ALIGN{
+enum class ALIGN {
     CENTER,
     CENTER_VERTICAL,
     CENTER_HORIZONTAL,
@@ -35,6 +38,7 @@ public:
     const string appName = "Pacman";
 
     //view dimensions
+    static const float margin;
     static const sf::Vector2f wallSize;
     static const int WALL_ROW;
     static const int WALL_COL;

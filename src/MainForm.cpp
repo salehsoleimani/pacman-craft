@@ -3,12 +3,11 @@
 
 MainForm::MainForm() : Form("../res/map_menu.txt") {
     initTexts();
+    initMenuView();
 }
 
 MainForm::~MainForm() {
-    delete btnOptions;
-    delete btnPlay;
-    delete btnQuit;
+    delete menuView;
 }
 
 void MainForm::pollEvents() {
@@ -28,22 +27,20 @@ void MainForm::update() {
 
 void MainForm::render() {
 
-    btnPlay->render(window);
-    btnOptions->render(window);
-    btnQuit->render(window);
+    menuView->render(window);
     txtCredits->render(window);
 
 }
 
 void MainForm::initTexts() {
-    // make a menu item vector
-    btnPlay = new TextView("play", sf::Vector2f(235, 355));
-    btnOptions = new TextView("options", sf::Vector2f(198, 428));
-    btnQuit = new TextView("quit", sf::Vector2f(236, 501));
     txtCredits = new TextView("made with <3 by saleh", sf::Vector2f(155, 629));
-    btnPlay->setCharacterSize(Application::mediumFontSize);
-    btnOptions->setCharacterSize(Application::mediumFontSize);
-    btnQuit->setCharacterSize(Application::mediumFontSize);
     txtCredits->setCharacterSize(Application::smallFontSize);
     txtCredits->setFillColor(Application::colorCyan);
+}
+
+void MainForm::initMenuView() {
+    menuView = new MenuView(sf::Vector2f(235, 355));
+    menuView->pushItem("play", [] { std::cout << "I am working!"; });
+    menuView->pushItem("options", [] { std::cout << "I am working!"; });
+    menuView->pushItem("quit", [] { std::cout << "I am working!"; });
 }

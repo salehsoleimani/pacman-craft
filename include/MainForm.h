@@ -5,6 +5,7 @@
 #include "Form.h"
 #include "TextView.h"
 #include "Wall.h"
+#include "MenuView.h"
 
 class MainForm : public Form {
 public:
@@ -13,9 +14,11 @@ public:
     ~MainForm();
 
 private:
-    TextView *btnPlay;
-    TextView *btnOptions;
-    TextView *btnQuit;
+    MenuView* menuView;
+//
+//    TextView *btnPlay;
+//    TextView *btnOptions;
+//    TextView *btnQuit;
     TextView *txtCredits;
 
 
@@ -29,6 +32,7 @@ private:
 
     void initWalls();
 
+    void initMenuView();
 };
 
 
