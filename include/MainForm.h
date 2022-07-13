@@ -14,9 +14,12 @@ public:
     ~MainForm();
 
 private:
-    MenuView* menuView;
+    MenuView *menuView;
+
     TextView *txtCredits;
 
+    sf::Texture logoSrc;
+    sf::RectangleShape *logoIV;
 
     void pollEvents() override;
 
@@ -27,6 +30,8 @@ private:
     void initTexts();
 
     void initMenuView();
+
+    void initImages();
 };
 
 

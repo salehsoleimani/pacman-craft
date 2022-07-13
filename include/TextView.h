@@ -3,7 +3,7 @@
 
 #include "Application.h"
 
-class TextView : public sf::Text{
+class TextView : public sf::Text {
 public:
     TextView(string, sf::Vector2f);
 

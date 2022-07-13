@@ -44,6 +44,7 @@ namespace Colors {
     static const sf::Color colorCyan = sf::Color(175, 255, 228);
     static const sf::Color colorWall = sf::Color(28, 145, 229);
     static const sf::Color colorActive = sf::Color(255, 234, 0);
+    static const sf::Color colorShadow = sf::Color(238, 35, 39);
 }
 
 //font
@@ -55,7 +56,8 @@ namespace Font {
 
 //view dimensions
 namespace Dimensions {
-    static const float margin = 30;
+    static const float margin = 48;
+    static const float shadowOffset = 6;
     static const sf::Vector2f wallSize = {30, 30};
     static const int WALL_ROW = 26;
     static const int WALL_COL = 19;
