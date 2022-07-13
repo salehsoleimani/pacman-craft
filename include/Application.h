@@ -20,7 +20,11 @@ public:
 
     void operator=(const Application &) = delete;
 
-    static Application &getInstance();
+    static Application &getInstance() {
+        static Application instance;
+        return instance;
+    }
+
 
     // Window params.
     const sf::VideoMode videoMode = {570, 780};
