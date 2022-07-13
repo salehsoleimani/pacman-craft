@@ -16,6 +16,19 @@ void MainForm::pollEvents() {
             case sf::Event::Closed:
                 window->close();
                 break;
+            case sf::Event::KeyPressed:
+                switch (event.key.code) {
+                    case sf::Keyboard::Enter:
+                        menuView->getSelectedItem()->onClick();
+                        break;
+                    case sf::Keyboard::Down:
+                        menuView->selectItem(menuView->getSelectedItemIndex()+1);
+                        break;
+                    case sf::Keyboard::Up:
+                        menuView->selectItem(menuView->getSelectedItemIndex()-1);
+                        break;
+                }
+
         }
 
     }
@@ -26,21 +39,20 @@ void MainForm::update() {
 }
 
 void MainForm::render() {
-
     menuView->render(window);
     txtCredits->render(window);
 
 }
 
 void MainForm::initTexts() {
-    txtCredits = new TextView("made with <3 by saleh", sf::Vector2f(155, 629));
-    txtCredits->setCharacterSize(Application::smallFontSize);
-    txtCredits->setFillColor(Application::colorCyan);
+    txtCredits = new TextView("made with <3 by saleh", {155, 629});
+    txtCredits->setCharacterSize(Font::smallFontSize);
+    txtCredits->setFillColor(Colors::colorCyan);
 }
 
 void MainForm::initMenuView() {
-    menuView = new MenuView(sf::Vector2f(235, 355));
+    menuView = new MenuView(sf::Vector2f(window->getSize().x / 2.f, 355));
     menuView->pushItem("play", [] { std::cout << "I am working!"; });
     menuView->pushItem("options", [] { std::cout << "I am working!"; });
-    menuView->pushItem("quit", [] { std::cout << "I am working!"; });
+    menuView->pushItem("quit", [&] { window->close(); });
 }

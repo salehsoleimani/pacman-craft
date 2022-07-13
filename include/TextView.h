@@ -11,6 +11,8 @@ public:
 
     void render(sf::RenderTarget *);
 
+    void setCenterHorizontal(bool);
+
 private:
     sf::Vector2f position;
 

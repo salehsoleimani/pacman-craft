@@ -6,9 +6,9 @@
 
 class MenuItem {
 public:
-    MenuItem(TextView itemView, function<void()> onClick) : itemView(itemView), onClick(onClick) {}
+    MenuItem(TextView* itemView, function<void()> onClick) : itemView(itemView), onClick(onClick) {}
 
-    TextView itemView;
+    TextView* itemView;
 
     function<void()> onClick;
 };
@@ -26,7 +26,14 @@ public:
 
     void pushItem(const string &, const function<void()> &);
 
+    const MenuItem* getSelectedItem();
+
+    int getSelectedItemIndex();
+
+    void selectItem(int i);
+
 private:
+    int selectedItem;
 
     sf::Vector2f position;
 

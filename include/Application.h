@@ -13,16 +13,6 @@
 
 using namespace std;
 
-enum class ALIGN {
-    CENTER,
-    CENTER_VERTICAL,
-    CENTER_HORIZONTAL,
-    LEFT,
-    RIGHT,
-    BOTTOM,
-    TOP
-};
-
 //singleton class for accessing some helper method, variables
 class Application {
 public:
@@ -37,27 +27,34 @@ public:
     const int windowFrameRate = 60;
     const string appName = "Pacman";
 
-    //view dimensions
-    static const float margin;
-    static const sf::Vector2f wallSize;
-    static const int WALL_ROW;
-    static const int WALL_COL;
-
-    //font
-    static const int smallFontSize;
-    static const int bigFontSize;
-    static const int mediumFontSize;
-
     const sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
-
-    //colors
-    static const sf::Color colorBlue;
-    static const sf::Color colorCyan;
-    static const sf::Color colorWall;
 
 private:
     Application() = default;
+
 };
 
+//colors
+namespace Colors {
+    static const sf::Color colorBlue = sf::Color(10, 7, 67);
+    static const sf::Color colorCyan = sf::Color(175, 255, 228);
+    static const sf::Color colorWall = sf::Color(28, 145, 229);
+    static const sf::Color colorActive = sf::Color(255, 234, 0);
+}
+
+//font
+namespace Font {
+    static const int smallFontSize = 20;
+    static const int bigFontSize = 46;
+    static const int mediumFontSize = 36;
+}
+
+//view dimensions
+namespace Dimensions {
+    static const float margin = 30;
+    static const sf::Vector2f wallSize = {30, 30};
+    static const int WALL_ROW = 26;
+    static const int WALL_COL = 19;
+}
 
 #endif //PACMAN_APPLICATION_H

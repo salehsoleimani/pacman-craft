@@ -15,10 +15,6 @@ public:
 
 private:
     MenuView* menuView;
-//
-//    TextView *btnPlay;
-//    TextView *btnOptions;
-//    TextView *btnQuit;
     TextView *txtCredits;
 
 
@@ -29,8 +25,6 @@ private:
     void render() override;
 
     void initTexts();
-
-    void initWalls();
 
     void initMenuView();
 };

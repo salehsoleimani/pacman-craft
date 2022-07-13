@@ -5,10 +5,10 @@ Wall::Wall(sf::Vector2f position){
     wall = new sf::RectangleShape;
     wall->setPosition(position);
     wall->setOrigin(wall->getSize().x / 2, wall->getSize().y / 2);
-    wall->setFillColor(Application::colorWall);
-    wall->setOutlineColor(Application::colorBlue);
+    wall->setFillColor(Colors::colorWall);
+    wall->setOutlineColor(Colors::colorBlue);
     wall->setOutlineThickness(-1.f);
-    wall->setSize(Application::wallSize);
+    wall->setSize(Dimensions::wallSize);
 }
 
 void Wall::update(sf::RenderTarget *target) {

@@ -25,7 +25,7 @@ bool Form::isRunning() const {
 void Form::display() {
     while (isRunning()) {
         update();
-        window->clear(Application::colorBlue);
+        window->clear(Colors::colorBlue);
         render();
 
         for (Wall *wall: walls) wall->render(window);
@@ -40,16 +40,16 @@ void Form::initGrid() {
     string line;
     for (int i = 0; i < 26; ++i) {
         line = file.getline();
-        for (int j = 0; j < Application::WALL_COL; ++j) {
+        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             board[i][j] = line[j];
         }
     }
 
     for (int i = 0; i < 26; ++i) {
-        for (int j = 0; j < Application::WALL_COL; ++j) {
+        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             if (board[i][j] == 'W')
-                walls.push_back(new Wall(sf::Vector2f(j * Application::wallSize.x,
-                                                      i * Application::wallSize.y)));
+                walls.push_back(new Wall({j * Dimensions::wallSize.x,
+                                          i * Dimensions::wallSize.y}));
         }
         cout << endl;
     }
