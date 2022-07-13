@@ -23,6 +23,7 @@ bool Form::isRunning() const {
 }
 
 void Form::display() {
+//    if (window == nullptr) initWindow();
     while (isRunning()) {
         update();
         window->clear(Colors::colorBlue);

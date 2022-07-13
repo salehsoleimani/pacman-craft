@@ -1,24 +1,20 @@
-#ifndef PACMAN_MAINFORM_H
-#define PACMAN_MAINFORM_H
+#ifndef PACMAN_OPTIONSFORM_H
+#define PACMAN_OPTIONSFORM_H
 
 #include "Application.h"
 #include "Form.h"
 #include "TextView.h"
 #include "Wall.h"
 #include "MenuView.h"
-#include "GameForm.h"
-#include "OptionsForm.h"
 
-class MainForm : public Form {
+class OptionsForm : public Form {
 public:
-    MainForm();
+    OptionsForm();
 
-    ~MainForm();
+    ~OptionsForm();
 
 private:
     MenuView *menuView;
-
-    TextView *txtCredits;
 
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
@@ -37,4 +33,4 @@ private:
 };
 
 
-#endif //PACMAN_MAINFORM_H
+#endif //PACMAN_OPTIONSFORM_H

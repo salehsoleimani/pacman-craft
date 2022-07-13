@@ -1,6 +1,6 @@
 #include "GameForm.h"
 
-GameForm::GameForm(string fileName):Form(fileName) {
+GameForm::GameForm(string fileName) : Form(fileName) {
     //intialize wall
     initTexts();
 }

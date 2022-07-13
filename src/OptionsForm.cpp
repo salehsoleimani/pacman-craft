@@ -1,19 +1,17 @@
-#include "MainForm.h"
+#include "OptionsForm.h"
 
 
-MainForm::MainForm() : Form("../res/map_menu.txt") {
-    initTexts();
+OptionsForm::OptionsForm() : Form("../res/map_menu.txt") {
     initMenuView();
     initImages();
 }
 
-MainForm::~MainForm() {
+OptionsForm::~OptionsForm() {
     delete menuView;
     delete logoIV;
-    delete txtCredits;
 }
 
-void MainForm::pollEvents() {
+void OptionsForm::pollEvents() {
     while (window->pollEvent(event)) {
         switch (event.type) {
             case sf::Event::Closed:
@@ -37,36 +35,26 @@ void MainForm::pollEvents() {
     }
 }
 
-void MainForm::update() {
+void OptionsForm::update() {
     pollEvents();
 }
 
-void MainForm::render() {
+void OptionsForm::render() {
+    window->close();
     menuView->render(window);
-    txtCredits->render(window);
     window->draw(*logoIV);
 }
 
-void MainForm::initTexts() {
-    txtCredits = new TextView("made with <3 by saleh", {155, 629});
-    txtCredits->setCharacterSize(Font::smallFontSize);
-    txtCredits->setFillColor(Colors::colorCyan);
-}
-
-void MainForm::initMenuView() {
+void OptionsForm::initMenuView() {
     menuView = new MenuView(sf::Vector2f(window->getSize().x / 2.f, 355));
-    menuView->pushItem("play", [&] {
-        window->close();
-        GameForm("../res/map.txt").display();
+    menuView->pushItem("reset", [] {});
+    menuView->pushItem("clear score", [] { std::cout << "I am working!"; });
+    menuView->pushItem("back to menu", [&] {
+
     });
-    menuView->pushItem("options", [&] {
-        OptionsForm().display();
-//        window->close();
-    });
-    menuView->pushItem("quit", [&] { window->close(); });
 }
 
-void MainForm::initImages() {
+void OptionsForm::initImages() {
     logoIV = new sf::RectangleShape({385, 91});
     logoIV->setOrigin(logoIV->getLocalBounds().width / 2, 0);
     logoIV->setPosition(window->getSize().x / 2, 208);
