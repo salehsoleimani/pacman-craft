@@ -4,6 +4,7 @@
 #include <array>
 #include "Wall.h"
 #include "TextView.h"
+#include "MainForm.h"
 #include "Form.h"
 #include "File.h"
 
@@ -35,6 +36,8 @@ private:
     vector<Wall *> walls;
 
     array<array<char, 19>, 26> board;
+
+
 };
 
 #endif //PACMAN_GAMEFORM_H

@@ -1,7 +1,8 @@
 #include "MainForm.h"
 
 
-MainForm::MainForm() {
+MainForm::MainForm(Application *context) {
+    this->context = context;
     this->mapFileName = "../res/map_menu.txt";
     initTexts();
     initMenuView();
@@ -16,7 +17,7 @@ MainForm::~MainForm() {
     for (auto wall: walls) delete wall;
 }
 
-Form *MainForm::pollEvents(sf::Event &event,sf::RenderWindow* window) {
+Form *MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     switch (event.type) {
         case sf::Event::Closed:
             window->close();
@@ -24,7 +25,9 @@ Form *MainForm::pollEvents(sf::Event &event,sf::RenderWindow* window) {
         case sf::Event::KeyPressed:
             switch (event.key.code) {
                 case sf::Keyboard::Enter:
-                    menuView->getSelectedItem()->onClick();
+                    if (menuView->getSelectedItemIndex() == 1) {
+//                        context->changeForm(this->context.)
+                    }
                     break;
                 case sf::Keyboard::Down:
                     menuView->selectItem(menuView->getSelectedItemIndex() + 1);

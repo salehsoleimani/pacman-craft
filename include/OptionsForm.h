@@ -5,6 +5,7 @@
 #include "TextView.h"
 #include "Wall.h"
 #include "MenuView.h"
+#include "MainForm.h"
 
 class OptionsForm : public Form {
 public:

@@ -8,17 +8,12 @@
 
 #include "Form.h"
 #include "Values.h"
-#include "MainForm.h"
-#include "OptionsForm.h"
-#include "GameForm.h"
 
 class Application {
 public:
     Application() {
         window.create(Config::videoMode, Config::appName, Config::style);
         window.setFramerateLimit(Config::windowFrameRate);
-
-        forms.push(new MainForm());
     }
 
     ~Application() {
@@ -30,7 +25,11 @@ public:
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
-                currentForm()->pollEvents(event,&window);
+                Form *form = currentForm()->pollEvents(event, &window);
+                if (form != nullptr) {
+                    cout << "ey baba";
+                    changeForm(form);
+                }
             }
             currentForm()->update();
             window.clear(Colors::colorBlue);

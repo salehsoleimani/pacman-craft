@@ -2,6 +2,7 @@
 #define PACMAN_MAINFORM_H
 
 #include "Form.h"
+#include "Application.h"
 #include "TextView.h"
 #include "Wall.h"
 #include "MenuView.h"
@@ -10,11 +11,13 @@
 
 class MainForm : public Form {
 public:
-    MainForm();
+    MainForm(Application *);
 
     ~MainForm();
 
 private:
+    Application* context;
+
     MenuView *menuView;
 
     TextView *txtCredits;
