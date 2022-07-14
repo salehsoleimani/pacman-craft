@@ -1,38 +1,42 @@
 #ifndef PACMAN_FORM_H
 #define PACMAN_FORM_H
 
-#include "Application.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <array>
+#include <iostream>
+#include <vector>
+#include "Wall.h"
+#include "Values.h"
+#include "File.h"
+
+using namespace std;
 
 class Form {
 public:
-    Form(string mapFileName);
+//    Form();
 
-    ~Form();
+//    virtual ~Form();
 
-    void display();
+//    void display();
 
-protected:
-    sf::RenderWindow *window;
-    sf::Event event;
+//protected:
+//    sf::Event event;
 
-    bool isRunning() const;
+//    bool isRunning() const;
 
-    virtual void pollEvents() = 0;
+//    virtual void pollEvents() = 0;
+    virtual Form *pollEvents(sf::Event &,sf::RenderWindow*) = 0;
 
     virtual void update() = 0;
 
-    virtual void render() = 0;
+    virtual void render(sf::RenderWindow *) = 0;
 
-    void initWindow();
+//    void initWindow();
+//protected:
+//    sf::RenderWindow *window;
 
-private:
-    string mapFileName;
 
-    void initGrid();
-
-    vector<Wall *> walls;
-
-    array<array<char, 19>, 26> board;
 };
 
 

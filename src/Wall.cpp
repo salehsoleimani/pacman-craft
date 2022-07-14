@@ -1,4 +1,5 @@
 #include "Wall.h"
+#include "Values.h"
 
 Wall::Wall(sf::Vector2f position){
     this->position = position;

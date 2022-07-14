@@ -1,7 +1,6 @@
 #ifndef PACMAN_OPTIONSFORM_H
 #define PACMAN_OPTIONSFORM_H
 
-#include "Application.h"
 #include "Form.h"
 #include "TextView.h"
 #include "Wall.h"
@@ -19,17 +18,26 @@ private:
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
 
-    void pollEvents() override;
+    Form* pollEvents(sf::Event&,sf::RenderWindow*) override;
 
     void update() override;
 
-    void render() override;
+    void render(sf::RenderWindow *) override;
 
     void initTexts();
 
     void initMenuView();
 
     void initImages();
+
+    //displaying grid background
+//    string mapFileName;
+//
+//    void initGrid();
+//
+//    vector<Wall *> walls;
+//
+//    array<array<char, 19>, 26> board;
 };
 
 

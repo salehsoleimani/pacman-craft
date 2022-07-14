@@ -4,7 +4,7 @@ void TextView::update(sf::RenderTarget *target) {
 
 }
 
-TextView::TextView(string txt, sf::Vector2f position) {
+TextView::TextView(std::string txt, sf::Vector2f position) {
     this->position = position;
     font.loadFromFile("../res/fonts/bungee.ttf");
     setString(txt);

@@ -1,7 +1,10 @@
 #ifndef PACMAN_TEXTVIEW_H
 #define PACMAN_TEXTVIEW_H
 
-#include "Application.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+
+using namespace std;
 
 class TextView : public sf::Text {
 public:

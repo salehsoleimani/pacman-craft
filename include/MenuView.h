@@ -1,16 +1,20 @@
 #ifndef PACMAN_MENUVIEW_H
 #define PACMAN_MENUVIEW_H
 
-#include "Application.h"
+#include "TextView.h"
+#include <vector>
+#include <functional>
+#include "Values.h"
 
+using namespace std;
 
 class MenuItem {
 public:
-    MenuItem(TextView *itemView, function<void()> onClick) : itemView(itemView), onClick(onClick) {}
+    MenuItem(TextView *itemView, std::function<void()> onClick) : itemView(itemView), onClick(onClick) {}
 
     TextView *itemView;
 
-    function<void()> onClick;
+    std::function<void()> onClick;
 };
 
 class MenuView {
@@ -37,7 +41,7 @@ private:
 
     sf::Vector2f position;
 
-    vector<MenuItem *> items;
+    std::vector<MenuItem *> items;
 
     TextView *textShadow;
 };

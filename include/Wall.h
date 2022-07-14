@@ -1,11 +1,10 @@
 #ifndef PACMAN_WALL_H
 #define PACMAN_WALL_H
 
-#include "Application.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
-using namespace std;
-
-class Wall{
+class Wall {
 public:
 
     Wall(sf::Vector2f);

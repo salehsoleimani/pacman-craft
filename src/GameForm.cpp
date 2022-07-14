@@ -1,28 +1,24 @@
 #include "GameForm.h"
 
-GameForm::GameForm(string fileName) : Form(fileName) {
-    //intialize wall
+GameForm::GameForm(){
+    this->mapFileName = "../res/map.txt";
+    initGrid();
     initTexts();
 }
 
-void GameForm::pollEvents() {
-    while (window->pollEvent(event)) {
-        switch (event.type) {
-            case sf::Event::Closed:
-                window->close();
-                break;
-        }
-
+Form *GameForm::pollEvents(sf::Event &event,sf::RenderWindow* window) {
+    switch (event.type) {
     }
+    return nullptr;
 }
 
 void GameForm::update() {
-    pollEvents();
 }
 
-void GameForm::render() {
+void GameForm::render(sf::RenderWindow *window) {
     txtRecord->render(window);
     txtScore->render(window);
+    for (Wall *wall: walls) wall->render(window);
 }
 
 void GameForm::initTexts() {
@@ -30,4 +26,29 @@ void GameForm::initTexts() {
     txtRecord = new TextView("high score\n3421", {380, 21});
     txtScore->setCharacterSize(Font::smallFontSize);
     txtRecord->setCharacterSize(Font::smallFontSize);
+}
+
+void GameForm::initGrid() {
+    File file(mapFileName);
+    file.open(ios::in);
+    string line;
+    for (int i = 0; i < 26; ++i) {
+        line = file.getline();
+        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
+            board[i][j] = line[j];
+        }
+    }
+
+    for (int i = 0; i < 26; ++i) {
+        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
+            if (board[i][j] == 'W')
+                walls.push_back(new Wall({j * Dimensions::wallSize.x,
+                                          i * Dimensions::wallSize.y}));
+        }
+        cout << endl;
+    }
+}
+
+GameForm::~GameForm() {
+    for(auto wall:walls) delete wall;
 }
