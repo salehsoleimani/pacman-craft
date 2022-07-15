@@ -20,8 +20,10 @@ Form *OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::KeyPressed:
             switch (event.key.code) {
                 case sf::Keyboard::Enter:
-//                    menuView->getSelectedItem().
-
+                  if (menuView->getSelectedItemIndex() == 1) {
+                        context->pushForm(optionsForm);
+//                        context->changeForm(this->context.)
+                    }
                     break;
                 case sf::Keyboard::Down:
                     menuView->selectItem(menuView->getSelectedItemIndex() + 1);

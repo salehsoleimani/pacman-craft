@@ -14,7 +14,7 @@ using namespace std;
 
 class Form {
 public:
-//    Form();
+    Form();
 
 //    virtual ~Form();
 
@@ -26,7 +26,7 @@ public:
 //    bool isRunning() const;
 
 //    virtual void pollEvents() = 0;
-    virtual Form *pollEvents(sf::Event &,sf::RenderWindow*) = 0;
+    virtual Form *pollEvents(sf::Event &, sf::RenderWindow *) = 0;
 
     virtual void update() = 0;
 
@@ -35,8 +35,6 @@ public:
 //    void initWindow();
 //protected:
 //    sf::RenderWindow *window;
-
-
 };
 
 

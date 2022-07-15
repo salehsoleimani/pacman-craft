@@ -6,8 +6,9 @@
 
 #include <stack>
 
-#include "Form.h"
 #include "Values.h"
+#include "Form.h"
+
 
 class Application {
 public:
@@ -63,5 +64,6 @@ private:
 
     stack<Form *> forms;
 };
+
 
 #endif //PACMAN_APPLICATION_H

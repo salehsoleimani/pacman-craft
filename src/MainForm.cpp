@@ -1,9 +1,9 @@
 #include "MainForm.h"
 
 
-MainForm::MainForm(Application *context) {
-    this->context = context;
+MainForm::MainForm() {
     this->mapFileName = "../res/map_menu.txt";
+
     initTexts();
     initMenuView();
     initImages();
@@ -26,6 +26,7 @@ Form *MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
             switch (event.key.code) {
                 case sf::Keyboard::Enter:
                     if (menuView->getSelectedItemIndex() == 1) {
+                        context->pushForm(optionsForm);
 //                        context->changeForm(this->context.)
                     }
                     break;

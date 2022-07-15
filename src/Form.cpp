@@ -1,11 +1,11 @@
 #include "Form.h"
 
-//Form::Form() {
+Form::Form(Application* context) : context(context) {
 //    this->mapFileName = mapFileName;
 //    window = nullptr;
 //    initWindow();
 //    initGrid();
-//}
+}
 
 //Form::~Form() {
 //}

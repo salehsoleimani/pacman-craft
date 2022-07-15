@@ -11,13 +11,11 @@
 
 class MainForm : public Form {
 public:
-    MainForm(Application *);
+    MainForm();
 
     ~MainForm();
 
 private:
-    Application* context;
-
     MenuView *menuView;
 
     TextView *txtCredits;
@@ -25,7 +23,7 @@ private:
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
 
-    Form* pollEvents(sf::Event&,sf::RenderWindow*) override;
+    Form *pollEvents(sf::Event &, sf::RenderWindow *) override;
 
     void update() override;
 
