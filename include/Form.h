@@ -12,29 +12,30 @@
 
 using namespace std;
 
+class Application;
+
 class Form {
 public:
-    Form();
+    Form(string);
 
-//    virtual ~Form();
+    virtual ~Form();
 
-//    void display();
-
-//protected:
-//    sf::Event event;
-
-//    bool isRunning() const;
-
-//    virtual void pollEvents() = 0;
-    virtual Form *pollEvents(sf::Event &, sf::RenderWindow *) = 0;
+    virtual void pollEvents(sf::Event &, sf::RenderWindow *, Application *) = 0;
 
     virtual void update() = 0;
 
     virtual void render(sf::RenderWindow *) = 0;
 
-//    void initWindow();
-//protected:
-//    sf::RenderWindow *window;
+    virtual void clear(sf::RenderWindow *window);
+
+private:
+    void initGrid();
+
+    vector<Wall *> walls;
+
+    array<array<char, 19>, 26> board;
+
+    string mapFileName;
 };
 
 

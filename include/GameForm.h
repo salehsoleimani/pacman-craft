@@ -13,14 +13,15 @@ using namespace std;
 class GameForm : public Form {
 public:
     GameForm();
+
     ~GameForm();
+
 private:
-    //views
     TextView *txtScore;
     TextView *txtRecord;
+    TextView *btnBack;
 
-    //methods
-    Form* pollEvents(sf::Event&,sf::RenderWindow*) override;
+    void pollEvents(sf::Event &, sf::RenderWindow *, Application *) override;
 
     void update() override;
 
@@ -28,7 +29,6 @@ private:
 
     void initTexts();
 
-    //displaying grid background
     string mapFileName;
 
     void initGrid();
@@ -36,8 +36,6 @@ private:
     vector<Wall *> walls;
 
     array<array<char, 19>, 26> board;
-
-
 };
 
 #endif //PACMAN_GAMEFORM_H

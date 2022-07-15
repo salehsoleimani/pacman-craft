@@ -1,15 +1,24 @@
 #include "GameForm.h"
 
-GameForm::GameForm(){
+GameForm::GameForm() : Form("../res/map.txt") {
     this->mapFileName = "../res/map.txt";
     initGrid();
     initTexts();
 }
 
-Form *GameForm::pollEvents(sf::Event &event,sf::RenderWindow* window) {
+void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
     switch (event.type) {
+        case sf::Event::MouseButtonReleased:
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::IntRect rect(btnBack->getPosition().x, btnBack->getPosition().y,
+                                 btnBack->getGlobalBounds().width, btnBack->getGlobalBounds().height);
+                if (rect.contains(sf::Mouse::getPosition(*window))) {
+                    context->pushForm(new MainForm());
+                }
+            }
+            break;
+
     }
-    return nullptr;
 }
 
 void GameForm::update() {
@@ -18,12 +27,15 @@ void GameForm::update() {
 void GameForm::render(sf::RenderWindow *window) {
     txtRecord->render(window);
     txtScore->render(window);
+    btnBack->render(window);
     for (Wall *wall: walls) wall->render(window);
 }
 
 void GameForm::initTexts() {
     txtScore = new TextView("score\n1200", {251, 21});
     txtRecord = new TextView("high score\n3421", {380, 21});
+    btnBack = new TextView("back\nto menu", {82, 21});
+    btnBack->setCharacterSize(Font::smallFontSize);
     txtScore->setCharacterSize(Font::smallFontSize);
     txtRecord->setCharacterSize(Font::smallFontSize);
 }
@@ -50,5 +62,5 @@ void GameForm::initGrid() {
 }
 
 GameForm::~GameForm() {
-    for(auto wall:walls) delete wall;
+    for (auto wall: walls) delete wall;
 }

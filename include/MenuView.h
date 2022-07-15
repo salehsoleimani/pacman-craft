@@ -8,15 +8,6 @@
 
 using namespace std;
 
-class MenuItem {
-public:
-    MenuItem(TextView *itemView, std::function<void()> onClick) : itemView(itemView), onClick(onClick) {}
-
-    TextView *itemView;
-
-    std::function<void()> onClick;
-};
-
 class MenuView {
 public:
 
@@ -28,9 +19,7 @@ public:
 
     void render(sf::RenderTarget *);
 
-    void pushItem(const string &, const function<void()> &);
-
-    const MenuItem *getSelectedItem();
+    void pushItem(const string &);
 
     int getSelectedItemIndex();
 
@@ -41,7 +30,7 @@ private:
 
     sf::Vector2f position;
 
-    std::vector<MenuItem *> items;
+    std::vector<TextView *> items;
 
     TextView *textShadow;
 };

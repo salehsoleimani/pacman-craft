@@ -5,33 +5,33 @@ MenuView::MenuView(sf::Vector2f position) {
     selectedItem = 0;
 }
 
-void MenuView::pushItem(const string &itemTitle, const function<void()> &onClick) {
+void MenuView::pushItem(const string &itemTitle) {
     //set margin based on view rendered before this view
-    float yAxis = items.size() == 0 ? position.y : items.back()->itemView->getPosition().y +
+    float yAxis = items.size() == 0 ? position.y : items.back()->getPosition().y +
                                                    //because view origin is 0,0
-                                                   items.back()->itemView->getLocalBounds().height +
+                                                   items.back()->getLocalBounds().height +
                                                    Dimensions::margin;
 
     TextView *itemView = new TextView(itemTitle, {position.x, yAxis});
     itemView->setCharacterSize(Font::mediumFontSize);
     itemView->setCenterHorizontal(true);
 
-    items.push_back(new MenuItem(itemView, onClick));
+    items.push_back(itemView);
     //initialization state
     if (items.size() == 1)
-        items[0]->itemView->setFillColor(Colors::colorActive);
+        items[0]->setFillColor(Colors::colorActive);
 }
 
 void MenuView::render(sf::RenderTarget *target) {
-    textShadow = new TextView(items[selectedItem]->itemView->getString(),
-                              {position.x, items[selectedItem]->itemView->getPosition().y + Dimensions::shadowOffset});
+    textShadow = new TextView(items[selectedItem]->getString(),
+                              {position.x, items[selectedItem]->getPosition().y + Dimensions::shadowOffset});
     textShadow->setFillColor(Colors::colorShadow);
     textShadow->setCharacterSize(Font::mediumFontSize);
     textShadow->setCenterHorizontal(true);
     target->draw(*textShadow);
 
     for (auto item: items) {
-        target->draw(*item->itemView);
+        target->draw(*item);
     }
 }
 
@@ -42,17 +42,13 @@ MenuView::~MenuView() {
     }
 }
 
-const MenuItem *MenuView::getSelectedItem() {
-    return items[selectedItem];
-}
-
 int MenuView::getSelectedItemIndex() {
     return selectedItem;
 }
 
 void MenuView::selectItem(int index) {
     if (index >= items.size() || index < 0) return;
-    items[selectedItem]->itemView->setFillColor(sf::Color::White);
+    items[selectedItem]->setFillColor(sf::Color::White);
     selectedItem = index;
-    items[selectedItem]->itemView->setFillColor(Colors::colorActive);
+    items[selectedItem]->setFillColor(Colors::colorActive);
 }

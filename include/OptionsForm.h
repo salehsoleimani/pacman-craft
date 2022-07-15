@@ -19,7 +19,7 @@ private:
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
 
-    Form* pollEvents(sf::Event&,sf::RenderWindow*) override;
+    void pollEvents(sf::Event&,sf::RenderWindow*, Application *) override;
 
     void update() override;
 
@@ -30,15 +30,6 @@ private:
     void initMenuView();
 
     void initImages();
-
-    //displaying grid background
-//    string mapFileName;
-//
-//    void initGrid();
-//
-//    vector<Wall *> walls;
-//
-//    array<array<char, 19>, 26> board;
 };
 
 

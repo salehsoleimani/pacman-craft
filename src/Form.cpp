@@ -1,32 +1,34 @@
 #include "Form.h"
 
-Form::Form(Application* context) : context(context) {
-//    this->mapFileName = mapFileName;
-//    window = nullptr;
-//    initWindow();
-//    initGrid();
+Form::Form(string mapFileName) : mapFileName(mapFileName) {
+    initGrid();
 }
 
-//Form::~Form() {
-//}
+void Form::clear(sf::RenderWindow *window) {
+    for (Wall *wall: walls) wall->render(window);
+}
 
-//void Form::initWindow() {
-//    window = new sf::RenderWindow(Config::videoMode, Config::appName, Config::style);
-//    window->setFramerateLimit(Config::windowFrameRate);
-//}
+Form::~Form() {
+    for (auto wall: walls) delete wall;
+}
 
-//bool Form::isRunning() const {
-//    return window->isOpen();
-//}
+void Form::initGrid() {
+    File file(mapFileName);
+    file.open(ios::in);
+    string line;
+    for (int i = 0; i < 26; ++i) {
+        line = file.getline();
+        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
+            board[i][j] = line[j];
+        }
+    }
 
-//void Form::display() {
-//    if (window == nullptr) initWindow();
-//    while (isRunning()) {
-//        update();
-//        window->clear(Colors::colorBlue);
-//        render();
-//
-//
-//        window->display();
-//    }
-//}
+    for (int i = 0; i < 26; ++i) {
+        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
+            if (board[i][j] == 'W')
+                walls.push_back(new Wall({j * Dimensions::wallSize.x,
+                                          i * Dimensions::wallSize.y}));
+        }
+        cout << endl;
+    }
+}

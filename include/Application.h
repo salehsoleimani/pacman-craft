@@ -3,12 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-
-#include <stack>
+#include <deque>
 
 #include "Values.h"
 #include "Form.h"
-
 
 class Application {
 public:
@@ -17,52 +15,50 @@ public:
         window.setFramerateLimit(Config::windowFrameRate);
     }
 
-    ~Application() {
-        while (!this->forms.empty()) popForm();
-    }
-
     void run() {
-
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
-                Form *form = currentForm()->pollEvents(event, &window);
-                if (form != nullptr) {
-                    cout << "ey baba";
-                    changeForm(form);
-                }
+                if (event.type == sf::Event::Closed)
+                    window.close();
+                currentForm()->pollEvents(event, &window, this);
             }
             currentForm()->update();
             window.clear(Colors::colorBlue);
+            currentForm()->clear(&window);
             currentForm()->render(&window);
             window.display();
         }
     }
 
+    Form *currentForm() {
+        if (forms.empty()) return nullptr;
+        return forms.back();
+    }
+
     void pushForm(Form *form) {
-        this->forms.push(form);
+        forms.push_back(form);
     }
 
     void popForm() {
-        delete this->forms.top();
-        this->forms.pop();
+        delete forms.back();
+        forms.pop_back();
     }
 
-    void changeForm(Form *form) {
-        if (!this->forms.empty())
-            popForm();
-        pushForm(form);
+    void resetGame(Form *form) {
+        delete forms.front();
+        forms.pop_front();
+        forms.push_front(form);
     }
 
-    Form *currentForm() {
-        if (this->forms.empty()) return nullptr;
-        return this->forms.top();
+    ~Application() {
+        while (!forms.empty()) popForm();
     }
 
 private:
     sf::RenderWindow window;
 
-    stack<Form *> forms;
+    deque<Form *> forms;
 };
 
 

@@ -1,8 +1,6 @@
 #include "OptionsForm.h"
 
-
-OptionsForm::OptionsForm() {
-//    this->mapFileName = "../res/map_menu.txt";
+OptionsForm::OptionsForm() : Form("../res/map_menu.txt") {
     initMenuView();
     initImages();
 }
@@ -12,7 +10,7 @@ OptionsForm::~OptionsForm() {
     delete logoIV;
 }
 
-Form *OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
+void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
     switch (event.type) {
         case sf::Event::Closed:
             window->close();
@@ -20,9 +18,13 @@ Form *OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::KeyPressed:
             switch (event.key.code) {
                 case sf::Keyboard::Enter:
-                  if (menuView->getSelectedItemIndex() == 1) {
-                        context->pushForm(optionsForm);
-//                        context->changeForm(this->context.)
+                    switch (menuView->getSelectedItemIndex()) {
+                        case 0:
+                            context->resetGame(new GameForm());
+                            break;
+                        case 2:
+                            context->popForm();
+                            break;
                     }
                     break;
                 case sf::Keyboard::Down:
@@ -35,26 +37,21 @@ Form *OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
 
     }
 
-    return nullptr;
 }
 
 void OptionsForm::update() {
-//    pollEvents();
 }
 
 void OptionsForm::render(sf::RenderWindow *window) {
-//    window->close();
     menuView->render(window);
     window->draw(*logoIV);
 }
 
 void OptionsForm::initMenuView() {
     menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 355));
-    menuView->pushItem("reset", [] {});
-    menuView->pushItem("clear score", [] { std::cout << "I am working!"; });
-    menuView->pushItem("back to menu", [&] {
-
-    });
+    menuView->pushItem("reset");
+    menuView->pushItem("clear score");
+    menuView->pushItem("back to menu");
 }
 
 void OptionsForm::initImages() {

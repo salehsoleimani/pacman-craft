@@ -1,23 +1,19 @@
 #include "MainForm.h"
 
 
-MainForm::MainForm() {
-    this->mapFileName = "../res/map_menu.txt";
-
+MainForm::MainForm() : Form("../res/map_menu.txt") {
     initTexts();
     initMenuView();
     initImages();
-    initGrid();
 }
 
 MainForm::~MainForm() {
     delete menuView;
     delete logoIV;
     delete txtCredits;
-    for (auto wall: walls) delete wall;
 }
 
-Form *MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
+void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
     switch (event.type) {
         case sf::Event::Closed:
             window->close();
@@ -25,9 +21,13 @@ Form *MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::KeyPressed:
             switch (event.key.code) {
                 case sf::Keyboard::Enter:
-                    if (menuView->getSelectedItemIndex() == 1) {
-                        context->pushForm(optionsForm);
-//                        context->changeForm(this->context.)
+                    switch (menuView->getSelectedItemIndex()) {
+                        case 0:
+                            context->popForm();
+                            break;
+                        case 1:
+                            context->pushForm(new OptionsForm());
+                            break;
                     }
                     break;
                 case sf::Keyboard::Down:
@@ -39,7 +39,6 @@ Form *MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
             }
 
     }
-    return nullptr;
 }
 
 void MainForm::update() {
@@ -49,7 +48,6 @@ void MainForm::update() {
 void MainForm::render(sf::RenderWindow *window) {
     menuView->render(window);
     txtCredits->render(window);
-    for (Wall *wall: walls) wall->render(window);
     window->draw(*logoIV);
 }
 
@@ -61,15 +59,9 @@ void MainForm::initTexts() {
 
 void MainForm::initMenuView() {
     menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 355));
-    menuView->pushItem("play", [&] {
-//        window->close();
-//        GameForm("../res/map.txt").display();
-    });
-    menuView->pushItem("options", [&] {
-//        OptionsForm().display();
-//        window->close();
-    });
-    menuView->pushItem("quit", [&] {});
+    menuView->pushItem("continue");
+    menuView->pushItem("options");
+    menuView->pushItem("quit");
 }
 
 void MainForm::initImages() {
@@ -78,25 +70,4 @@ void MainForm::initImages() {
     logoIV->setPosition(Config::videoMode.width / 2, 208);
     if (!logoSrc.loadFromFile("../res/images/logo.png")) throw runtime_error("Cannot open resource");
     logoIV->setTexture(&logoSrc);
-}
-
-void MainForm::initGrid() {
-    File file(mapFileName);
-    file.open(ios::in);
-    string line;
-    for (int i = 0; i < 26; ++i) {
-        line = file.getline();
-        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            board[i][j] = line[j];
-        }
-    }
-
-    for (int i = 0; i < 26; ++i) {
-        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            if (board[i][j] == 'W')
-                walls.push_back(new Wall({j * Dimensions::wallSize.x,
-                                          i * Dimensions::wallSize.y}));
-        }
-        cout << endl;
-    }
 }
