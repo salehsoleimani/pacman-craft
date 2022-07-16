@@ -22,11 +22,13 @@ namespace Colors {
     static const sf::Color colorWall = sf::Color(28, 145, 229);
     static const sf::Color colorActive = sf::Color(255, 234, 0);
     static const sf::Color colorShadow = sf::Color(238, 35, 39);
+    static const sf::Color colorTransparent = sf::Color(0, 0, 0, 76);
 }
 
 //font
 namespace Font {
     static const int smallFontSize = 20;
+    static const int regularFontSize = 26;
     static const int bigFontSize = 46;
     static const int mediumFontSize = 36;
 }
@@ -38,6 +40,8 @@ namespace Dimensions {
     static const sf::Vector2f wallSize = {30, 30};
     static const int WALL_ROW = 26;
     static const int WALL_COL = 19;
+    static const sf::Vector2f BUTTON_SIZE_SMALL = {138, 74};
+    static const sf::Vector2f BUTTON_SIZE_BIG = {298, 74};
 }
 
 

@@ -10,6 +10,8 @@ class TextView : public sf::Text {
 public:
     TextView(string, sf::Vector2f);
 
+    TextView();
+
     void update(sf::RenderTarget *);
 
     void render(sf::RenderTarget *);
@@ -17,8 +19,6 @@ public:
     void setCenterHorizontal(bool);
 
 private:
-    sf::Vector2f position;
-
     sf::Font font;
 };
 

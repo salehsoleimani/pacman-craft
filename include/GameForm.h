@@ -7,6 +7,8 @@
 #include "MainForm.h"
 #include "Form.h"
 #include "File.h"
+#include "ButtonView.h"
+#include "DialogView.h"
 
 using namespace std;
 

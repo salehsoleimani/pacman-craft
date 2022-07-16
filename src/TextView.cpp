@@ -5,9 +5,8 @@ void TextView::update(sf::RenderTarget *target) {
 }
 
 TextView::TextView(std::string txt, sf::Vector2f position) {
-    this->position = position;
-    font.loadFromFile("../res/fonts/bungee.ttf");
     setString(txt);
+    font.loadFromFile("../res/fonts/bungee.ttf");
     setFont(font);
     setPosition(position);
 }
@@ -19,5 +18,5 @@ void TextView::render(sf::RenderTarget *target) {
 void TextView::setCenterHorizontal(bool isCenter) {
     if (!isCenter) return setOrigin(0, 0);
     setOrigin(getLocalBounds().width / 2.0f, 0);
-    setPosition(position);
+    setPosition(getPosition());
 }

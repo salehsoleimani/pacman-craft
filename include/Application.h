@@ -8,6 +8,7 @@
 #include "Values.h"
 #include "Form.h"
 
+
 class Application {
 public:
     Application() {
@@ -27,6 +28,7 @@ public:
             window.clear(Colors::colorBlue);
             currentForm()->clear(&window);
             currentForm()->render(&window);
+
             window.display();
         }
     }

@@ -28,13 +28,14 @@ void GameForm::render(sf::RenderWindow *window) {
     txtRecord->render(window);
     txtScore->render(window);
     btnBack->render(window);
+
     for (Wall *wall: walls) wall->render(window);
 }
 
 void GameForm::initTexts() {
     txtScore = new TextView("score\n1200", {251, 21});
     txtRecord = new TextView("high score\n3421", {380, 21});
-    btnBack = new TextView("back\nto menu", {82, 21});
+    btnBack = new TextView("pause\nto menu", {82, 21});
     btnBack->setCharacterSize(Font::smallFontSize);
     txtScore->setCharacterSize(Font::smallFontSize);
     txtRecord->setCharacterSize(Font::smallFontSize);
