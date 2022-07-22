@@ -14,7 +14,7 @@ public:
 
     void update(sf::RenderTarget *);
 
-    void render(sf::RenderTarget *);
+    virtual void render(sf::RenderTarget *);
 
     void setCenterHorizontal(bool);
 

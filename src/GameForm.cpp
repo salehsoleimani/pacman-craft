@@ -4,30 +4,37 @@ GameForm::GameForm() : Form("../res/map.txt") {
 
     initTexts();
     initSprites();
-
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
+    sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window).x,
+                                              sf::Mouse::getPosition((*window)).y);
     switch (event.type) {
         case sf::Event::MouseButtonReleased:
+        case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left) {
-                dialog = new DialogView("Pause", "you want to Quit?", "Yes",window->getSize(), [=]() -> void {
-                context->pushForm(new MainForm());
-                });
+                if (btnBack->getGlobalBounds().contains(mousePosition) ||
+                    btnBackIc.getGlobalBounds().contains(mousePosition)) {
+                    if (!dialog)
+                        dialog = new DialogView("Pause", "you want to Quit?", "Yes", window->getSize(), [&]() -> void {
+                            context->pushForm(new MainForm());
+                            dialog = nullptr;
+                        });
+                } else if (dialog) { dialog->pollEvents(event, window); }
             }
             break;
         case sf::Event::KeyPressed:
             pacman->pollEvents(event);
             break;
+
     }
+
 }
 
 
 void GameForm::update(sf::RenderWindow *window) {
-    if (dialog != nullptr)
-        dialog->update(window);
-    else
-    pacman->update();
+    if (dialog == nullptr)
+        pacman->update();
 }
 
 void GameForm::render(sf::RenderWindow *window) {
@@ -38,7 +45,6 @@ void GameForm::render(sf::RenderWindow *window) {
     window->draw(btnBackIc);
     if (dialog != nullptr)
         dialog->render(window);
-
 }
 
 void GameForm::initTexts() {

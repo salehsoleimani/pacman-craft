@@ -70,7 +70,7 @@ void Pacman::update() {
         pacman.setPosition(-Dimensions::wallSize.x, pacman.getPosition().y);
     else if (pacman.getPosition().x <= -Dimensions::wallSize.x)
         pacman.setPosition(Config::videoMode.width, pacman.getPosition().y);
-    else if (pacman.getPosition().x < 1/2* Dimensions::wallSize.x  ||
+    else if (pacman.getPosition().x < 1 / 2 * Dimensions::wallSize.x ||
              (pacman.getPosition().x >= Dimensions::wallSize.x * (Dimensions::WALL_COL - 1)))
         return;
     else {

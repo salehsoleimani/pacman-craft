@@ -5,10 +5,6 @@
 #include "Values.h"
 #include <iostream>
 
-enum class ButtonEvents {
-    INIT, CLICKED, HOVERED
-};
-
 class ButtonView : public TextView {
 public:
     enum class ButtonSize {
@@ -16,20 +12,16 @@ public:
         BIG
     };
 
-    ButtonView(string title, sf::Vector2f position, ButtonView::ButtonSize buttonSize,function<void()> onClick);
-
-    void update(sf::RenderTarget *);
+    ButtonView(string title, sf::Vector2f position, ButtonView::ButtonSize buttonSize, function<void()> onClick);
 
     void render(sf::RenderTarget *target);
 
     void setButtonPosition(sf::Vector2f position);
 
-    void update(const sf::Vector2f &);
+    void eventHandler(const sf::Event &, const sf::Vector2f &);
 
 private:
     function<void()> onClick;
-
-    ButtonEvents event;
 
     sf::Vector2f position;
 
@@ -39,6 +31,7 @@ private:
     sf::RectangleShape buttonShadow;
 
     void initShapes();
+
 };
 
 

@@ -66,6 +66,6 @@ void DialogView::initDialog() {
             {(float) size.x / 2, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
 }
 
-void DialogView::update(sf::RenderTarget *target) {
-    ctaBtn->update(sf::Vector2f(sf::Mouse::getPosition()));
+void DialogView::pollEvents(const sf::Event &event, const sf::Window *target) {
+    ctaBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
 }

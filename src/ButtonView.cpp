@@ -32,32 +32,19 @@ void ButtonView::initShapes() {
     setButtonPosition(position);
 }
 
-void ButtonView::update(const sf::Vector2f &mousePosition) {
-    event = ButtonEvents::INIT;
-
-    sf::IntRect rect(2 * buttonShape.getPosition().x,
-                     buttonShape.getPosition().y + buttonShape.getGlobalBounds().height,
-                     buttonShape.getGlobalBounds().width, buttonShape.getGlobalBounds().height);
-
-    if (rect.contains(mousePosition.x, mousePosition.y)) {
-        event = ButtonEvents::HOVERED;
-
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-            event = ButtonEvents::CLICKED;
-    }
-
-    buttonShape.setOrigin({buttonShape.getGlobalBounds().width / 2, 0});
-
-    switch (event) {
-        case ButtonEvents::INIT:
-            initShapes();
-            break;
-        case ButtonEvents::HOVERED:
-            buttonShape.setPosition({position.x + 6, position.y + 6});
-            break;
-        case ButtonEvents::CLICKED:
-            buttonShape.setPosition({position.x + 6, position.y + 6});
-            onClick();
-            break;
+void ButtonView::eventHandler(const sf::Event &e, const sf::Vector2f &mousePosition) {
+    if (buttonShape.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
+        switch (e.type) {
+            case sf::Event::MouseButtonPressed:
+                setPosition({getPosition().x + 6, getPosition().y + 6});
+                buttonShape.setPosition({position.x + 6, position.y + 6});
+                break;
+            case sf::Event::MouseButtonReleased:
+                onClick();
+                break;
+        }
+    } else {
+        setPosition({position.x, position.y + size.y / 4});
+        buttonShape.setPosition({position.x, position.y});
     }
 }
