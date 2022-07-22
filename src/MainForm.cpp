@@ -1,6 +1,5 @@
 #include "MainForm.h"
 
-
 MainForm::MainForm() : Form("../res/map_menu.txt") {
     initTexts();
     initMenuView();
@@ -28,6 +27,9 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
                         case 1:
                             context->pushForm(new OptionsForm());
                             break;
+                        case 2:
+                            window->close();
+                            break;
                     }
                     break;
                 case sf::Keyboard::Down:
@@ -41,8 +43,7 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
     }
 }
 
-void MainForm::update() {
-//    pollEvents();
+void MainForm::update(sf::RenderWindow *window) {
 }
 
 void MainForm::render(sf::RenderWindow *window) {

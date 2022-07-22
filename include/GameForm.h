@@ -9,6 +9,7 @@
 #include "File.h"
 #include "ButtonView.h"
 #include "DialogView.h"
+#include "Pacman.h"
 
 using namespace std;
 
@@ -19,25 +20,25 @@ public:
     ~GameForm();
 
 private:
+    Pacman *pacman;
+
     TextView *txtScore;
     TextView *txtRecord;
     TextView *btnBack;
 
+    sf::Sprite btnBackIc;
+
+    DialogView *dialog = nullptr;
+
     void pollEvents(sf::Event &, sf::RenderWindow *, Application *) override;
 
-    void update() override;
+    void update(sf::RenderWindow *) override;
 
     void render(sf::RenderWindow *) override;
 
     void initTexts();
 
-    string mapFileName;
-
-    void initGrid();
-
-    vector<Wall *> walls;
-
-    array<array<char, 19>, 26> board;
+    void initSprites();
 };
 
 #endif //PACMAN_GAMEFORM_H

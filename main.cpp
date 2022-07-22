@@ -3,6 +3,7 @@
 #include "GameForm.h"
 
 int main() {
+    //initialize application and first state
     Application app;
     app.pushForm(new GameForm());
     app.run();

@@ -13,7 +13,6 @@ public:
 
     void update(sf::RenderTarget *);
 
-
     void render(sf::RenderTarget *);
 
 private:

@@ -8,6 +8,7 @@
 #include "MenuView.h"
 #include "GameForm.h"
 #include "OptionsForm.h"
+#include "DialogView.h"
 
 class MainForm : public Form {
 public:
@@ -25,7 +26,7 @@ private:
 
     void pollEvents(sf::Event &, sf::RenderWindow *, Application *) override;
 
-    void update() override;
+    void update(sf::RenderWindow *) override;
 
     void render(sf::RenderWindow *) override;
 

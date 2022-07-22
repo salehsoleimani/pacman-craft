@@ -29,6 +29,5 @@ void Form::initGrid() {
                 walls.push_back(new Wall({j * Dimensions::wallSize.x,
                                           i * Dimensions::wallSize.y}));
         }
-        cout << endl;
     }
 }

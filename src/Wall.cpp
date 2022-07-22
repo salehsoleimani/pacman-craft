@@ -8,6 +8,7 @@ Wall::Wall(sf::Vector2f position){
     wall->setOrigin(wall->getSize().x / 2, wall->getSize().y / 2);
     wall->setFillColor(Colors::colorWall);
     wall->setOutlineColor(Colors::colorBlue);
+    // set a inline border
     wall->setOutlineThickness(-1.f);
     wall->setSize(Dimensions::wallSize);
 }

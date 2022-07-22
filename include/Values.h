@@ -35,11 +35,16 @@ namespace Font {
 
 //view dimensions
 namespace Dimensions {
+
     static const float margin = 48;
+
     static const float shadowOffset = 6;
+
     static const sf::Vector2f wallSize = {30, 30};
+
     static const int WALL_ROW = 26;
     static const int WALL_COL = 19;
+
     static const sf::Vector2f BUTTON_SIZE_SMALL = {138, 74};
     static const sf::Vector2f BUTTON_SIZE_BIG = {298, 74};
 }

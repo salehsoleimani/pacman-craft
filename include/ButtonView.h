@@ -5,6 +5,10 @@
 #include "Values.h"
 #include <iostream>
 
+enum class ButtonEvents {
+    INIT, CLICKED, HOVERED
+};
+
 class ButtonView : public TextView {
 public:
     enum class ButtonSize {
@@ -12,35 +16,21 @@ public:
         BIG
     };
 
-    ButtonView(string title, sf::Vector2f position, ButtonView::ButtonSize buttonSize) : TextView(title,
-                                                                                                  {position.x / 2,
-                                                                                                   position.y / 2}),
-                                                                                         position(position) {
-        setFillColor(Colors::colorBlue);
-        setCharacterSize(Font::regularFontSize);
-        setCenterHorizontal(true);
-        size = buttonSize == ButtonSize::SMALL ? Dimensions::BUTTON_SIZE_SMALL : Dimensions::BUTTON_SIZE_BIG;
-        initShapes();
-    }
+    ButtonView(string title, sf::Vector2f position, ButtonView::ButtonSize buttonSize,function<void()> onClick);
 
     void update(sf::RenderTarget *);
 
-    void render(sf::RenderTarget *target) {
-        target->draw(buttonShadow);
-        target->draw(buttonShape);
-        target->draw(*this);
-    }
+    void render(sf::RenderTarget *target);
 
-    void setButtonPosition(sf::Vector2f position) {
-        this->position = position;
-        buttonShape.setOrigin({buttonShape.getGlobalBounds().width / 2, 0});
-        buttonShadow.setOrigin({buttonShadow.getGlobalBounds().width / 2, 0});
-        buttonShape.setPosition(position);
-        buttonShadow.setPosition({position.x + 8, position.y + 8});
-        setPosition({position.x, position.y + size.y/4 });
-    }
+    void setButtonPosition(sf::Vector2f position);
+
+    void update(const sf::Vector2f &);
 
 private:
+    function<void()> onClick;
+
+    ButtonEvents event;
+
     sf::Vector2f position;
 
     sf::Vector2f size;
@@ -48,13 +38,7 @@ private:
     sf::RectangleShape buttonShape;
     sf::RectangleShape buttonShadow;
 
-    void initShapes() {
-        buttonShape.setSize(size);
-        buttonShadow.setSize(size);
-        buttonShape.setFillColor(Colors::colorActive);
-        buttonShadow.setFillColor(Colors::colorShadow);
-        setButtonPosition(position);
-    }
+    void initShapes();
 };
 
 

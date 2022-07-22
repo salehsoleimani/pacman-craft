@@ -30,8 +30,10 @@ private:
 
     sf::Vector2f position;
 
+    //menu items
     std::vector<TextView *> items;
 
+    //shadow behind textview when selected
     TextView *textShadow;
 };
 

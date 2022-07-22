@@ -39,7 +39,7 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
 
 }
 
-void OptionsForm::update() {
+void OptionsForm::update(sf::RenderWindow *window) {
 }
 
 void OptionsForm::render(sf::RenderWindow *window) {
