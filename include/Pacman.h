@@ -2,6 +2,7 @@
 #define PACMAN_PACMAN_H
 
 #include "Application.h"
+#include "Animator.h"
 
 class Pacman {
 public:
@@ -15,11 +16,13 @@ public:
 
     void pollEvents(sf::Event &event);
 
-    void update();
+    void update(const sf::Time &dt);
 
     void render(sf::RenderTarget *target);
 
 private:
+    Animator *animator;
+
 // we need this to check collisions
     array<array<char, 19>, 26> board;
 
@@ -32,7 +35,7 @@ private:
     sf::Vector2f nextMove;
     sf::Vector2f lastMove;
 
-    sf::RectangleShape pacman;
+    sf::Sprite pacman;
 
     float speed = 3;
 

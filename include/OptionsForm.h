@@ -21,7 +21,7 @@ private:
 
     void pollEvents(sf::Event&,sf::RenderWindow*, Application *) override;
 
-    void update(sf::RenderWindow *) override;
+    void update(sf::RenderWindow *,const sf::Time&) override;
 
     void render(sf::RenderWindow *) override;
 

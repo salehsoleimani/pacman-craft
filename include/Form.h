@@ -23,7 +23,7 @@ public:
     //to poll events from Application window to forms
     virtual void pollEvents(sf::Event &, sf::RenderWindow *, Application *) = 0;
 
-    virtual void update(sf::RenderWindow *) = 0;
+    virtual void update(sf::RenderWindow *,const sf::Time&) = 0;
 
     virtual void render(sf::RenderWindow *) = 0;
 

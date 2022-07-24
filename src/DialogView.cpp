@@ -1,6 +1,7 @@
 #include "DialogView.h"
 
-DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, sf::Vector2u size, function<void()> onClick) {
+DialogView::DialogView(const string &dialogTitle, const string &dialogTxt, const string &cta, const sf::Vector2u &size,
+                       const function<void()> &onClick) {
     titleTV = new TextView(dialogTitle, {0, 0});
     txtTV = new TextView(justifyText(dialogTxt), {0, 0});
     ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
@@ -10,7 +11,7 @@ DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, sf::Vec
     initDialog();
 }
 
-string DialogView::justifyText(string str) {
+string DialogView::justifyText(const string& str) {
     int width = 21, count = 0;
     ostringstream stream;
     istringstream input;

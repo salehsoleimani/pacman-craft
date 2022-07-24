@@ -1,12 +1,16 @@
 #include "Pacman.h"
 
 Pacman::Pacman(float row, float col, const array<array<char, 19>, 26> &board) : board(board) {
-    auto *texture = new sf::Texture;
-    texture->loadFromFile("../res/sprites/pacman.png");
-    texture->setSmooth(true);
     pacman.setPosition({row * Dimensions::wallSize.x, col * Dimensions::wallSize.y});
-    pacman.setSize(Dimensions::wallSize);
-    pacman.setTexture(texture);
+
+    animator = new Animator(pacman);
+
+    animator->add("right", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 0), 5);
+    animator->add("left", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 60), 5);
+    animator->add("up", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 30), 5);
+
+    animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(30, 0), 12, false);
+
     relativePosition = {row, col};
 }
 
@@ -14,29 +18,36 @@ Pacman::~Pacman() {
 
 }
 
-void Pacman::pollEvents(sf::Event &event) {
 
+void Pacman::pollEvents(sf::Event &event) {
     if (event.type == sf::Event::KeyPressed)
         switch (event.key.code) {
             case sf::Keyboard::Down:
                 direction = Directions::DOWN;
+                animator->setAnimation("down");
                 break;
             case sf::Keyboard::Up:
                 direction = Directions::UP;
+                animator->setAnimation("up");
                 break;
             case sf::Keyboard::Left:
                 direction = Directions::LEFT;
+                animator->setAnimation("left");
                 break;
             case sf::Keyboard::Right:
                 direction = Directions::RIGHT;
+                animator->setAnimation("right");
                 break;
             default:
                 direction = Directions::INIT;
+                animator->setAnimation("die");
                 break;
         }
 }
 
-void Pacman::update() {
+void Pacman::update(const sf::Time &dt) {
+
+    animator->update(dt);
 
     sf::Vector2f currentPosition = pacman.getPosition();
 
@@ -66,13 +77,17 @@ void Pacman::update() {
     updateRelativePosition();
 
     //walking through gates
-    if (Dimensions::wallSize.x * Dimensions::WALL_COL <= pacman.getPosition().x)
+    if (pacman.getPosition().x >= Dimensions::wallSize.x * Dimensions::WALL_COL)
         pacman.setPosition(-Dimensions::wallSize.x, pacman.getPosition().y);
+
     else if (pacman.getPosition().x <= -Dimensions::wallSize.x)
         pacman.setPosition(Config::videoMode.width, pacman.getPosition().y);
+
     else if (pacman.getPosition().x < 1 / 2 * Dimensions::wallSize.x ||
-             (pacman.getPosition().x >= Dimensions::wallSize.x * (Dimensions::WALL_COL - 1)))
+             (pacman.getPosition().x >
+              Dimensions::wallSize.x * (Dimensions::WALL_COL - 1) - 1 / 2 * Dimensions::wallSize.x))
         return;
+
     else {
         if (checkCollision(relativePosition.x, relativePosition.y)) {
             pacman.setPosition(currentPosition);
@@ -81,13 +96,15 @@ void Pacman::update() {
 
             updateRelativePosition();
 
-            if (lastMove != nextMove && !checkCollision(relativePosition.x, relativePosition.y))
+            if (lastMove != nextMove && !checkCollision(relativePosition.x, relativePosition.y)) {
                 pacman.move(lastMove);
+            }
 
             updateRelativePosition();
 
-            if (checkCollision(relativePosition.x, relativePosition.y))
+            if (checkCollision(relativePosition.x, relativePosition.y)) {
                 pacman.setPosition(currentPosition);
+            }
 
         } else
             lastMove = nextMove;

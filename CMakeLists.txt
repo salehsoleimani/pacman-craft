@@ -15,7 +15,9 @@ add_executable(Pacman main.cpp
         src/OptionsForm.cpp
         src/ButtonView.cpp
         src/Pacman.cpp
-        src/DialogView.cpp)
+        src/DialogView.cpp
+        src/Animator.cpp
+        src/Animation.cpp)
 include_directories(/usr/local/include include)
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS})

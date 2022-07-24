@@ -8,7 +8,7 @@
 
 class DialogView : public sf::RectangleShape {
 public:
-    DialogView(string dialogTitle, string dialogTxt, string cta, sf::Vector2u size, function<void()> onClick);
+    DialogView(const string& dialogTitle,const string& dialogTxt,const string& cta,const sf::Vector2u &size,const function<void()>& onClick);
 
 //    void update(sf::RenderTarget *);
 
@@ -19,7 +19,7 @@ public:
     void pollEvents(const sf::Event &, const sf::Window *);
 
 private:
-    string justifyText(string text);
+    string justifyText(const string &text);
 
     sf::Vector2u size;
     ButtonView *ctaBtn;

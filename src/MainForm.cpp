@@ -43,7 +43,7 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
     }
 }
 
-void MainForm::update(sf::RenderWindow *window) {
+void MainForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 }
 
 void MainForm::render(sf::RenderWindow *window) {

@@ -18,9 +18,13 @@ public:
     }
 
     void run() {
+        sf::Clock clock;
         while (window.isOpen()) {
 
-            currentForm()->update(&window);
+            sf::Time dt = clock.restart();
+
+            currentForm()->update(&window,dt);
+
             window.clear(Colors::colorBlue);
             //draw walls background
             currentForm()->clear(&window);

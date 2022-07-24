@@ -12,11 +12,12 @@ public:
         BIG
     };
 
-    ButtonView(string title, sf::Vector2f position, ButtonView::ButtonSize buttonSize, function<void()> onClick);
+    ButtonView(const string &title, const sf::Vector2f &position, const ButtonView::ButtonSize &buttonSize,
+               const function<void()> &onClick);
 
     void render(sf::RenderTarget *target);
 
-    void setButtonPosition(sf::Vector2f position);
+    void setButtonPosition(const sf::Vector2f &position);
 
     void eventHandler(const sf::Event &, const sf::Vector2f &);
 

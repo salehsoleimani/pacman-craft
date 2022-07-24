@@ -1,6 +1,7 @@
 #include "ButtonView.h"
 
-ButtonView::ButtonView(string title, sf::Vector2f position, ButtonView::ButtonSize buttonSize, function<void()> onClick)
+ButtonView::ButtonView(const string &title, const sf::Vector2f &position, const ButtonView::ButtonSize &buttonSize,
+                       const function<void()> &onClick)
         : TextView(title, {position.x / 2, position.y / 2}), position(position), onClick(onClick) {
     setFillColor(Colors::colorBlue);
     setCharacterSize(Font::regularFontSize);
@@ -15,7 +16,7 @@ void ButtonView::render(sf::RenderTarget *target) {
     target->draw(*this);
 }
 
-void ButtonView::setButtonPosition(sf::Vector2f position) {
+void ButtonView::setButtonPosition(const sf::Vector2f &position) {
     this->position = position;
     buttonShape.setOrigin({buttonShape.getGlobalBounds().width / 2, 0});
     buttonShadow.setOrigin({buttonShadow.getGlobalBounds().width / 2, 0});

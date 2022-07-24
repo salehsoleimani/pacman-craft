@@ -32,9 +32,9 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
 }
 
 
-void GameForm::update(sf::RenderWindow *window) {
+void GameForm::update(sf::RenderWindow *window,const sf::Time& dt) {
     if (dialog == nullptr)
-        pacman->update();
+        pacman->update(dt);
 }
 
 void GameForm::render(sf::RenderWindow *window) {
