@@ -31,3 +31,7 @@ void Form::initGrid() {
         }
     }
 }
+
+const array<array<char, 19>, 26> &Form::getBoard() const {
+    return board;
+}

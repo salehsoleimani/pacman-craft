@@ -1,6 +1,6 @@
 #include "Pacman.h"
 
-Pacman::Pacman(float row, float col, const array<array<char, 19>, 26> &board) : board(board) {
+Pacman::Pacman(float row, float col, Form *context) : context(context) {
     pacman.setPosition({row * Dimensions::wallSize.x, col * Dimensions::wallSize.y});
 
     animator = new Animator(pacman);
@@ -113,8 +113,9 @@ void Pacman::update(const sf::Time &dt) {
 }
 
 bool Pacman::checkCollision(float x, float y) {
-    if (board[ceil(y)][ceil(x)] == 'W' || board[ceil(y)][floor(x)] == 'W' || board[floor(y)][ceil(x)] == 'W' ||
-        board[floor(y)][floor(x)] == 'W')
+    if (context->getBoard()[ceil(y)][ceil(x)] == 'W' || context->getBoard()[ceil(y)][floor(x)] == 'W' ||
+        context->getBoard()[floor(y)][ceil(x)] == 'W' ||
+        context->getBoard()[floor(y)][floor(x)] == 'W')
         return true;
     return false;
 }

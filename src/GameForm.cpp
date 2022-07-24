@@ -70,9 +70,7 @@ void GameForm::initSprites() {
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             if (board[i][j] == 'P') {
-                pacman = new Pacman(j, i, board);
-                //i dont know why but without this print line the view doesnt render:)
-//                cout << pacman->getPosition().x << pacman->getPosition().y << endl;
+                pacman = new Pacman(j, i, this);
             }
         }
     }

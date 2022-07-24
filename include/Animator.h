@@ -28,7 +28,7 @@ private:
 
     vector<Animation *> animations;
 
-    int currentAnimation;
+    Animation *currentAnimation;
 };
 
 #endif //PACMAN_ANIMATOR_H

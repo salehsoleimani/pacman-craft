@@ -10,7 +10,7 @@ public:
         INIT, UP, DOWN, LEFT, RIGHT
     };
 
-    explicit Pacman(float row, float col, const array<array<char, 19>, 26> &board);
+    explicit Pacman(float row, float col, Form* context);
 
     ~Pacman();
 
@@ -21,10 +21,9 @@ public:
     void render(sf::RenderTarget *target);
 
 private:
-    Animator *animator;
+    Form* context;
 
-// we need this to check collisions
-    array<array<char, 19>, 26> board;
+    Animator *animator;
 
     sf::Vector2f relativePosition;
 

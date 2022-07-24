@@ -30,6 +30,8 @@ public:
     //draw background walls based on map
     virtual void clear(sf::RenderWindow *window);
 
+    const array<array<char, 19>, 26> &getBoard() const;
+
 private:
     void initGrid();
 
