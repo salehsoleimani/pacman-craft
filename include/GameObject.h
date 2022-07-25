@@ -6,11 +6,22 @@
 
 class GameObject {
 public:
+    enum class ObjectType {
+        WALL, PACMAN, FOOD, FOOD_POWER, EMPTY
+    };
+
     GameObject(sf::Vector2f position) : position(position) {}
 
     virtual void update(sf::Time) = 0;
 
     virtual void render(sf::RenderTarget *) = 0;
+
+    const sf::Vector2f &getPosition() const {
+        return position;
+    }
+
+protected:
+    ObjectType gameObjectType;
 
 private:
     sf::Vector2f position;

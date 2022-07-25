@@ -76,14 +76,14 @@ void GameForm::initSprites() {
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             switch (board[i][j]) {
-                case 'P':
-                    pacman = new Pacman(j, i, this);
+                case GameObject::ObjectType::PACMAN:
+                    pacman = new Pacman(sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x}, this);
                     break;
-                case 'F': //normal foods
+                case GameObject::ObjectType::FOOD: //normal foods
                     foods.push_back(new Food({j * Dimensions::wallSize.x,
                                               i * Dimensions::wallSize.y}, Food::FoodType::NORMAL));
                     break;
-                case 'S': //power foods
+                case GameObject::ObjectType::FOOD_POWER: //power foods
                     foods.push_back(new Food({j * Dimensions::wallSize.x,
                                               i * Dimensions::wallSize.y}, Food::FoodType::POWER));
                     break;

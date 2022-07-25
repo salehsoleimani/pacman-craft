@@ -1,7 +1,7 @@
 #include "Pacman.h"
 
-Pacman::Pacman(float row, float col, Form *context) : context(context) {
-    pacman.setPosition({row * Dimensions::wallSize.x, col * Dimensions::wallSize.y});
+Pacman::Pacman(sf::Vector2f position, Form *context) : GameObject(position),context(context) {
+    pacman.setPosition(position);
 
     animator = new Animator(pacman);
 
@@ -12,7 +12,7 @@ Pacman::Pacman(float row, float col, Form *context) : context(context) {
 
     animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(30, 0), 12, false);
 
-    relativePosition = {row, col};
+    updateRelativePosition();
 }
 
 Pacman::~Pacman() {
@@ -46,7 +46,7 @@ void Pacman::pollEvents(sf::Event &event) {
         }
 }
 
-void Pacman::update(const sf::Time &dt) {
+void Pacman::update(sf::Time dt) {
 
     animator->update(dt);
 
@@ -114,11 +114,15 @@ void Pacman::update(const sf::Time &dt) {
 }
 
 bool Pacman::checkCollision(float x, float y) {
-    if (context->getBoard()[ceil(y)][ceil(x)] == 'W' || context->getBoard()[ceil(y)][floor(x)] == 'W' ||
-        context->getBoard()[floor(y)][ceil(x)] == 'W' ||
-        context->getBoard()[floor(y)][floor(x)] == 'W')
+    if (context->getBoard()[ceil(y)][ceil(x)] == GameObject::ObjectType::WALL|| context->getBoard()[ceil(y)][floor(x)] == GameObject::ObjectType::WALL||
+        context->getBoard()[floor(y)][ceil(x)] == GameObject::ObjectType::WALL ||
+        context->getBoard()[floor(y)][floor(x)] == GameObject::ObjectType::WALL)
         return true;
     return false;
+}
+
+void Pacman::eat() {
+//    context->getBoard()
 }
 
 void Pacman::updateRelativePosition() {

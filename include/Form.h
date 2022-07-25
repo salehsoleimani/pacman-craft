@@ -31,7 +31,7 @@ public:
     //draw background walls based on map
     virtual void clear(sf::RenderWindow *window);
 
-    const array<array<char, 19>, 26> &getBoard() const;
+    const array<array<GameObject::ObjectType, 19>, 26> &getBoard() const;
 
 private:
     void initGrid();
@@ -43,7 +43,7 @@ private:
 
 protected:
     //we need this in GameForm for drawing other entities
-    array<array<char, 19>, 26> board;
+    array<array<GameObject::ObjectType, 19>, 26> board;
 };
 
 

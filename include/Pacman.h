@@ -4,41 +4,44 @@
 #include "Application.h"
 #include "Animator.h"
 
-class Pacman {
+class Pacman : public GameObject {
 public:
     enum class Directions {
         INIT, UP, DOWN, LEFT, RIGHT
     };
 
-    explicit Pacman(float row, float col, Form* context);
+    explicit Pacman(sf::Vector2f, Form *context);
 
     ~Pacman();
 
     void pollEvents(sf::Event &event);
 
-    void update(const sf::Time &dt);
+    void update(sf::Time dt) override;
 
-    void render(sf::RenderTarget *target);
+    void render(sf::RenderTarget *target) override;
 
 private:
-    Form* context;
+    Form *context;
 
     Animator *animator;
 
     sf::Vector2f relativePosition;
 
-    void updateRelativePosition();
-
     Directions direction;
 
     sf::Vector2f nextMove;
+
     sf::Vector2f lastMove;
 
     sf::Sprite pacman;
 
     float speed = 3;
 
+    void updateRelativePosition();
+
     bool checkCollision(float x, float y);
+
+    void eat();
 };
 
 

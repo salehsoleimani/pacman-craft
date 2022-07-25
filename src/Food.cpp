@@ -1,7 +1,5 @@
 #include "Food.h"
 
-#include <iostream>
-
 Food::Food(sf::Vector2f position, FoodType foodType) : GameObject(position), foodType(foodType) {
     if (foodType == FoodType::NORMAL)
         food.setRadius(3.0f);
@@ -13,12 +11,12 @@ Food::Food(sf::Vector2f position, FoodType foodType) : GameObject(position), foo
     food.setFillColor(sf::Color::White);
 }
 
-void Food::render(sf::RenderTarget *target) {
-    target->draw(food);
-}
-
 Food::~Food() {
 
+}
+
+void Food::render(sf::RenderTarget *target) {
+    target->draw(food);
 }
 
 void Food::update(sf::Time dt) {
@@ -26,10 +24,13 @@ void Food::update(sf::Time dt) {
         progress += dt;
         if (progress >= blinkAnimation) {
             progress = sf::Time::Zero;
-            if (food.getFillColor() == sf::Color::Transparent)
+            if (foodState == FoodState::BLINK) {
                 food.setFillColor(sf::Color::White);
-            else
+                foodState = FoodState::NORMAL;
+            } else if (foodState == FoodState::NORMAL) {
                 food.setFillColor(sf::Color::Transparent);
+                foodState = FoodState::BLINK;
+            }
             progress = sf::Time::Zero;
         }
     }

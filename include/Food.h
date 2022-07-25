@@ -11,6 +11,10 @@ public:
         NORMAL, POWER
     };
 
+    enum class FoodState {
+        NORMAL, BLINK, EATEN
+    };
+
     explicit Food(sf::Vector2f, FoodType);
 
     ~Food();
@@ -23,6 +27,8 @@ private:
     sf::Time progress, blinkAnimation = sf::milliseconds(400.0f);
 
     FoodType foodType;
+
+    FoodState foodState = FoodState::NORMAL;
 
     sf::CircleShape food;
 };
