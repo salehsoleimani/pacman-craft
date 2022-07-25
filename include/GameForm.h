@@ -20,6 +20,8 @@ public:
     ~GameForm();
 
 private:
+    vector<Food *> foods;
+
     Pacman *pacman;
 
     TextView *txtScore;

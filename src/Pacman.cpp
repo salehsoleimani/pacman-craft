@@ -8,6 +8,7 @@ Pacman::Pacman(float row, float col, Form *context) : context(context) {
     animator->add("right", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 0), 5);
     animator->add("left", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 60), 5);
     animator->add("up", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 30), 5);
+    animator->add("down", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 90), 5);
 
     animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(30, 0), 12, false);
 

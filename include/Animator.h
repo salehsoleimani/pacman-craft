@@ -1,7 +1,6 @@
 #ifndef PACMAN_ANIMATOR_H
 #define PACMAN_ANIMATOR_H
 
-#include "Application.h"
 #include "Animation.h"
 
 using namespace std;

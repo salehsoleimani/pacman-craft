@@ -1,23 +1,19 @@
 #ifndef PACMAN_WALL_H
 #define PACMAN_WALL_H
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "GameObject.h"
 
-class Wall {
+class Wall : public GameObject {
 public:
-
     Wall(sf::Vector2f);
 
     ~Wall();
 
-    void update(sf::RenderTarget *);
+    void update(sf::Time) override;
 
-    void render(sf::RenderTarget *);
+    void render(sf::RenderTarget *) override;
 
 private:
-    sf::Vector2f position;
-
     sf::RectangleShape *wall;
 };
 

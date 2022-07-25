@@ -6,6 +6,12 @@ GameForm::GameForm() : Form("../res/map.txt") {
     initSprites();
 }
 
+GameForm::~GameForm() {
+    delete pacman;
+    for (auto food: foods) delete food;
+
+}
+
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
     sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window).x,
                                               sf::Mouse::getPosition((*window)).y);
@@ -32,9 +38,13 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
 }
 
 
-void GameForm::update(sf::RenderWindow *window,const sf::Time& dt) {
-    if (dialog == nullptr)
+void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
+    if (dialog == nullptr) {
         pacman->update(dt);
+        for (auto food: foods) {
+            food->update(dt);
+        }
+    }
 }
 
 void GameForm::render(sf::RenderWindow *window) {
@@ -42,6 +52,7 @@ void GameForm::render(sf::RenderWindow *window) {
     txtScore->render(window);
     btnBack->render(window);
     pacman->render(window);
+    for (auto food: foods) food->render(window);
     window->draw(btnBackIc);
     if (dialog != nullptr)
         dialog->render(window);
@@ -56,12 +67,7 @@ void GameForm::initTexts() {
     txtRecord->setCharacterSize(Font::smallFontSize);
 }
 
-GameForm::~GameForm() {
-    delete pacman;
-}
-
 void GameForm::initSprites() {
-
     auto *icBackTexture = new sf::Texture;
     icBackTexture->loadFromFile("../res/icons/ic_back.png");
     btnBackIc.setPosition({30, (btnBack->getGlobalBounds().top + btnBack->getGlobalBounds().height) / 2});
@@ -69,8 +75,18 @@ void GameForm::initSprites() {
 
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            if (board[i][j] == 'P') {
-                pacman = new Pacman(j, i, this);
+            switch (board[i][j]) {
+                case 'P':
+                    pacman = new Pacman(j, i, this);
+                    break;
+                case 'F': //normal foods
+                    foods.push_back(new Food({j * Dimensions::wallSize.x,
+                                              i * Dimensions::wallSize.y}, Food::FoodType::NORMAL));
+                    break;
+                case 'S': //power foods
+                    foods.push_back(new Food({j * Dimensions::wallSize.x,
+                                              i * Dimensions::wallSize.y}, Food::FoodType::POWER));
+                    break;
             }
         }
     }

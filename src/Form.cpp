@@ -5,7 +5,7 @@ Form::Form(string mapFileName) : mapFileName(mapFileName) {
 }
 
 void Form::clear(sf::RenderWindow *window) {
-    for (Wall *wall: walls) wall->render(window);
+    for (auto wall: walls) wall->render(window);
 }
 
 Form::~Form() {
@@ -15,6 +15,7 @@ Form::~Form() {
 void Form::initGrid() {
     File file(mapFileName);
     file.open(ios::in);
+
     string line;
     for (int i = 0; i < 26; ++i) {
         line = file.getline();
@@ -25,9 +26,12 @@ void Form::initGrid() {
 
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            if (board[i][j] == 'W')
-                walls.push_back(new Wall({j * Dimensions::wallSize.x,
-                                          i * Dimensions::wallSize.y}));
+            switch (board[i][j]) {
+                case 'W': //walls
+                    walls.push_back(new Wall({j * Dimensions::wallSize.x,
+                                              i * Dimensions::wallSize.y}));
+                    break;
+            }
         }
     }
 }

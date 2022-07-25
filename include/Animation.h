@@ -1,7 +1,12 @@
 #ifndef PACMAN_ANIMATION_H
 #define PACMAN_ANIMATION_H
 
-#include "Application.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <vector>
+#include "Values.h"
+
+using namespace std;
 
 class Animation {
 public:
