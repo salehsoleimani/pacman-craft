@@ -8,10 +8,16 @@ GameForm::GameForm() : Form("../res/map.txt") {
 }
 
 GameForm::~GameForm() {
+    if (score > highScore)
+        try {
+            File file("high_score.txt");
+            file.open(ios::out);
+            file << score;
+        } catch (file_open_exception ex) {
+            cerr << "error reading highscore";
+        }
     delete pacman;
     for (auto food: foods) delete food;
-    if (food)
-        delete food;
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
@@ -41,11 +47,16 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
 
 
 void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
+    ifstream f(string("high_score.txt").c_str());
+    if (!f.good()) highScore = 0;
+    txtRecord->setString("high score\n" + to_string(highScore));
     if (dialog == nullptr) {
         pacman->update(dt);
-        for (auto food: foods) {
+
+        for (auto food: foods)
             food->update(dt);
-        }
+
+        txtScore->setString("score\n" + to_string(this->score));
     }
 }
 
@@ -61,8 +72,16 @@ void GameForm::render(sf::RenderWindow *window) {
 }
 
 void GameForm::initTexts() {
-    txtScore = new TextView("score\n1200", {251, 21});
-    txtRecord = new TextView("high score\n3421", {380, 21});
+    try {
+        File file("high_score.txt");
+        file.open(ios::in);
+        highScore = stoi(file.getline());
+    } catch (file_open_exception ex) {
+        highScore = 0;
+    }
+
+    txtScore = new TextView("score\n0", {251, 21});
+    txtRecord = new TextView("high score\n" + to_string(highScore), {380, 21});
     btnBack = new TextView("pause\nto menu", {82, 21});
     btnBack->setCharacterSize(Font::smallFontSize);
     txtScore->setCharacterSize(Font::smallFontSize);
@@ -100,4 +119,8 @@ void GameForm::initSprites() {
 
 const vector<Food *> &GameForm::getFoods() const {
     return foods;
+}
+
+void GameForm::raiseScore(unsigned int score) {
+    this->score += score;
 }

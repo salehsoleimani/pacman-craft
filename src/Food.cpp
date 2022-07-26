@@ -40,3 +40,19 @@ void Food::ate() {
     food.setFillColor(sf::Color::Transparent);
     foodState = FoodState::EATEN;
 }
+
+//enhance this later
+unsigned Food::getPpt() const {
+    switch (foodType) {
+        case FoodType::NORMAL:
+            return 20;
+        case FoodType::POWER:
+            return 50;
+        default:
+            return 0;
+    }
+}
+
+bool Food::isEaten() const {
+    return foodState == FoodState::EATEN;
+}

@@ -24,6 +24,10 @@ public:
     void render(sf::RenderTarget *) override;
 
     void ate();
+
+    unsigned getPpt() const;
+
+    bool isEaten() const;
 private:
     sf::Time progress, blinkAnimation = sf::milliseconds(400.0f);
 

@@ -25,7 +25,11 @@ public:
 
     const vector<Food *> &getFoods() const;
 
+    void raiseScore(unsigned);
 private:
+    unsigned score = 0;
+    unsigned highScore = 0;
+
     Food *food;
 
     vector<Food *> foods;
@@ -36,7 +40,6 @@ private:
     TextView *txtRecord;
     TextView *btnBack;
 
-private:
     sf::Sprite btnBackIc;
 
     DialogView *dialog = nullptr;
@@ -47,7 +50,7 @@ private:
 
     void render(sf::RenderWindow *) override;
 
-    void initTexts();
+    void initTexts() ;
 
     void initSprites();
 };

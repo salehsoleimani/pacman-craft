@@ -57,9 +57,12 @@ public:
     }
 
     //reset button in options menu
-    void resetGame(Form *form) {
+    void resetGame() {
         delete forms.front();
         forms.pop_front();
+    }
+
+    void pushFront(Form *form){
         forms.push_front(form);
     }
 

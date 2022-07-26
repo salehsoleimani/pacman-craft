@@ -20,7 +20,12 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                 case sf::Keyboard::Enter:
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:
-                            context->resetGame(new GameForm());
+                            context->resetGame();
+                            context->pushFront(new GameForm());
+                            break;
+                        case 1:
+                            if (remove("high_score.txt") != 0)
+                                cerr << "Error deleting file";
                             break;
                         case 2:
                             context->popForm();
@@ -39,7 +44,7 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
 
 }
 
-void OptionsForm::update(sf::RenderWindow *window,const sf::Time& dt) {
+void OptionsForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 }
 
 void OptionsForm::render(sf::RenderWindow *window) {

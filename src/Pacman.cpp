@@ -74,9 +74,13 @@ void Pacman::update(sf::Time dt) {
 
     pacman.move(nextMove);
 
+    //eating fruits
     for (auto food: context->getFoods()) {
-        if (food->getRelativePosition().x == relativePosition.x && food->getRelativePosition().y == relativePosition.y)
+        if (food->getRelativePosition().x == relativePosition.x &&
+            food->getRelativePosition().y == relativePosition.y && !food->isEaten()) {
             food->ate();
+            context->raiseScore(food->getPpt());
+        }
     }
 
     updateRelativePosition();
@@ -125,7 +129,7 @@ bool Pacman::checkCollision(float x, float y) {
     return false;
 }
 
-void Pacman::eat(Food* food) {
+void Pacman::eat(Food *food) {
 }
 
 void Pacman::updateRelativePosition() {
