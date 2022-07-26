@@ -5,7 +5,6 @@
 #include <SFML/Window.hpp>
 #include <deque>
 #include <cmath>
-
 #include "Values.h"
 #include "Form.h"
 

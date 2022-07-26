@@ -20,11 +20,20 @@ public:
         return position;
     }
 
+    const sf::Vector2f &getRelativePosition() const {
+        return relativePosition;
+    }
+
+    void setRelativePosition(const sf::Vector2f &relativePosition) {
+        GameObject::relativePosition = relativePosition;
+    }
+
 protected:
     ObjectType gameObjectType;
 
-private:
     sf::Vector2f position;
+
+    sf::Vector2f relativePosition;
 };
 
 

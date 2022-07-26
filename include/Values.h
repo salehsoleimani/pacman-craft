@@ -23,6 +23,7 @@ namespace Colors {
     static const sf::Color colorActive = sf::Color(255, 234, 0);
     static const sf::Color colorShadow = sf::Color(238, 35, 39);
     static const sf::Color colorTransparent = sf::Color(0, 0, 0, 76);
+    static const sf::Color colorDot = sf::Color(247, 191, 80);
 }
 
 //font

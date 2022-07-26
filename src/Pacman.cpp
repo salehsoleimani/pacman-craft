@@ -1,6 +1,6 @@
 #include "Pacman.h"
 
-Pacman::Pacman(sf::Vector2f position, Form *context) : GameObject(position),context(context) {
+Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position), context(context) {
     pacman.setPosition(position);
 
     animator = new Animator(pacman);
@@ -18,7 +18,6 @@ Pacman::Pacman(sf::Vector2f position, Form *context) : GameObject(position),cont
 Pacman::~Pacman() {
 
 }
-
 
 void Pacman::pollEvents(sf::Event &event) {
     if (event.type == sf::Event::KeyPressed)
@@ -75,6 +74,11 @@ void Pacman::update(sf::Time dt) {
 
     pacman.move(nextMove);
 
+    for (auto food: context->getFoods()) {
+        if (food->getRelativePosition().x == relativePosition.x && food->getRelativePosition().y == relativePosition.y)
+            food->ate();
+    }
+
     updateRelativePosition();
 
     //walking through gates
@@ -84,9 +88,10 @@ void Pacman::update(sf::Time dt) {
     else if (pacman.getPosition().x <= -Dimensions::wallSize.x)
         pacman.setPosition(Config::videoMode.width, pacman.getPosition().y);
 
-    else if (pacman.getPosition().x < 1 / 2 * Dimensions::wallSize.x ||
-             (pacman.getPosition().x >
-              Dimensions::wallSize.x * (Dimensions::WALL_COL - 1) - 1 / 2 * Dimensions::wallSize.x))
+    else if ((pacman.getPosition().x < 1 / 2 * Dimensions::wallSize.x ||
+              (pacman.getPosition().x >
+               Dimensions::wallSize.x * (Dimensions::WALL_COL - 1) - 1 / 2 * Dimensions::wallSize.x)) &&
+             (direction == Directions::RIGHT || direction == Directions::LEFT))
         return;
 
     else {
@@ -97,15 +102,13 @@ void Pacman::update(sf::Time dt) {
 
             updateRelativePosition();
 
-            if (lastMove != nextMove && !checkCollision(relativePosition.x, relativePosition.y)) {
+            if (lastMove != nextMove && !checkCollision(relativePosition.x, relativePosition.y))
                 pacman.move(lastMove);
-            }
 
             updateRelativePosition();
 
-            if (checkCollision(relativePosition.x, relativePosition.y)) {
+            if (checkCollision(relativePosition.x, relativePosition.y))
                 pacman.setPosition(currentPosition);
-            }
 
         } else
             lastMove = nextMove;
@@ -114,15 +117,15 @@ void Pacman::update(sf::Time dt) {
 }
 
 bool Pacman::checkCollision(float x, float y) {
-    if (context->getBoard()[ceil(y)][ceil(x)] == GameObject::ObjectType::WALL|| context->getBoard()[ceil(y)][floor(x)] == GameObject::ObjectType::WALL||
-        context->getBoard()[floor(y)][ceil(x)] == GameObject::ObjectType::WALL ||
-        context->getBoard()[floor(y)][floor(x)] == GameObject::ObjectType::WALL)
+    if (context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL ||
+        context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL ||
+        context->getBoard()[floor(y)][ceil(x)] == ObjectType::WALL ||
+        context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL)
         return true;
     return false;
 }
 
-void Pacman::eat() {
-//    context->getBoard()
+void Pacman::eat(Food* food) {
 }
 
 void Pacman::updateRelativePosition() {

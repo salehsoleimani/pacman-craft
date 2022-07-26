@@ -23,6 +23,7 @@ public:
 
     void render(sf::RenderTarget *) override;
 
+    void ate();
 private:
     sf::Time progress, blinkAnimation = sf::milliseconds(400.0f);
 
@@ -31,6 +32,7 @@ private:
     FoodState foodState = FoodState::NORMAL;
 
     sf::CircleShape food;
+
 };
 
 

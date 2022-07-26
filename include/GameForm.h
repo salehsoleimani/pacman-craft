@@ -9,9 +9,13 @@
 #include "File.h"
 #include "ButtonView.h"
 #include "DialogView.h"
-#include "Pacman.h"
+
+//#include "Pacman.h"
 
 using namespace std;
+
+
+class Pacman;
 
 class GameForm : public Form {
 public:
@@ -19,7 +23,11 @@ public:
 
     ~GameForm();
 
+    const vector<Food *> &getFoods() const;
+
 private:
+    Food *food;
+
     vector<Food *> foods;
 
     Pacman *pacman;
@@ -28,13 +36,14 @@ private:
     TextView *txtRecord;
     TextView *btnBack;
 
+private:
     sf::Sprite btnBackIc;
 
     DialogView *dialog = nullptr;
 
     void pollEvents(sf::Event &, sf::RenderWindow *, Application *) override;
 
-    void update(sf::RenderWindow *,const sf::Time&) override;
+    void update(sf::RenderWindow *, const sf::Time &) override;
 
     void render(sf::RenderWindow *) override;
 

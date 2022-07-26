@@ -1,3 +1,4 @@
+#include "Pacman.h"
 #include "GameForm.h"
 
 GameForm::GameForm() : Form("../res/map.txt") {
@@ -9,7 +10,8 @@ GameForm::GameForm() : Form("../res/map.txt") {
 GameForm::~GameForm() {
     delete pacman;
     for (auto food: foods) delete food;
-
+    if (food)
+        delete food;
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
@@ -51,8 +53,8 @@ void GameForm::render(sf::RenderWindow *window) {
     txtRecord->render(window);
     txtScore->render(window);
     btnBack->render(window);
-    pacman->render(window);
     for (auto food: foods) food->render(window);
+    pacman->render(window);
     window->draw(btnBackIc);
     if (dialog != nullptr)
         dialog->render(window);
@@ -80,14 +82,22 @@ void GameForm::initSprites() {
                     pacman = new Pacman(sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x}, this);
                     break;
                 case GameObject::ObjectType::FOOD: //normal foods
-                    foods.push_back(new Food({j * Dimensions::wallSize.x,
-                                              i * Dimensions::wallSize.y}, Food::FoodType::NORMAL));
+                    food = new Food({j * Dimensions::wallSize.x,
+                                     i * Dimensions::wallSize.y}, Food::FoodType::NORMAL);
+                    food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
+                    foods.push_back(food);
                     break;
                 case GameObject::ObjectType::FOOD_POWER: //power foods
-                    foods.push_back(new Food({j * Dimensions::wallSize.x,
-                                              i * Dimensions::wallSize.y}, Food::FoodType::POWER));
+                    food = new Food({j * Dimensions::wallSize.x,
+                                     i * Dimensions::wallSize.y}, Food::FoodType::POWER);
+                    food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
+                    foods.push_back(food);
                     break;
             }
         }
     }
+}
+
+const vector<Food *> &GameForm::getFoods() const {
+    return foods;
 }

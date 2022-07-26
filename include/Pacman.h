@@ -1,8 +1,11 @@
 #ifndef PACMAN_PACMAN_H
 #define PACMAN_PACMAN_H
 
-#include "Application.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include "Values.h"
 #include "Animator.h"
+#include "GameForm.h"
 
 class Pacman : public GameObject {
 public:
@@ -10,7 +13,7 @@ public:
         INIT, UP, DOWN, LEFT, RIGHT
     };
 
-    explicit Pacman(sf::Vector2f, Form *context);
+    explicit Pacman(sf::Vector2f, GameForm *context);
 
     ~Pacman();
 
@@ -21,11 +24,9 @@ public:
     void render(sf::RenderTarget *target) override;
 
 private:
-    Form *context;
+    GameForm *context;
 
     Animator *animator;
-
-    sf::Vector2f relativePosition;
 
     Directions direction;
 
@@ -41,7 +42,7 @@ private:
 
     bool checkCollision(float x, float y);
 
-    void eat();
+    void eat(Food* food);
 };
 
 
