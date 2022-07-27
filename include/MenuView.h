@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//custom MenuView class for implementing game menus
 class MenuView {
 public:
 

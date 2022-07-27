@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//defines every Animation structure
 class Animation {
 public:
     Animation(string id, sf::Time interval, string texturePath, bool loop);

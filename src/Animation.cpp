@@ -3,7 +3,7 @@
 Animation::Animation(string id, sf::Time interval, string texturePath, bool loop) : id(id), texturePath(texturePath),
                                                                                     interval(interval), loop(loop) {}
 
-
+//adding animation frames clip-content as IntRect objects
 void Animation::addFrames(sf::Vector2i offset, unsigned framesCount) {
     this->framesCount = framesCount;
     for (int i = 0; i < framesCount; ++i) {

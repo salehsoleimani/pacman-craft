@@ -8,17 +8,19 @@
 
 class DialogView : public sf::RectangleShape {
 public:
-    DialogView(const string& dialogTitle,const string& dialogTxt,const string& cta,const sf::Vector2u &size,const function<void()>& onClick);
+    DialogView(string, string, string, const sf::Vector2u &, const function<void()> &);
 
-//    void update(sf::RenderTarget *);
+    DialogView(string, string, string, string, const sf::Vector2u &, const function<void()> &);
 
     void render(sf::RenderTarget *target);
-
-    void initDialog();
 
     void pollEvents(const sf::Event &, const sf::Window *);
 
 private:
+    void initDialog();
+
+    void initTexts(string, string);
+
     string justifyText(const string &text);
 
     sf::Vector2u size;
@@ -27,7 +29,6 @@ private:
     TextView *txtTV;
     sf::RectangleShape dialogBox;
     sf::RectangleShape line;
-
 };
 
 #endif

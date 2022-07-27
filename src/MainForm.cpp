@@ -12,6 +12,27 @@ MainForm::~MainForm() {
     delete txtCredits;
 }
 
+void MainForm::initTexts() {
+    txtCredits = new TextView("made with <3 by saleh", {155, 629});
+    txtCredits->setCharacterSize(Font::smallFontSize);
+    txtCredits->setFillColor(Colors::colorCyan);
+}
+
+void MainForm::initMenuView() {
+    menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 355));
+    menuView->pushItem("continue");
+    menuView->pushItem("options");
+    menuView->pushItem("quit");
+}
+
+void MainForm::initImages() {
+    logoIV = new sf::RectangleShape({385, 91});
+    logoIV->setOrigin(logoIV->getLocalBounds().width / 2, 0);
+    logoIV->setPosition(Config::videoMode.width / 2, 208);
+    if (!logoSrc.loadFromFile("../res/images/logo.png")) throw runtime_error("Cannot open resource");
+    logoIV->setTexture(&logoSrc);
+}
+
 void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
     switch (event.type) {
         case sf::Event::Closed:
@@ -50,25 +71,4 @@ void MainForm::render(sf::RenderWindow *window) {
     menuView->render(window);
     txtCredits->render(window);
     window->draw(*logoIV);
-}
-
-void MainForm::initTexts() {
-    txtCredits = new TextView("made with <3 by saleh", {155, 629});
-    txtCredits->setCharacterSize(Font::smallFontSize);
-    txtCredits->setFillColor(Colors::colorCyan);
-}
-
-void MainForm::initMenuView() {
-    menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 355));
-    menuView->pushItem("continue");
-    menuView->pushItem("options");
-    menuView->pushItem("quit");
-}
-
-void MainForm::initImages() {
-    logoIV = new sf::RectangleShape({385, 91});
-    logoIV->setOrigin(logoIV->getLocalBounds().width / 2, 0);
-    logoIV->setPosition(Config::videoMode.width / 2, 208);
-    if (!logoSrc.loadFromFile("../res/images/logo.png")) throw runtime_error("Cannot open resource");
-    logoIV->setTexture(&logoSrc);
 }

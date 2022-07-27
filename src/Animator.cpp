@@ -12,6 +12,8 @@ Animator::add(string id, sf::Time interval, string textureName, sf::Vector2i off
 
     animation->addFrames(offset, framesCount);
 
+    //set current animation
+    //if there is no animation running
     if (!currentAnimation) {
         texture->loadFromFile(animation->getTexturePath());
         texture->setSmooth(true);
@@ -38,9 +40,13 @@ void Animator::update(sf::Time dt) {
     }
 }
 
+//switch current animation to animation with given id
 void Animator::setAnimation(string id) {
+    //search between animations to find the animation with given id
     for (auto it = animations.begin(); it != animations.end(); ++it)
+        //if animation was found
         if ((*it)->getId() == id) {
+            //setup sprite texture and current animation
             if (*it) {
                 texture->loadFromFile((*it)->getTexturePath());
                 texture->setSmooth(true);

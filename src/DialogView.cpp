@@ -1,17 +1,28 @@
 #include "DialogView.h"
 
-DialogView::DialogView(const string &dialogTitle, const string &dialogTxt, const string &cta, const sf::Vector2u &size,
-                       const function<void()> &onClick) {
-    titleTV = new TextView(dialogTitle, {0, 0});
-    txtTV = new TextView(justifyText(dialogTxt), {0, 0});
+DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, const sf::Vector2u &size,
+                       const function<void()> &onClick) : size(size) {
+
     ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
-    setFillColor(Colors::colorTransparent);
-    setSize({(float) size.x, (float) size.y});
-    this->size = size;
+    initTexts(dialogTitle, dialogTxt);
     initDialog();
 }
 
-string DialogView::justifyText(const string& str) {
+DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, string secondaryCta, const sf::Vector2u &size,
+                       const function<void()> &onClick) : size(size) {
+    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
+    initTexts(dialogTitle, dialogTxt);
+    initDialog();
+}
+
+void DialogView::initTexts(string dialogTitle, string dialogTxt) {
+    titleTV = new TextView(dialogTitle, {0, 0});
+    txtTV = new TextView(justifyText(dialogTxt), {0, 0});
+}
+
+//fitting Textview to dialog content area
+//line break if passes the line
+string DialogView::justifyText(const string &str) {
     int width = 21, count = 0;
     ostringstream stream;
     istringstream input;
@@ -42,6 +53,9 @@ void DialogView::render(sf::RenderTarget *target) {
 
 
 void DialogView::initDialog() {
+    setFillColor(Colors::colorTransparent);
+    setSize({(float) size.x, (float) size.y});
+
     dialogBox.setSize({394, ctaBtn->getGlobalBounds().height + txtTV->getGlobalBounds().height +
                             titleTV->getGlobalBounds().height + line.getGlobalBounds().height + 214});
     dialogBox.setFillColor(Colors::colorBlue);

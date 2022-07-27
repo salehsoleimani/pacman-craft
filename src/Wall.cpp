@@ -4,6 +4,7 @@
 Wall::Wall(sf::Vector2f position) : GameObject(position) {
     wall = new sf::RectangleShape;
     wall->setPosition(position);
+    //set anchor to center
     wall->setOrigin(wall->getSize().x / 2, wall->getSize().y / 2);
     wall->setFillColor(Colors::colorWall);
     wall->setOutlineColor(Colors::colorBlue);

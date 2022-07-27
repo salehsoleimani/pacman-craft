@@ -8,27 +8,33 @@
 #include "Values.h"
 #include "Form.h"
 
-
+//main state-machine for game
 class Application {
 public:
+    //setting up window
     Application() {
         window.create(Config::videoMode, Config::appName, Config::style);
         window.setFramerateLimit(Config::windowFrameRate);
     }
 
+    //game-loop
     void run() {
         sf::Clock clock;
         while (window.isOpen()) {
 
+            //calculating dt(delta time) between frames
             sf::Time dt = clock.restart();
 
+            //update
             currentForm()->update(&window,dt);
 
+            //render
             window.clear(Colors::colorBlue);
             //draw walls background
             currentForm()->clear(&window);
             currentForm()->render(&window);
 
+            //handle events
             sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
@@ -42,6 +48,7 @@ public:
         }
     }
 
+    //functions used to switch between states
     Form *currentForm() {
         if (forms.empty()) return nullptr;
         return forms.back();
@@ -66,6 +73,7 @@ public:
         forms.push_front(form);
     }
 
+    ///deleting Form pointers from memory
     ~Application() {
         while (!forms.empty()) popForm();
     }

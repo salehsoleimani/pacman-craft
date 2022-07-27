@@ -32,7 +32,7 @@ protected:
     ObjectType gameObjectType;
 
     sf::Vector2f position;
-
+    //relative position based on game grids
     sf::Vector2f relativePosition;
 };
 

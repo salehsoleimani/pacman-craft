@@ -15,6 +15,7 @@ using namespace std;
 
 class Application;
 
+//each application state
 class Form {
 public:
     Form(string);
@@ -34,6 +35,7 @@ public:
     const array<array<GameObject::ObjectType, 19>, 26> &getBoard() const;
 
 private:
+    //walls grid is same for all forms so we handle it here
     void initGrid();
 
     vector<Wall *> walls;

@@ -24,8 +24,9 @@ public:
     void render(sf::RenderTarget *target) override;
 
 private:
+    //using game context and it's properties
     GameForm *context;
-
+    //animatior used for pacman sprite
     Animator *animator;
 
     Directions direction;

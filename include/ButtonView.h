@@ -7,6 +7,7 @@
 
 class ButtonView : public TextView {
 public:
+    //for this game we only need these 2 dimensions
     enum class ButtonSize {
         SMALL,
         BIG
@@ -19,20 +20,17 @@ public:
 
     void setButtonPosition(const sf::Vector2f &position);
 
+    //handling button states
     void eventHandler(const sf::Event &, const sf::Vector2f &);
 
 private:
+    //a function passed to execute on button click
     function<void()> onClick;
-
     sf::Vector2f position;
-
     sf::Vector2f size;
-
     sf::RectangleShape buttonShape;
     sf::RectangleShape buttonShadow;
-
     void initShapes();
-
 };
 
 
