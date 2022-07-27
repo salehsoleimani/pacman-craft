@@ -1,4 +1,6 @@
 #include "Pacman.h"
+#include "Ghost.h"
+#include "Inky.h"
 #include "GameForm.h"
 
 GameForm::GameForm() : Form("../res/map.txt") {
@@ -30,10 +32,16 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
                 if (btnBack->getGlobalBounds().contains(mousePosition) ||
                     btnBackIc.getGlobalBounds().contains(mousePosition)) {
                     if (!dialog)
-                        dialog = new DialogView("Pause", "you want to Quit?", "Yes", window->getSize(), [&]() -> void {
-                            context->pushForm(new MainForm());
-                            dialog = nullptr;
-                        });
+                        dialog = new DialogView("Pause", "you want to Quit?", "Yes", "skip", window->getSize(),
+                                                [&]() -> void {
+                                                    context->pushForm(new MainForm());
+                                                    delete dialog;
+                                                    dialog = nullptr;
+                                                },
+                                                [&]() -> void {
+                                                    delete dialog;
+                                                    dialog = nullptr;
+                                                });
                 } else if (dialog) { dialog->pollEvents(event, window); }
             }
             break;
@@ -65,6 +73,7 @@ void GameForm::render(sf::RenderWindow *window) {
     txtScore->render(window);
     btnBack->render(window);
     for (auto food: foods) food->render(window);
+    for (auto ghost: ghosts) ghost->render(window);
     pacman->render(window);
     window->draw(btnBackIc);
     if (dialog != nullptr)
@@ -96,21 +105,23 @@ void GameForm::initSprites() {
 
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
+            sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x};
             switch (board[i][j]) {
                 case GameObject::ObjectType::PACMAN:
-                    pacman = new Pacman(sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x}, this);
+                    pacman = new Pacman(position, this);
                     break;
                 case GameObject::ObjectType::FOOD: //normal foods
-                    food = new Food({j * Dimensions::wallSize.x,
-                                     i * Dimensions::wallSize.y}, Food::FoodType::NORMAL);
+                    food = new Food(position, Food::FoodType::NORMAL);
                     food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     foods.push_back(food);
                     break;
                 case GameObject::ObjectType::FOOD_POWER: //power foods
-                    food = new Food({j * Dimensions::wallSize.x,
-                                     i * Dimensions::wallSize.y}, Food::FoodType::POWER);
+                    food = new Food(position, Food::FoodType::POWER);
                     food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     foods.push_back(food);
+                    break;
+                case GameObject::ObjectType::INKY:
+                    ghosts.push_back(new Inky(position, this));
                     break;
             }
         }

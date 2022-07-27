@@ -9,24 +9,20 @@
 
 class Pacman : public GameObject {
 public:
-    enum class Directions {
-        INIT, UP, DOWN, LEFT, RIGHT
-    };
-
-    explicit Pacman(sf::Vector2f, GameForm *context);
+    explicit Pacman(sf::Vector2f, GameForm *);
 
     ~Pacman();
 
-    void pollEvents(sf::Event &event);
+    void pollEvents(sf::Event &);
 
-    void update(sf::Time dt) override;
+    void update(sf::Time) override;
 
-    void render(sf::RenderTarget *target) override;
+    void render(sf::RenderTarget *) override;
 
 private:
     //using game context and it's properties
     GameForm *context;
-    //animatior used for pacman sprite
+    //animator used for pacman sprite
     Animator *animator;
 
     Directions direction;

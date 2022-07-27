@@ -37,6 +37,9 @@ void Form::initGrid() {
                 case 'E':
                     board[i][j] = GameObject::ObjectType::EMPTY;
                     break;
+                case 'I':
+                    board[i][j] = GameObject::ObjectType::INKY;
+                    break;
             }
         }
     }

@@ -10,7 +10,10 @@ class DialogView : public sf::RectangleShape {
 public:
     DialogView(string, string, string, const sf::Vector2u &, const function<void()> &);
 
-    DialogView(string, string, string, string, const sf::Vector2u &, const function<void()> &);
+    DialogView(string, string, string, string, const sf::Vector2u &, const function<void()> &,
+               const function<void()> &);
+
+    ~DialogView();
 
     void render(sf::RenderTarget *target);
 
@@ -25,6 +28,7 @@ private:
 
     sf::Vector2u size;
     ButtonView *ctaBtn;
+    ButtonView *secondaryBtn;
     TextView *titleTV;
     TextView *txtTV;
     sf::RectangleShape dialogBox;

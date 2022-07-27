@@ -4,13 +4,17 @@ DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, const s
                        const function<void()> &onClick) : size(size) {
 
     ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
+    secondaryBtn = nullptr;
+
     initTexts(dialogTitle, dialogTxt);
     initDialog();
 }
 
 DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, string secondaryCta, const sf::Vector2u &size,
-                       const function<void()> &onClick) : size(size) {
-    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
+                       const function<void()> &onClick, const function<void()> &onSecondaryClick) : size(size) {
+    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::SMALL, onClick);
+    secondaryBtn = new ButtonView(secondaryCta, {0, 0}, ButtonView::ButtonSize::SMALL, onSecondaryClick);
+
     initTexts(dialogTitle, dialogTxt);
     initDialog();
 }
@@ -49,6 +53,7 @@ void DialogView::render(sf::RenderTarget *target) {
     target->draw(*titleTV);
     target->draw(*txtTV);
     ctaBtn->render(target);
+    if(secondaryBtn) target->draw(*secondaryBtn);
 }
 
 
@@ -77,10 +82,27 @@ void DialogView::initDialog() {
     txtTV->setPosition({getGlobalBounds().width / 2, line.getGlobalBounds().top + line.getGlobalBounds().height + 26});
     txtTV->setCenterHorizontal(true);
 
+    if(!secondaryBtn)
     ctaBtn->setButtonPosition(
             {(float) size.x / 2, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+    else{
+        secondaryBtn->setFillColor(sf::Color::White);
+        ctaBtn->setButtonPosition(
+                {298 + secondaryBtn->getGlobalBounds().width, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+        secondaryBtn->setButtonPosition(
+                {ctaBtn->getGlobalBounds().left - 2 * secondaryBtn->getGlobalBounds().width , txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+
+    }
 }
 
 void DialogView::pollEvents(const sf::Event &event, const sf::Window *target) {
     ctaBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
+    secondaryBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
+}
+
+DialogView::~DialogView() {
+    delete txtTV;
+    delete titleTV;
+    delete ctaBtn;
+    if(secondaryBtn) delete secondaryBtn;
 }

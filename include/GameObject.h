@@ -7,7 +7,15 @@
 class GameObject {
 public:
     enum class ObjectType {
-        WALL, PACMAN, FOOD, FOOD_POWER, EMPTY
+        WALL,
+        PACMAN,
+        FOOD,
+        FOOD_POWER,
+        INKY,
+        BLINKY,
+        CLYDE,
+        PINKY,
+        EMPTY
     };
 
     GameObject(sf::Vector2f position) : position(position) {}

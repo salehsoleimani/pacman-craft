@@ -10,11 +10,9 @@
 #include "ButtonView.h"
 #include "DialogView.h"
 
-//#include "Pacman.h"
-
 using namespace std;
 
-
+class Ghost;
 class Pacman;
 
 class GameForm : public Form {
@@ -33,6 +31,8 @@ private:
     Food *food;
 
     vector<Food *> foods;
+
+    vector<Ghost *> ghosts;
 
     Pacman *pacman;
 

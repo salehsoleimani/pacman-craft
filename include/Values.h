@@ -50,5 +50,8 @@ namespace Dimensions {
     static const sf::Vector2f BUTTON_SIZE_BIG = {298, 74};
 }
 
+enum class Directions {
+    INIT, UP, DOWN, LEFT, RIGHT
+};
 
 #endif //PACMAN_VALUES_H
