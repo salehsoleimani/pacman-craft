@@ -15,6 +15,7 @@ public:
         BLINKY,
         CLYDE,
         PINKY,
+        HEART,
         EMPTY
     };
 

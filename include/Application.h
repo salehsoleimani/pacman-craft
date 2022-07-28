@@ -40,7 +40,7 @@ public:
                 if (event.type == sf::Event::Closed)
                     window.close();
                 //abstract event handler in Form class
-                currentForm()->pollEvents(event, &window, this);
+                currentForm()->pollEvents(event, &window);
             }
 
             window.display();

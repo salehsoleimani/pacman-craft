@@ -13,11 +13,12 @@
 using namespace std;
 
 class Pacman;
+
 class Ghost;
 
 class GameForm : public Form {
 public:
-    GameForm();
+    GameForm(Application&);
 
     ~GameForm();
 
@@ -27,15 +28,21 @@ public:
 
     void raiseScore(int);
 
+    void lose();
+
 private:
     unsigned score = 0;
     unsigned highScore = 0;
 
     Food *food;
 
+    Application *context = nullptr;
+
     vector<Food *> foods;
 
     vector<Ghost *> ghosts;
+
+    vector<sf::Sprite> hearts;
 
     Pacman *pacman;
 
@@ -45,9 +52,11 @@ private:
 
     sf::Sprite btnBackIc;
 
+    sf::Texture *heartTexture;
+
     DialogView *dialog = nullptr;
 
-    void pollEvents(sf::Event &, sf::RenderWindow *, Application *) override;
+    void pollEvents(sf::Event &, sf::RenderWindow *) override;
 
     void update(sf::RenderWindow *, const sf::Time &) override;
 
@@ -56,6 +65,8 @@ private:
     void initTexts();
 
     void initSprites();
+
+    void welcomeDialog();
 };
 
 #endif //PACMAN_GAMEFORM_H

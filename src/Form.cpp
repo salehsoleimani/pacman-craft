@@ -1,7 +1,7 @@
 #include "Form.h"
 #include "GameObject.h"
 
-Form::Form(string mapFileName) : mapFileName(mapFileName) {
+Form::Form(string mapFileName,Application& context) : mapFileName(mapFileName) , context(context) {
     initGrid();
 }
 
@@ -40,6 +40,9 @@ void Form::initGrid() {
                 case 'I':
                     board[i][j] = GameObject::ObjectType::INKY;
                     break;
+                case 'H':
+                    board[i][j] = GameObject::ObjectType::HEART;
+                    break;
             }
         }
     }
@@ -55,4 +58,8 @@ void Form::initGrid() {
 
 const array<array<GameObject::ObjectType, 19>, 26> &Form::getBoard() const {
     return board;
+}
+
+Application& Form::getApplicationContext() const {
+    return context;
 }

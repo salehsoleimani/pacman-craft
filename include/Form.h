@@ -18,14 +18,14 @@ class Application;
 //each application state
 class Form {
 public:
-    Form(string);
+    Form(string, Application &);
 
     virtual ~Form();
 
     //to poll events from Application window to forms
-    virtual void pollEvents(sf::Event &, sf::RenderWindow *, Application *) = 0;
+    virtual void pollEvents(sf::Event &, sf::RenderWindow *) = 0;
 
-    virtual void update(sf::RenderWindow *,const sf::Time&) = 0;
+    virtual void update(sf::RenderWindow *, const sf::Time &) = 0;
 
     virtual void render(sf::RenderWindow *) = 0;
 
@@ -34,7 +34,11 @@ public:
 
     const array<array<GameObject::ObjectType, 19>, 26> &getBoard() const;
 
+    Application &getApplicationContext() const;
+
 private:
+    Application &context;
+
     //walls grid is same for all forms so we handle it here
     void initGrid();
 

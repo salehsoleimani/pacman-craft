@@ -1,6 +1,6 @@
 #include "MainForm.h"
 
-MainForm::MainForm() : Form("../res/map_menu.txt") {
+MainForm::MainForm(Application& context) : Form("../res/map_menu.txt",context) {
     initTexts();
     initMenuView();
     initImages();
@@ -33,7 +33,7 @@ void MainForm::initImages() {
     logoIV->setTexture(&logoSrc);
 }
 
-void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
+void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     switch (event.type) {
         case sf::Event::Closed:
             window->close();
@@ -43,10 +43,10 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
                 case sf::Keyboard::Enter:
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:
-                            context->popForm();
+                            getApplicationContext().popForm();
                             break;
                         case 1:
-                            context->pushForm(new OptionsForm());
+                            getApplicationContext().pushForm(new OptionsForm(getApplicationContext()));
                             break;
                         case 2:
                             window->close();

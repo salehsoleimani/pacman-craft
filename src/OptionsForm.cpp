@@ -1,6 +1,6 @@
 #include "OptionsForm.h"
 
-OptionsForm::OptionsForm() : Form("../res/map_menu.txt") {
+OptionsForm::OptionsForm(Application& context) : Form("../res/map_menu.txt",context) {
     initMenuView();
     initImages();
 }
@@ -11,7 +11,7 @@ OptionsForm::~OptionsForm() {
     delete dialog;
 }
 
-void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
+void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     switch (event.type) {
         case sf::Event::Closed:
             window->close();
@@ -25,8 +25,8 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                                 dialog = new DialogView("Reset game", "clear all game data", "reset",
                                                         "cancel", window->getSize(),
                                                         [&]() -> void {
-                                                            context->resetGame();
-                                                            context->pushFront(new GameForm());
+                                                            getApplicationContext().resetGame();
+                                                            getApplicationContext().pushFront(new GameForm(getApplicationContext()));
                                                             delete dialog;
                                                             dialog = nullptr;
                                                         },
@@ -53,7 +53,7 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                             }
                             break;
                         case 2:
-                            context->popForm();
+                            getApplicationContext().popForm();
                             break;
                     }
                     break;

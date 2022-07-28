@@ -2,8 +2,7 @@
 #include "GameForm.h"
 #include "Inky.h"
 
-GameForm::GameForm() : Form("../res/map.txt") {
-
+GameForm::GameForm(Application& context) : Form("../res/map.txt",context) {
     initTexts();
     initSprites();
 }
@@ -18,11 +17,12 @@ GameForm::~GameForm() {
             cerr << "error reading highscore";
         }
     delete pacman;
+    delete heartTexture;
     for (auto food: foods) delete food;
-    if (dialog) delete dialog;
+    delete dialog;
 }
 
-void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
+void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window).x,
                                               sf::Mouse::getPosition((*window)).y);
     switch (event.type) {
@@ -34,7 +34,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
                     if (!dialog)
                         dialog = new DialogView("Pause", "pause the game", "okay", "cancel", window->getSize(),
                                                 [&]() -> void {
-                                                    context->pushForm(new MainForm());
+                                                    getApplicationContext().pushForm(new MainForm(getApplicationContext()));
                                                     delete dialog;
                                                     dialog = nullptr;
                                                 },
@@ -73,6 +73,7 @@ void GameForm::render(sf::RenderWindow *window) {
     btnBack->render(window);
     for (auto food: foods) food->render(window);
     for (auto ghost: ghosts) ghost->render(window);
+    for (auto heart: hearts) window->draw(heart);
     pacman->render(window);
     window->draw(btnBackIc);
     if (dialog)
@@ -97,6 +98,12 @@ void GameForm::initTexts() {
 }
 
 void GameForm::initSprites() {
+    heartTexture = new sf::Texture;
+    heartTexture->loadFromFile("../res/sprites/heart.png");
+    heartTexture->setSmooth(true);
+
+    sf::Sprite heartSprite(*heartTexture);
+
     auto *icBackTexture = new sf::Texture;
     icBackTexture->loadFromFile("../res/icons/ic_back.png");
     btnBackIc.setPosition({30, (btnBack->getGlobalBounds().top + btnBack->getGlobalBounds().height) / 2});
@@ -106,6 +113,10 @@ void GameForm::initSprites() {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x};
             switch (board[i][j]) {
+                case GameObject::ObjectType::HEART:
+                    heartSprite.setPosition(position);
+                    hearts.push_back(heartSprite);
+                    break;
                 case GameObject::ObjectType::PACMAN:
                     pacman = new Pacman(position, this);
                     break;
@@ -120,7 +131,7 @@ void GameForm::initSprites() {
                     foods.push_back(food);
                     break;
                 case GameObject::ObjectType::INKY:
-                    ghosts.push_back(new Inky(position,this));
+                    ghosts.push_back(new Inky(position, this));
                     break;
             }
         }
@@ -137,4 +148,14 @@ const vector<Ghost *> &GameForm::getGhosts() const {
 
 void GameForm::raiseScore(int score) {
     this->score += score;
+}
+
+void GameForm::lose() {
+    int lives = hearts.size();
+    if (lives > 1) {
+        hearts.pop_back();
+    } else {
+        getApplicationContext().resetGame();
+        getApplicationContext().pushFront(new GameForm(getApplicationContext()));
+    }
 }

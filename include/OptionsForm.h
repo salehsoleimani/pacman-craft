@@ -10,7 +10,7 @@
 
 class OptionsForm : public Form {
 public:
-    OptionsForm();
+    OptionsForm(Application&);
 
     ~OptionsForm();
 
@@ -22,7 +22,7 @@ private:
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
 
-    void pollEvents(sf::Event&,sf::RenderWindow*, Application *) override;
+    void pollEvents(sf::Event&,sf::RenderWindow*) override;
 
     void update(sf::RenderWindow *,const sf::Time&) override;
 

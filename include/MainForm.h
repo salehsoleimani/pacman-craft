@@ -12,7 +12,7 @@
 
 class MainForm : public Form {
 public:
-    MainForm();
+    MainForm(Application&);
 
     ~MainForm();
 
@@ -24,7 +24,7 @@ private:
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
 
-    void pollEvents(sf::Event &, sf::RenderWindow *, Application *) override;
+    void pollEvents(sf::Event &, sf::RenderWindow *) override;
 
     void update(sf::RenderWindow *,const sf::Time&) override;
 

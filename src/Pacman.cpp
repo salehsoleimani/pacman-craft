@@ -87,7 +87,7 @@ void Pacman::update(sf::Time dt) {
     //check collision with ghosts
     for (auto ghost: context->getGhosts()) {
         if (ghost->getRelativePosition().x == relativePosition.x &&
-             ghost->getRelativePosition().y == relativePosition.y) {
+            ghost->getRelativePosition().y == relativePosition.y) {
 //            ghost->ate();
             animator->setAnimation("die");
             context->raiseScore(-5);
@@ -95,7 +95,6 @@ void Pacman::update(sf::Time dt) {
         }
 //        if(ghost.)
     }
-
 
 
     updateRelativePosition();
