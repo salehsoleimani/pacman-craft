@@ -25,6 +25,8 @@ public:
     //handling button states
     void eventHandler(const sf::Event &, const sf::Vector2f &);
 
+    float getWidth() const;
+
 private:
     //a function passed to execute on button click
     function<void()> onClick;

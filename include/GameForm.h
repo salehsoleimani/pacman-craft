@@ -12,8 +12,8 @@
 
 using namespace std;
 
-class Ghost;
 class Pacman;
+class Ghost;
 
 class GameForm : public Form {
 public:
@@ -23,7 +23,10 @@ public:
 
     const vector<Food *> &getFoods() const;
 
-    void raiseScore(unsigned);
+    const vector<Ghost *> &getGhosts() const;
+
+    void raiseScore(int);
+
 private:
     unsigned score = 0;
     unsigned highScore = 0;
@@ -50,7 +53,7 @@ private:
 
     void render(sf::RenderWindow *) override;
 
-    void initTexts() ;
+    void initTexts();
 
     void initSprites();
 };

@@ -86,11 +86,13 @@ void DialogView::initDialog() {
                 {(float) size.x / 2, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
     else {
         secondaryBtn->setFillColor(sf::Color::White);
-        ctaBtn->setButtonPosition(
-                {298 + secondaryBtn->getGlobalBounds().width,
-                 txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+
         secondaryBtn->setButtonPosition(
-                {ctaBtn->getGlobalBounds().left - 2 * secondaryBtn->getGlobalBounds().width,
+                {dialogBox.getGlobalBounds().left + ctaBtn->getWidth()/2,
+                 txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+
+        ctaBtn->setButtonPosition(
+                { dialogBox.getGlobalBounds().left + dialogBox.getGlobalBounds().width - ctaBtn->getWidth() / 2,
                  txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
 
     }

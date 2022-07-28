@@ -1,7 +1,6 @@
 #include "Pacman.h"
-#include "Ghost.h"
-#include "Inky.h"
 #include "GameForm.h"
+#include "Inky.h"
 
 GameForm::GameForm() : Form("../res/map.txt") {
 
@@ -20,7 +19,7 @@ GameForm::~GameForm() {
         }
     delete pacman;
     for (auto food: foods) delete food;
-    if(dialog) delete dialog;
+    if (dialog) delete dialog;
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
@@ -33,7 +32,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
                 if (btnBack->getGlobalBounds().contains(mousePosition) ||
                     btnBackIc.getGlobalBounds().contains(mousePosition)) {
                     if (!dialog)
-                        dialog = new DialogView("Pause", "you want to Quit?", "Yes", "skip", window->getSize(),
+                        dialog = new DialogView("Pause", "pause the game", "okay", "cancel", window->getSize(),
                                                 [&]() -> void {
                                                     context->pushForm(new MainForm());
                                                     delete dialog;
@@ -121,7 +120,7 @@ void GameForm::initSprites() {
                     foods.push_back(food);
                     break;
                 case GameObject::ObjectType::INKY:
-                    ghosts.push_back(new Inky(position, this));
+                    ghosts.push_back(new Inky(position,this));
                     break;
             }
         }
@@ -132,6 +131,10 @@ const vector<Food *> &GameForm::getFoods() const {
     return foods;
 }
 
-void GameForm::raiseScore(unsigned int score) {
+const vector<Ghost *> &GameForm::getGhosts() const {
+    return ghosts;
+}
+
+void GameForm::raiseScore(int score) {
     this->score += score;
 }

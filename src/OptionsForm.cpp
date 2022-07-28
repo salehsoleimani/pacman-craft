@@ -22,8 +22,8 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:
                             if (!dialog) {
-                                dialog = new DialogView("Reset game", "clear all game data", "Yes",
-                                                        "skip", window->getSize(),
+                                dialog = new DialogView("Reset game", "clear all game data", "reset",
+                                                        "cancel", window->getSize(),
                                                         [&]() -> void {
                                                             context->resetGame();
                                                             context->pushFront(new GameForm());
@@ -38,8 +38,8 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                             break;
                         case 1:
                             if (!dialog) {
-                                dialog = new DialogView("Clear Record", "reset game record", "Yes",
-                                                        "skip", window->getSize(),
+                                dialog = new DialogView("Clear Record", "reset game record", "clear",
+                                                        "cancel", window->getSize(),
                                                         [&]() -> void {
                                                             if (remove("high_score.txt") != 0)
                                                                 cerr << "Error deleting file";

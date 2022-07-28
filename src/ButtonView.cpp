@@ -68,3 +68,7 @@ ButtonView::~ButtonView() {
     delete buttonShape;
     delete buttonShadow;
 }
+
+float ButtonView::getWidth() const {
+    return getGlobalBounds().width + buttonShape->getGlobalBounds().width + 6;
+}

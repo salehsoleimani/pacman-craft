@@ -1,4 +1,5 @@
 #include "Pacman.h"
+#include "Ghost.h"
 
 Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position), context(context) {
     pacman.setPosition(position);
@@ -82,6 +83,20 @@ void Pacman::update(sf::Time dt) {
             context->raiseScore(food->getPpt());
         }
     }
+
+    //check collision with ghosts
+    for (auto ghost: context->getGhosts()) {
+        if (ghost->getRelativePosition().x == relativePosition.x &&
+             ghost->getRelativePosition().y == relativePosition.y) {
+//            ghost->ate();
+            animator->setAnimation("die");
+            context->raiseScore(-5);
+            delete this;
+        }
+//        if(ghost.)
+    }
+
+
 
     updateRelativePosition();
 
