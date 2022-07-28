@@ -88,12 +88,9 @@ void Pacman::update(sf::Time dt) {
     for (auto ghost: context->getGhosts()) {
         if (ghost->getRelativePosition().x == relativePosition.x &&
             ghost->getRelativePosition().y == relativePosition.y) {
-//            ghost->ate();
             animator->setAnimation("die");
-            context->raiseScore(-5);
-            delete this;
+            context->lose();
         }
-//        if(ghost.)
     }
 
 

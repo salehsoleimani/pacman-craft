@@ -43,6 +43,9 @@ void Form::initGrid() {
                 case 'H':
                     board[i][j] = GameObject::ObjectType::HEART;
                     break;
+                case 'D':
+                    board[i][j] =  GameObject::ObjectType::DOOR;
+                    break;
             }
         }
     }

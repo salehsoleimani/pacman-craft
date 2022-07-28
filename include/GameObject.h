@@ -16,6 +16,7 @@ public:
         CLYDE,
         PINKY,
         HEART,
+        DOOR,
         EMPTY
     };
 

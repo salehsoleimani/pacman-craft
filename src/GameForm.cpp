@@ -2,7 +2,7 @@
 #include "GameForm.h"
 #include "Inky.h"
 
-GameForm::GameForm(Application& context) : Form("../res/map.txt",context) {
+GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
     initTexts();
     initSprites();
 }
@@ -34,7 +34,8 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                     if (!dialog)
                         dialog = new DialogView("Pause", "pause the game", "okay", "cancel", window->getSize(),
                                                 [&]() -> void {
-                                                    getApplicationContext().pushForm(new MainForm(getApplicationContext()));
+                                                    getApplicationContext().pushForm(
+                                                            new MainForm(getApplicationContext()));
                                                     delete dialog;
                                                     dialog = nullptr;
                                                 },
@@ -119,6 +120,7 @@ void GameForm::initSprites() {
                     break;
                 case GameObject::ObjectType::PACMAN:
                     pacman = new Pacman(position, this);
+                    pacmanPosition = position;
                     break;
                 case GameObject::ObjectType::FOOD: //normal foods
                     food = new Food(position, Food::FoodType::NORMAL);
@@ -151,11 +153,14 @@ void GameForm::raiseScore(int score) {
 }
 
 void GameForm::lose() {
-    int lives = hearts.size();
+    unsigned lives = hearts.size();
     if (lives > 1) {
+        score -= 20;
         hearts.pop_back();
+        delete pacman;
+        pacman = new Pacman(pacmanPosition, this);
     } else {
+        getApplicationContext().pushForm(new GameForm(getApplicationContext()));
         getApplicationContext().resetGame();
-        getApplicationContext().pushFront(new GameForm(getApplicationContext()));
     }
 }

@@ -18,7 +18,7 @@ class Ghost;
 
 class GameForm : public Form {
 public:
-    GameForm(Application&);
+    GameForm(Application &);
 
     ~GameForm();
 
@@ -32,7 +32,10 @@ public:
 
 private:
     unsigned score = 0;
+
     unsigned highScore = 0;
+
+    sf::Vector2f pacmanPosition;
 
     Food *food;
 
