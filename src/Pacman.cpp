@@ -10,7 +10,7 @@ Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position),
     animator->add("up", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 30), 5);
     animator->add("down", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 90), 5);
 
-    animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(30, 0), 12, false);
+    animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(24, 0), 12, false);
 
     updateRelativePosition();
 }

@@ -6,6 +6,7 @@
 #include "Wall.h"
 #include "MenuView.h"
 #include "MainForm.h"
+#include "DialogView.h"
 
 class OptionsForm : public Form {
 public:
@@ -14,6 +15,8 @@ public:
     ~OptionsForm();
 
 private:
+    DialogView *dialog = nullptr;
+
     MenuView *menuView;
 
     sf::Texture logoSrc;

@@ -8,6 +8,7 @@ OptionsForm::OptionsForm() : Form("../res/map_menu.txt") {
 OptionsForm::~OptionsForm() {
     delete menuView;
     delete logoIV;
+    delete dialog;
 }
 
 void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
@@ -20,12 +21,36 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                 case sf::Keyboard::Enter:
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:
-                            context->resetGame();
-                            context->pushFront(new GameForm());
+                            if (!dialog) {
+                                dialog = new DialogView("Reset game", "clear all game data", "Yes",
+                                                        "skip", window->getSize(),
+                                                        [&]() -> void {
+                                                            context->resetGame();
+                                                            context->pushFront(new GameForm());
+                                                            delete dialog;
+                                                            dialog = nullptr;
+                                                        },
+                                                        [&]() -> void {
+                                                            delete dialog;
+                                                            dialog = nullptr;
+                                                        });
+                            }
                             break;
                         case 1:
-                            if (remove("high_score.txt") != 0)
-                                cerr << "Error deleting file";
+                            if (!dialog) {
+                                dialog = new DialogView("Clear Record", "reset game record", "Yes",
+                                                        "skip", window->getSize(),
+                                                        [&]() -> void {
+                                                            if (remove("high_score.txt") != 0)
+                                                                cerr << "Error deleting file";
+                                                            delete dialog;
+                                                            dialog = nullptr;
+                                                        },
+                                                        [&]() -> void {
+                                                            delete dialog;
+                                                            dialog = nullptr;
+                                                        });
+                            }
                             break;
                         case 2:
                             context->popForm();
@@ -38,8 +63,16 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applica
                 case sf::Keyboard::Up:
                     menuView->selectItem(menuView->getSelectedItemIndex() - 1);
                     break;
+                    //handling dialog click events
             }
-
+            break;
+        case sf::Event::MouseButtonReleased:
+        case sf::Event::MouseButtonPressed:
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                if (dialog)
+                    dialog->pollEvents(event, window);
+            }
+            break;
     }
 
 }
@@ -50,6 +83,8 @@ void OptionsForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 void OptionsForm::render(sf::RenderWindow *window) {
     menuView->render(window);
     window->draw(*logoIV);
+    if (dialog)
+        dialog->render(window);
 }
 
 void OptionsForm::initMenuView() {

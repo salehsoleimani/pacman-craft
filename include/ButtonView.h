@@ -16,6 +16,8 @@ public:
     ButtonView(const string &title, const sf::Vector2f &position, const ButtonView::ButtonSize &buttonSize,
                const function<void()> &onClick);
 
+    ~ButtonView();
+
     void render(sf::RenderTarget *target);
 
     void setButtonPosition(const sf::Vector2f &position);
@@ -28,8 +30,8 @@ private:
     function<void()> onClick;
     sf::Vector2f position;
     sf::Vector2f size;
-    sf::RectangleShape buttonShape;
-    sf::RectangleShape buttonShadow;
+    sf::RectangleShape* buttonShape = nullptr;
+    sf::RectangleShape* buttonShadow = nullptr;
     void initShapes();
 };
 

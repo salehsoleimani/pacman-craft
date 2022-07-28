@@ -27,10 +27,10 @@ private:
     string justifyText(const string &text);
 
     sf::Vector2u size;
-    ButtonView *ctaBtn;
-    ButtonView *secondaryBtn;
-    TextView *titleTV;
-    TextView *txtTV;
+    ButtonView *ctaBtn = nullptr;
+    ButtonView *secondaryBtn = nullptr;
+    TextView *titleTV = nullptr;
+    TextView *txtTV = nullptr;
     sf::RectangleShape dialogBox;
     sf::RectangleShape line;
 };

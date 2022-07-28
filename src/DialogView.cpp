@@ -4,7 +4,6 @@ DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, const s
                        const function<void()> &onClick) : size(size) {
 
     ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
-    secondaryBtn = nullptr;
 
     initTexts(dialogTitle, dialogTxt);
     initDialog();
@@ -53,7 +52,7 @@ void DialogView::render(sf::RenderTarget *target) {
     target->draw(*titleTV);
     target->draw(*txtTV);
     ctaBtn->render(target);
-    if(secondaryBtn) target->draw(*secondaryBtn);
+    if (secondaryBtn) target->draw(*secondaryBtn);
 }
 
 
@@ -82,15 +81,17 @@ void DialogView::initDialog() {
     txtTV->setPosition({getGlobalBounds().width / 2, line.getGlobalBounds().top + line.getGlobalBounds().height + 26});
     txtTV->setCenterHorizontal(true);
 
-    if(!secondaryBtn)
-    ctaBtn->setButtonPosition(
-            {(float) size.x / 2, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
-    else{
+    if (!secondaryBtn)
+        ctaBtn->setButtonPosition(
+                {(float) size.x / 2, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+    else {
         secondaryBtn->setFillColor(sf::Color::White);
         ctaBtn->setButtonPosition(
-                {298 + secondaryBtn->getGlobalBounds().width, txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+                {298 + secondaryBtn->getGlobalBounds().width,
+                 txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
         secondaryBtn->setButtonPosition(
-                {ctaBtn->getGlobalBounds().left - 2 * secondaryBtn->getGlobalBounds().width , txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
+                {ctaBtn->getGlobalBounds().left - 2 * secondaryBtn->getGlobalBounds().width,
+                 txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
 
     }
 }
@@ -104,5 +105,5 @@ DialogView::~DialogView() {
     delete txtTV;
     delete titleTV;
     delete ctaBtn;
-    if(secondaryBtn) delete secondaryBtn;
+    delete secondaryBtn;
 }

@@ -20,6 +20,7 @@ GameForm::~GameForm() {
         }
     delete pacman;
     for (auto food: foods) delete food;
+    if(dialog) delete dialog;
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Application *context) {
@@ -50,7 +51,6 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window, Applicatio
             break;
 
     }
-
 }
 
 
@@ -58,7 +58,7 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
     ifstream f(string("high_score.txt").c_str());
     if (!f.good()) highScore = 0;
     txtRecord->setString("high score\n" + to_string(highScore));
-    if (dialog == nullptr) {
+    if (!dialog) {
         pacman->update(dt);
 
         for (auto food: foods)
@@ -76,7 +76,7 @@ void GameForm::render(sf::RenderWindow *window) {
     for (auto ghost: ghosts) ghost->render(window);
     pacman->render(window);
     window->draw(btnBackIc);
-    if (dialog != nullptr)
+    if (dialog)
         dialog->render(window);
 }
 
