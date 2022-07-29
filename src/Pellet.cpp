@@ -1,7 +1,7 @@
-#include "Food.h"
+#include "Pellet.h"
 
-Food::Food(sf::Vector2f position, FoodType foodType) : GameObject(position), foodType(foodType) {
-    if (foodType == FoodType::NORMAL)
+Pellet::Pellet(sf::Vector2f position, PelletType foodType) : Snack(position), foodType(foodType) {
+    if (foodType == PelletType::NORMAL)
         food.setRadius(3.0f);
     else
         food.setRadius(7.0f);
@@ -11,48 +11,44 @@ Food::Food(sf::Vector2f position, FoodType foodType) : GameObject(position), foo
     food.setFillColor(Colors::colorDot);
 }
 
-Food::~Food() {
+Pellet::~Pellet() {
 
 }
 
-void Food::render(sf::RenderTarget *target) {
+void Pellet::render(sf::RenderTarget *target) {
     target->draw(food);
 }
 
-void Food::update(sf::Time dt) {
-    if (foodType == FoodType::POWER) {
+void Pellet::update(sf::Time dt) {
+    if (foodType == PelletType::POWER && !isEaten()) {
         progress += dt;
         if (progress >= blinkAnimation) {
             progress = sf::Time::Zero;
-            if (foodState == FoodState::BLINK) {
+            if (foodState == PelletState::BLINK) {
                 food.setFillColor(Colors::colorDot);
-                foodState = FoodState::NORMAL;
-            } else if (foodState == FoodState::NORMAL) {
+                foodState = PelletState::NORMAL;
+            } else if (foodState == PelletState::NORMAL) {
                 food.setFillColor(sf::Color::Transparent);
-                foodState = FoodState::BLINK;
+                foodState = PelletState::BLINK;
             }
             progress = sf::Time::Zero;
         }
     }
 }
 
-void Food::ate() {
+void Pellet::eat() {
     food.setFillColor(sf::Color::Transparent);
-    foodState = FoodState::EATEN;
+    eaten = true;
 }
 
 //enhance this later
-unsigned Food::getPpt() const {
+unsigned Pellet::getPpt() const {
     switch (foodType) {
-        case FoodType::NORMAL:
+        case PelletType::NORMAL:
             return 20;
-        case FoodType::POWER:
+        case PelletType::POWER:
             return 50;
         default:
             return 0;
     }
-}
-
-bool Food::isEaten() const {
-    return foodState == FoodState::EATEN;
 }

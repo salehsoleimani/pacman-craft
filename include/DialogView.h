@@ -24,8 +24,6 @@ private:
 
     void initTexts(string, string);
 
-    string justifyText(const string &text);
-
     sf::Vector2u size;
     ButtonView *ctaBtn = nullptr;
     ButtonView *secondaryBtn = nullptr;

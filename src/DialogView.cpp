@@ -20,29 +20,7 @@ DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, string 
 
 void DialogView::initTexts(string dialogTitle, string dialogTxt) {
     titleTV = new TextView(dialogTitle, {0, 0});
-    txtTV = new TextView(justifyText(dialogTxt), {0, 0});
-}
-
-//fitting Textview to dialog content area
-//line break if passes the line
-string DialogView::justifyText(const string &str) {
-    int width = 21, count = 0;
-    ostringstream stream;
-    istringstream input;
-    input.str(str);
-    string word, temp;
-    stream << str;
-
-    while (input >> word) {
-        count += word.size() + 1;
-        if (count <= width) {
-            temp += word + ' ';
-        } else {
-            temp += '\n' + word + ' ';
-            count = word.size() + 1;
-        }
-    }
-    return temp;
+    txtTV = new TextView(dialogTxt, {0, 0});
 }
 
 void DialogView::render(sf::RenderTarget *target) {

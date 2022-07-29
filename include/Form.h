@@ -7,7 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "Wall.h"
-#include "Food.h"
+#include "Pellet.h"
 #include "Values.h"
 #include "File.h"
 

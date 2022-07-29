@@ -39,7 +39,7 @@ private:
 
     bool checkCollision(float x, float y);
 
-    void eat(Food* food);
+    void eat(Pellet* food);
 };
 
 

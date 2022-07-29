@@ -22,7 +22,7 @@ public:
 
     ~GameForm();
 
-    const vector<Food *> &getFoods() const;
+    const vector<Pellet *> &getFoods() const;
 
     const vector<Ghost *> &getGhosts() const;
 
@@ -37,11 +37,11 @@ private:
 
     sf::Vector2f pacmanPosition;
 
-    Food *food;
+    Pellet *food;
 
     Application *context = nullptr;
 
-    vector<Food *> foods;
+    vector<Pellet *> foods;
 
     vector<Ghost *> ghosts;
 
@@ -69,7 +69,6 @@ private:
 
     void initSprites();
 
-    void welcomeDialog();
 };
 
 #endif //PACMAN_GAMEFORM_H

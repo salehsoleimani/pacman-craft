@@ -79,7 +79,7 @@ void Pacman::update(sf::Time dt) {
     for (auto food: context->getFoods()) {
         if (food->getRelativePosition().x == relativePosition.x &&
             food->getRelativePosition().y == relativePosition.y && !food->isEaten()) {
-            food->ate();
+            food->eat();
             context->raiseScore(food->getPpt());
         }
     }
@@ -140,7 +140,7 @@ bool Pacman::checkCollision(float x, float y) {
     return false;
 }
 
-void Pacman::eat(Food *food) {
+void Pacman::eat(Pellet *food) {
 }
 
 void Pacman::updateRelativePosition() {

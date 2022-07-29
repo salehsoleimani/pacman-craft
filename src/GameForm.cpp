@@ -123,12 +123,12 @@ void GameForm::initSprites() {
                     pacmanPosition = position;
                     break;
                 case GameObject::ObjectType::FOOD: //normal foods
-                    food = new Food(position, Food::FoodType::NORMAL);
+                    food = new Pellet(position, Pellet::PelletType::NORMAL);
                     food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     foods.push_back(food);
                     break;
                 case GameObject::ObjectType::FOOD_POWER: //power foods
-                    food = new Food(position, Food::FoodType::POWER);
+                    food = new Pellet(position, Pellet::PelletType::POWER);
                     food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     foods.push_back(food);
                     break;
@@ -140,7 +140,7 @@ void GameForm::initSprites() {
     }
 }
 
-const vector<Food *> &GameForm::getFoods() const {
+const vector<Pellet *> &GameForm::getFoods() const {
     return foods;
 }
 

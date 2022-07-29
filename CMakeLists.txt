@@ -18,7 +18,10 @@ add_executable(Pacman main.cpp
         src/DialogView.cpp
         src/Animator.cpp
         src/Animation.cpp
-        src/Food.cpp src/Ghost.cpp include/Ghost.h src/Inky.cpp include/Inky.h)
+        src/Pellet.cpp
+        src/Ghost.cpp
+        src/Inky.cpp
+        src/Fruit.cpp)
 include_directories(/usr/local/include include)
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS})

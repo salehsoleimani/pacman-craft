@@ -17,37 +17,52 @@ namespace Config {
 
 //colors
 namespace Colors {
-    static const sf::Color colorBlue = sf::Color(10, 7, 67);
-    static const sf::Color colorCyan = sf::Color(175, 255, 228);
-    static const sf::Color colorWall = sf::Color(28, 145, 229);
-    static const sf::Color colorActive = sf::Color(255, 234, 0);
-    static const sf::Color colorShadow = sf::Color(238, 35, 39);
-    static const sf::Color colorTransparent = sf::Color(0, 0, 0, 76);
-    static const sf::Color colorDot = sf::Color(247, 191, 80);
+    const sf::Color colorBlue = sf::Color(10, 7, 67);
+    const sf::Color colorCyan = sf::Color(175, 255, 228);
+    const sf::Color colorWall = sf::Color(28, 145, 229);
+    const sf::Color colorActive = sf::Color(255, 234, 0);
+    const sf::Color colorShadow = sf::Color(238, 35, 39);
+    const sf::Color colorTransparent = sf::Color(0, 0, 0, 76);
+    const sf::Color colorDot = sf::Color(247, 191, 80);
 }
 
 //font
 namespace Font {
-    static const int smallFontSize = 20;
-    static const int regularFontSize = 26;
-    static const int bigFontSize = 46;
-    static const int mediumFontSize = 36;
+    const int smallFontSize = 20;
+    const int regularFontSize = 26;
+    const int bigFontSize = 46;
+    const int mediumFontSize = 36;
 }
 
 //view dimensions
 namespace Dimensions {
 
-    static const float margin = 48;
+    const float margin = 48;
 
-    static const float shadowOffset = 6;
+    const float shadowOffset = 6;
 
-    static const sf::Vector2f wallSize = {30, 30};
+    const sf::Vector2f wallSize = {30, 30};
 
-    static const int WALL_ROW = 26;
-    static const int WALL_COL = 19;
+    const int WALL_ROW = 26;
+    const int WALL_COL = 19;
 
     static const sf::Vector2f BUTTON_SIZE_SMALL = {138, 74};
     static const sf::Vector2f BUTTON_SIZE_BIG = {298, 74};
+}
+
+namespace Path {
+
+    const std::string fruit = "../res/sprites/fruits/";
+
+    const float shadowOffset = 6;
+
+    const sf::Vector2f wallSize = {30, 30};
+
+    const int WALL_ROW = 26;
+    const int WALL_COL = 19;
+
+    const sf::Vector2f BUTTON_SIZE_SMALL = {138, 74};
+    const sf::Vector2f BUTTON_SIZE_BIG = {298, 74};
 }
 
 enum class Directions {
