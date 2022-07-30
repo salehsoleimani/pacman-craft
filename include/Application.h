@@ -63,6 +63,11 @@ public:
         forms.pop_back();
     }
 
+    void popFront() {
+        delete forms.front();
+        forms.pop_front();
+    }
+
     //reset button in options menu
     void resetGame() {
         delete forms.front();

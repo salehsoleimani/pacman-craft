@@ -63,6 +63,6 @@ const array<array<GameObject::ObjectType, 19>, 26> &Form::getBoard() const {
     return board;
 }
 
-Application& Form::getApplicationContext() const {
+Application& Form::getApplicationContext() {
     return context;
 }

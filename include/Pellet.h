@@ -15,7 +15,7 @@ public:
 
     explicit Pellet(sf::Vector2f, PelletType);
 
-    ~Pellet();
+    ~Pellet() override;
 
     void update(sf::Time) override;
 

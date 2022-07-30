@@ -1,4 +1,5 @@
 #include "Fruit.h"
+#include <iostream>
 
 Fruit::Fruit(sf::Vector2f position, FruitType fruitType) : Snack(position), fruitType(fruitType) {
     string texturePath = Path::fruit;
@@ -28,19 +29,20 @@ Fruit::Fruit(sf::Vector2f position, FruitType fruitType) : Snack(position), frui
     fruitTexture->loadFromFile(texturePath);
     fruitTexture->setSmooth(true);
     fruit.setTexture(*fruitTexture);
+    fruit.setPosition(position);
 }
-
 
 Fruit::~Fruit() {
     delete fruitTexture;
 }
 
 void Fruit::eat() {
-    eaten = true;
     fruit.setColor(sf::Color::Transparent);
+    eaten = true;
 }
 
 unsigned Fruit::getPpt() const {
+    cout << "ADSADASDSADAS";
     switch (fruitType) {
         case FruitType::APPLE:
             return 100;
@@ -55,4 +57,12 @@ unsigned Fruit::getPpt() const {
         case FruitType::BANANA:
             return 2000;
     }
+}
+
+void Fruit::update(sf::Time dt) {
+
+}
+
+void Fruit::render(sf::RenderTarget *target) {
+    target->draw(fruit);
 }

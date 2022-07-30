@@ -11,7 +11,7 @@ class Ghost : public GameObject {
 public:
     explicit Ghost(sf::Vector2f, GameForm *);
 
-    ~Ghost();
+    virtual ~Ghost() = default;
 
     void pollEvents(sf::Event &);
 
@@ -19,9 +19,9 @@ public:
 
 protected:
     //using game context and it's properties
-    GameForm *context;
+    GameForm *context = nullptr;
     //animator used for ghost sprite
-    Animator *animator;
+    Animator *animator = nullptr;
 
     Directions direction;
 

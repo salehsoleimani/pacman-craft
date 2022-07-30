@@ -20,6 +20,8 @@ public:
     void render(sf::RenderTarget *) override;
 
 private:
+    bool isFirstTime = true;
+
     //using game context and it's properties
     GameForm *context;
     //animator used for pacman sprite

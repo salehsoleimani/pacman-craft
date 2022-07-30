@@ -1,5 +1,6 @@
 #include "Pacman.h"
 #include "Ghost.h"
+#include <list>
 
 Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position), context(context) {
     pacman.setPosition(position);
@@ -76,23 +77,36 @@ void Pacman::update(sf::Time dt) {
     pacman.move(nextMove);
 
     //eating fruits
-    for (auto food: context->getFoods()) {
-        if (food->getRelativePosition().x == relativePosition.x &&
-            food->getRelativePosition().y == relativePosition.y && !food->isEaten()) {
+    for (auto food: context->getSnacks()) {
+        if (food->getRelativePosition() == relativePosition &&
+            food->getRelativePosition() == relativePosition && !food->isEaten()) {
             food->eat();
             context->raiseScore(food->getPpt());
         }
     }
 
+//    for (auto it = context->getSnacks().rbegin(); it != context->getSnacks().rend(); it++) {
+//        if ((*it)->getRelativePosition().x == relativePosition.x &&
+//            (*it)->getRelativePosition().y == relativePosition.y && !(*it)->isEaten()) {
+//            (*it)->eat();
+//            context->raiseScore((*it)->getPpt());
+////            delete *it;
+////            *it = nullptr;
+//    context->getSnacks().remove_if([=](Snack *snack) {
+//        return (snack->getRelativePosition() == relativePosition);
+//    });
+//        }
+//    }
+
     //check collision with ghosts
     for (auto ghost: context->getGhosts()) {
         if (ghost->getRelativePosition().x == relativePosition.x &&
-            ghost->getRelativePosition().y == relativePosition.y) {
+            ghost->getRelativePosition().y == relativePosition.y && isFirstTime) {
             animator->setAnimation("die");
+            isFirstTime = false;
             context->lose();
         }
     }
-
 
     updateRelativePosition();
 

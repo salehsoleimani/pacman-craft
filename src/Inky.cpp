@@ -14,3 +14,7 @@ Inky::Inky(sf::Vector2f position, GameForm *context) : Ghost(position, context) 
 void Inky::update(sf::Time dt) {
 
 }
+
+Inky::~Inky() {
+
+}

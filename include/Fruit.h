@@ -14,13 +14,17 @@ public:
         BANANA
     };
 
-    explicit Fruit(sf::Vector2f, FruitType);
+    Fruit(sf::Vector2f, FruitType);
 
-    ~Fruit();
+    ~Fruit() override;
 
     void eat() override;
 
     unsigned getPpt() const override;
+
+    void update(sf::Time) override;
+
+    void render(sf::RenderTarget *) override;
 
 private:
     FruitType fruitType;

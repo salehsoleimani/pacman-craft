@@ -1,5 +1,7 @@
 #include "Pacman.h"
 #include "GameForm.h"
+
+#include <random>
 #include "Inky.h"
 
 GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
@@ -17,8 +19,9 @@ GameForm::~GameForm() {
             cerr << "error reading highscore";
         }
     delete pacman;
+    for (auto snack: snacks) delete snack;
+    for (auto ghost: ghosts) delete ghost;
     delete heartTexture;
-    for (auto food: foods) delete food;
     delete dialog;
 }
 
@@ -53,16 +56,50 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     }
 }
 
-
 void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
+
+    if (isFruitVisible) fruitTimer += dt.asSeconds();
+
+    if (fruitTimer >= 10 && isFruitVisible) {
+        delete snacks.back();
+        snacks.pop_back();
+        isFruitVisible = false;
+        fruitTimer = 0;
+    }
+
+    if ((eatenSnacks >= 70 && fruitsCount == 0) || (eatenSnacks >= 170 && fruitsCount == 1)) {
+        fruitsCount++;
+        isFruitVisible = true;
+        vector<Snack *> randomSnacks;
+        for (auto snack: snacks) {
+            if (snack->isEaten())
+                randomSnacks.push_back(snack);
+        }
+        std::shuffle(randomSnacks.begin(), randomSnacks.end(), std::mt19937(std::random_device()()));
+
+        Fruit::FruitType fruitType = Fruit::FruitType::APPLE;
+
+        if (level >= 241) fruitType = Fruit::FruitType::BANANA;
+        else if (level >= 225) fruitType = Fruit::FruitType::GRAPES;
+        else if (level >= 192) fruitType = Fruit::FruitType::PEACH;
+        else if (level >= 129) fruitType = Fruit::FruitType::CHERRY;
+        else if (level >= 65) fruitType = Fruit::FruitType::STRAWBERRY;
+
+        Fruit *newFruit = new Fruit(randomSnacks[0]->getPosition(), fruitType);
+        newFruit->setRelativePosition(randomSnacks[0]->getRelativePosition());
+        snacks.push_back(newFruit);
+    }
+
     ifstream f(string("high_score.txt").c_str());
     if (!f.good()) highScore = 0;
+
     txtRecord->setString("high score\n" + to_string(highScore));
+
     if (!dialog) {
         pacman->update(dt);
 
-        for (auto food: foods)
-            food->update(dt);
+        for (auto snack: snacks)
+            if (snack) snack->update(dt);
 
         txtScore->setString("score\n" + to_string(this->score));
     }
@@ -72,7 +109,7 @@ void GameForm::render(sf::RenderWindow *window) {
     txtRecord->render(window);
     txtScore->render(window);
     btnBack->render(window);
-    for (auto food: foods) food->render(window);
+    for (auto snack: snacks) snack->render(window);
     for (auto ghost: ghosts) ghost->render(window);
     for (auto heart: hearts) window->draw(heart);
     pacman->render(window);
@@ -112,6 +149,7 @@ void GameForm::initSprites() {
 
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
+            Pellet * snack = nullptr;
             sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x};
             switch (board[i][j]) {
                 case GameObject::ObjectType::HEART:
@@ -123,14 +161,14 @@ void GameForm::initSprites() {
                     pacmanPosition = position;
                     break;
                 case GameObject::ObjectType::FOOD: //normal foods
-                    food = new Pellet(position, Pellet::PelletType::NORMAL);
-                    food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
-                    foods.push_back(food);
+                    snack = new Pellet(position, Pellet::PelletType::NORMAL);
+                    snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
+                    snacks.push_back(snack);
                     break;
                 case GameObject::ObjectType::FOOD_POWER: //power foods
-                    food = new Pellet(position, Pellet::PelletType::POWER);
-                    food->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
-                    foods.push_back(food);
+                    snack = new Pellet(position, Pellet::PelletType::POWER);
+                    snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
+                    snacks.push_back(snack);
                     break;
                 case GameObject::ObjectType::INKY:
                     ghosts.push_back(new Inky(position, this));
@@ -140,19 +178,21 @@ void GameForm::initSprites() {
     }
 }
 
-const vector<Pellet *> &GameForm::getFoods() const {
-    return foods;
+list<Snack *> &GameForm::getSnacks() {
+    return snacks;
 }
 
-const vector<Ghost *> &GameForm::getGhosts() const {
+list<Ghost *> &GameForm::getGhosts() {
     return ghosts;
 }
 
 void GameForm::raiseScore(int score) {
     this->score += score;
+    eatenSnacks++;
 }
 
 void GameForm::lose() {
+    sf::sleep(sf::milliseconds(300));
     unsigned lives = hearts.size();
     if (lives > 1) {
         score -= 20;
@@ -160,7 +200,8 @@ void GameForm::lose() {
         delete pacman;
         pacman = new Pacman(pacmanPosition, this);
     } else {
+//        *this = {};
         getApplicationContext().pushForm(new GameForm(getApplicationContext()));
-        getApplicationContext().resetGame();
+//        getApplicationContext().resetGame();
     }
 }

@@ -11,9 +11,10 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position) {
     updateRelativePosition();
 }
 
-Ghost::~Ghost() {
-
-}
+//Ghost::~Ghost() {
+//    delete animator;
+//    delete context;
+//}
 
 void Ghost::pollEvents(sf::Event &event) {
 

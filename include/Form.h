@@ -34,7 +34,7 @@ public:
 
     const array<array<GameObject::ObjectType, 19>, 26> &getBoard() const;
 
-    Application &getApplicationContext() const;
+    Application &getApplicationContext();
 
 private:
     Application &context;

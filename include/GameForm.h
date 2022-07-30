@@ -1,7 +1,9 @@
 #ifndef PACMAN_GAMEFORM_H
 #define PACMAN_GAMEFORM_H
 
+#include <algorithm>
 #include <array>
+#include <list>
 #include "Wall.h"
 #include "TextView.h"
 #include "MainForm.h"
@@ -9,6 +11,7 @@
 #include "File.h"
 #include "ButtonView.h"
 #include "DialogView.h"
+#include "Fruit.h"
 
 using namespace std;
 
@@ -22,28 +25,36 @@ public:
 
     ~GameForm();
 
-    const vector<Pellet *> &getFoods() const;
+     list<Snack *> &getSnacks() ;
 
-    const vector<Ghost *> &getGhosts() const;
+     list<Ghost *> &getGhosts() ;
 
     void raiseScore(int);
 
     void lose();
 
 private:
+    unsigned level = 1;
+
+    unsigned fruitsCount = 0;
+
+    bool isFruitVisible = false;
+
+    float fruitTimer = 0;
+
     unsigned score = 0;
+
+    unsigned eatenSnacks = 0;
 
     unsigned highScore = 0;
 
     sf::Vector2f pacmanPosition;
 
-    Pellet *food;
+    list<Snack *> snacks;
 
-    Application *context = nullptr;
+    list<Ghost *> ghosts;
 
-    vector<Pellet *> foods;
-
-    vector<Ghost *> ghosts;
+//    vector<Fruit *> fruits;
 
     vector<sf::Sprite> hearts;
 

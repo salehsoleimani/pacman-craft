@@ -7,6 +7,8 @@ class Inky : public Ghost {
 public:
     Inky(sf::Vector2f, GameForm *);
 
+    ~Inky();
+
     void update(sf::Time) override;
 
 };

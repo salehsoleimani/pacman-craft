@@ -7,7 +7,9 @@
 
 class Snack : public GameObject {
 public:
-    explicit Snack(sf::Vector2f position) : GameObject(position){}
+    explicit Snack(sf::Vector2f position) : GameObject(position) {}
+
+    virtual ~Snack() = default;
 
     virtual void eat() = 0;
 
@@ -16,6 +18,11 @@ public:
     bool isEaten() const {
         return eaten;
     }
+
+    void setEaten(bool eaten) {
+        this->eaten = eaten;
+    }
+
 protected:
     bool eaten;
 };
