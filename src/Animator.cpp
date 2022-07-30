@@ -33,8 +33,10 @@ void Animator::update(sf::Time dt) {
 
         if (currentAnimation->isLoop())
             frame %= currentAnimation->getFramesCount();
-        else if (frame >= currentAnimation->getFramesCount())
+        else if (frame >= currentAnimation->getFramesCount()) {
             frame = currentAnimation->getFramesCount() - 1;
+            finished = true;
+        }
 
         sprite.setTextureRect(currentAnimation->getFrames()[frame]);
     }
@@ -61,4 +63,8 @@ Animator::~Animator() {
     delete texture;
     for (auto animation: animations)
         delete animation;
+}
+
+bool Animator::isFinished() const {
+    return !currentAnimation->isLoop() && finished;
 }

@@ -1,6 +1,5 @@
 #include "Pacman.h"
 #include "GameForm.h"
-
 #include <random>
 #include "Inky.h"
 
@@ -10,6 +9,14 @@ GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
 }
 
 GameForm::~GameForm() {
+    delete pacman;
+    for (auto snack: snacks) delete snack;
+    for (auto ghost: ghosts) delete ghost;
+    delete heartTexture;
+    delete dialog;
+    delete txtRecord;
+    delete btnBack;
+    delete txtScore;
     if (score > highScore)
         try {
             File file("high_score.txt");
@@ -18,11 +25,6 @@ GameForm::~GameForm() {
         } catch (file_open_exception ex) {
             cerr << "error reading highscore";
         }
-    delete pacman;
-    for (auto snack: snacks) delete snack;
-    for (auto ghost: ghosts) delete ghost;
-    delete heartTexture;
-    delete dialog;
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
@@ -57,6 +59,17 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
 }
 
 void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
+    //if pacman ate all snacks rearrange board - reach to next level
+    if (eatenSnacks == snacksCount) {
+        level++;
+        for (auto snack: snacks) delete snack;
+        for (auto ghost: ghosts) delete ghost;
+        snacks.clear();
+        ghosts.clear();
+        initSprites();
+        eatenSnacks = 0;
+        fruitsCount = 0;
+    }
 
     if (isFruitVisible) fruitTimer += dt.asSeconds();
 
@@ -136,6 +149,8 @@ void GameForm::initTexts() {
 }
 
 void GameForm::initSprites() {
+    snacksCount = 0;
+
     heartTexture = new sf::Texture;
     heartTexture->loadFromFile("../res/sprites/heart.png");
     heartTexture->setSmooth(true);
@@ -149,23 +164,27 @@ void GameForm::initSprites() {
 
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            Pellet * snack = nullptr;
+            Pellet *snack = nullptr;
             sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x};
             switch (board[i][j]) {
                 case GameObject::ObjectType::HEART:
-                    heartSprite.setPosition(position);
-                    hearts.push_back(heartSprite);
+                    if (level == 1) {
+                        heartSprite.setPosition(position);
+                        hearts.push_back(heartSprite);
+                    }
                     break;
                 case GameObject::ObjectType::PACMAN:
                     pacman = new Pacman(position, this);
                     pacmanPosition = position;
                     break;
                 case GameObject::ObjectType::FOOD: //normal foods
+                    snacksCount++;
                     snack = new Pellet(position, Pellet::PelletType::NORMAL);
                     snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     snacks.push_back(snack);
                     break;
                 case GameObject::ObjectType::FOOD_POWER: //power foods
+                    snacksCount++;
                     snack = new Pellet(position, Pellet::PelletType::POWER);
                     snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     snacks.push_back(snack);
@@ -188,20 +207,21 @@ list<Ghost *> &GameForm::getGhosts() {
 
 void GameForm::raiseScore(int score) {
     this->score += score;
-    eatenSnacks++;
+    if (score <= 50)
+        eatenSnacks++;
 }
 
 void GameForm::lose() {
     sf::sleep(sf::milliseconds(300));
     unsigned lives = hearts.size();
+    cout << lives << endl;
     if (lives > 1) {
-        score -= 20;
-        hearts.pop_back();
         delete pacman;
         pacman = new Pacman(pacmanPosition, this);
+        score -= 20;
+        hearts.pop_back();
     } else {
-//        *this = {};
         getApplicationContext().pushForm(new GameForm(getApplicationContext()));
-//        getApplicationContext().resetGame();
+        getApplicationContext().resetGame();
     }
 }

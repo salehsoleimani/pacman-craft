@@ -25,50 +25,15 @@ public:
 
     ~GameForm();
 
-     list<Snack *> &getSnacks() ;
+    list<Snack *> &getSnacks();
 
-     list<Ghost *> &getGhosts() ;
+    list<Ghost *> &getGhosts();
 
     void raiseScore(int);
 
     void lose();
 
 private:
-    unsigned level = 1;
-
-    unsigned fruitsCount = 0;
-
-    bool isFruitVisible = false;
-
-    float fruitTimer = 0;
-
-    unsigned score = 0;
-
-    unsigned eatenSnacks = 0;
-
-    unsigned highScore = 0;
-
-    sf::Vector2f pacmanPosition;
-
-    list<Snack *> snacks;
-
-    list<Ghost *> ghosts;
-
-//    vector<Fruit *> fruits;
-
-    vector<sf::Sprite> hearts;
-
-    Pacman *pacman;
-
-    TextView *txtScore;
-    TextView *txtRecord;
-    TextView *btnBack;
-
-    sf::Sprite btnBackIc;
-
-    sf::Texture *heartTexture;
-
-    DialogView *dialog = nullptr;
 
     void pollEvents(sf::Event &, sf::RenderWindow *) override;
 
@@ -80,6 +45,25 @@ private:
 
     void initSprites();
 
+    float fruitTimer = 0;
+    unsigned level = 1;
+    unsigned score;
+    unsigned fruitsCount;
+    unsigned eatenSnacks;
+    unsigned snacksCount;
+    unsigned highScore;
+    bool isFruitVisible;
+    sf::Vector2f pacmanPosition;
+    list<Snack *> snacks;
+    list<Ghost *> ghosts;
+    vector<sf::Sprite> hearts;
+    Pacman *pacman;
+    TextView *txtScore;
+    TextView *txtRecord;
+    TextView *btnBack;
+    sf::Sprite btnBackIc;
+    sf::Texture *heartTexture;
+    DialogView *dialog = nullptr;
 };
 
 #endif //PACMAN_GAMEFORM_H

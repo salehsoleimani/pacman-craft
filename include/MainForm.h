@@ -12,7 +12,7 @@
 
 class MainForm : public Form {
 public:
-    MainForm(Application&);
+    MainForm(Application&z);
 
     ~MainForm();
 

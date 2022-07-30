@@ -2,6 +2,8 @@
 #include <iostream>
 
 Fruit::Fruit(sf::Vector2f position, FruitType fruitType) : Snack(position), fruitType(fruitType) {
+    eaten = false;
+
     string texturePath = Path::fruit;
 
     switch (fruitType) {
@@ -42,7 +44,6 @@ void Fruit::eat() {
 }
 
 unsigned Fruit::getPpt() const {
-    cout << "ADSADASDSADAS";
     switch (fruitType) {
         case FruitType::APPLE:
             return 100;

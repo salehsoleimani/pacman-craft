@@ -77,36 +77,23 @@ void Pacman::update(sf::Time dt) {
     pacman.move(nextMove);
 
     //eating fruits
-    for (auto food: context->getSnacks()) {
-        if (food->getRelativePosition() == relativePosition &&
-            food->getRelativePosition() == relativePosition && !food->isEaten()) {
-            food->eat();
-            context->raiseScore(food->getPpt());
+    for (auto snack: context->getSnacks()) {
+        if (snack->getRelativePosition() == relativePosition && !snack->isEaten()) {
+            snack->eat();
+            context->raiseScore(snack->getPpt());
         }
     }
-
-//    for (auto it = context->getSnacks().rbegin(); it != context->getSnacks().rend(); it++) {
-//        if ((*it)->getRelativePosition().x == relativePosition.x &&
-//            (*it)->getRelativePosition().y == relativePosition.y && !(*it)->isEaten()) {
-//            (*it)->eat();
-//            context->raiseScore((*it)->getPpt());
-////            delete *it;
-////            *it = nullptr;
-//    context->getSnacks().remove_if([=](Snack *snack) {
-//        return (snack->getRelativePosition() == relativePosition);
-//    });
-//        }
-//    }
 
     //check collision with ghosts
     for (auto ghost: context->getGhosts()) {
-        if (ghost->getRelativePosition().x == relativePosition.x &&
-            ghost->getRelativePosition().y == relativePosition.y && isFirstTime) {
+        if (ghost->getRelativePosition() == relativePosition && isFirst) {
             animator->setAnimation("die");
-            isFirstTime = false;
-            context->lose();
+            isFirst = false;
         }
     }
+    //destruct class after dying animation
+    if (animator->isFinished())
+        context->lose();
 
     updateRelativePosition();
 
@@ -152,9 +139,6 @@ bool Pacman::checkCollision(float x, float y) {
         context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL)
         return true;
     return false;
-}
-
-void Pacman::eat(Pellet *food) {
 }
 
 void Pacman::updateRelativePosition() {

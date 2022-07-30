@@ -20,18 +20,16 @@ public:
     //changes current running animation to the given id
     void setAnimation(string id);
 
+    bool isFinished() const;
 private:
+    bool finished = false;
     //store a reference to the sprite to set it's texture
     sf::Sprite &sprite;
-
     sf::Texture *texture;
-
     //current animation progress
     sf::Time progress;
-
     //used for adding multiple animations for a specific sprite
     vector<Animation *> animations;
-
     Animation *currentAnimation;
 };
 

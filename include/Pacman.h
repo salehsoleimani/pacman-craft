@@ -20,28 +20,20 @@ public:
     void render(sf::RenderTarget *) override;
 
 private:
-    bool isFirstTime = true;
-
     //using game context and it's properties
     GameForm *context;
     //animator used for pacman sprite
     Animator *animator;
-
     Directions direction;
-
     sf::Vector2f nextMove;
-
     sf::Vector2f lastMove;
-
     sf::Sprite pacman;
-
     float speed = 3;
+    bool isFirst = true;
 
     void updateRelativePosition();
 
     bool checkCollision(float x, float y);
-
-    void eat(Pellet* food);
 };
 
 

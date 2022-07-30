@@ -22,6 +22,8 @@ public:
 
     GameObject(sf::Vector2f position) : position(position) {}
 
+    virtual ~GameObject() = default;
+
     virtual void update(sf::Time) = 0;
 
     virtual void render(sf::RenderTarget *) = 0;
@@ -45,6 +47,5 @@ protected:
     //relative position based on game grids
     sf::Vector2f relativePosition;
 };
-
 
 #endif //PACMAN_GAMEOBJECT_H
