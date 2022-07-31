@@ -55,6 +55,10 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::MouseButtonReleased:
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left) {
+                if (dialog) {
+                    cout << "HERE" << endl;
+                    dialog->pollEvents(event, window);
+                }
                 if (btnBack->getGlobalBounds().contains(mousePosition) ||
                     btnBackIc.getGlobalBounds().contains(mousePosition)) {
                     if (!dialog)
@@ -69,7 +73,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                                     delete dialog;
                                                     dialog = nullptr;
                                                 });
-                } else if (dialog) { dialog->pollEvents(event, window); }
+                }
             }
             break;
         case sf::Event::KeyPressed:
@@ -83,13 +87,13 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     //if pacman ate all snacks rearrange board - reach to next level
     if (eatenSnacks == snacksCount) {
-//        dialog = new DialogView("Victory", "reached level " + to_string(level + 1), "Hoooray!", window->getSize(),
-//                                [&]() -> void {
-        level++;
-        resetBoard();
-//                                    delete dialog;
-//                                    dialog = nullptr;
-//                                });
+        dialog = new DialogView("Victory", "reached level " + to_string(level + 1), "Hoooray!", window->getSize(),
+                                [&]() -> void {
+                                    level++;
+                                    resetBoard();
+                                    delete dialog;
+                                    dialog = nullptr;
+                                });
     }
 
     if (isFruitVisible) fruitTimer += dt.asSeconds();
