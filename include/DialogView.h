@@ -8,10 +8,9 @@
 
 class DialogView : public sf::RectangleShape {
 public:
-    DialogView(string, string, string, const sf::Vector2u &, const function<void()> &);
+    DialogView();
 
-    DialogView(string, string, string, string, const sf::Vector2u &, const function<void()> &,
-               const function<void()> &);
+//    DialogView();
 
     ~DialogView();
 
@@ -19,11 +18,23 @@ public:
 
     void pollEvents(const sf::Event &, const sf::Window *);
 
+    DialogView &create(string, string, string, const sf::Vector2u &, const function<void()> &);
+
+    DialogView &create(string, string, string, string, const sf::Vector2u &, const function<void()> &,
+                       const function<void()> &);
+
+    bool show();
+
+    bool hide();
+
+    bool isVisible() const;
+
 private:
     void initDialog();
 
     void initTexts(string, string);
 
+    bool visible = false;
     sf::Vector2u size;
     ButtonView *ctaBtn = nullptr;
     ButtonView *secondaryBtn = nullptr;

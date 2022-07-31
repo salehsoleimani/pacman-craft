@@ -16,7 +16,6 @@ GameForm::~GameForm() {
     for (auto snack: snacks) delete snack;
     for (auto ghost: ghosts) delete ghost;
     delete heartTexture;
-    delete dialog;
     delete txtRecord;
     delete btnBack;
     delete txtScore;
@@ -55,24 +54,21 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::MouseButtonReleased:
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left) {
-                if (dialog) {
-                    cout << "HERE" << endl;
-                    dialog->pollEvents(event, window);
+                if (dialog.isVisible()) {
+                    dialog.pollEvents(event, window);
                 }
-                if (btnBack->getGlobalBounds().contains(mousePosition) ||
+                if (!dialog.isVisible())
+                    if (btnBack->getGlobalBounds().contains(mousePosition) ||
                     btnBackIc.getGlobalBounds().contains(mousePosition)) {
-                    if (!dialog)
-                        dialog = new DialogView("Pause", "pause the game", "okay", "cancel", window->getSize(),
-                                                [&]() -> void {
-                                                    getApplicationContext().pushForm(
-                                                            new MainForm(getApplicationContext()));
-                                                    delete dialog;
-                                                    dialog = nullptr;
-                                                },
-                                                [&]() -> void {
-                                                    delete dialog;
-                                                    dialog = nullptr;
-                                                });
+                        dialog.create("Pause", "pause the game", "okay", "cancel", window->getSize(),
+                                      [&]() -> void {
+                                          getApplicationContext().pushForm(
+                                                  new MainForm(getApplicationContext()));
+                                          dialog.hide();
+                                      },
+                                      [&]() -> void {
+                                          dialog.hide();
+                                      }).show();
                 }
             }
             break;
@@ -87,22 +83,21 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     //if pacman ate all snacks rearrange board - reach to next level
     if (eatenSnacks == snacksCount) {
-        dialog = new DialogView("Victory", "reached level " + to_string(level + 1), "Hoooray!", window->getSize(),
-                                [&]() -> void {
-                                    level++;
-                                    resetBoard();
-                                    delete dialog;
-                                    dialog = nullptr;
-                                });
+        dialog.create("Victory", "reached level " + to_string(level + 1), "Hoooray!", window->getSize(),
+                      [&]() -> void {
+                          dialog.hide();
+                          level++;
+                          resetBoard();
+                      }).show();
     }
 
     if (isFruitVisible) fruitTimer += dt.asSeconds();
 
     if (fruitTimer >= 10 && isFruitVisible) {
+        fruitTimer = 0;
         delete snacks.back();
         snacks.pop_back();
         isFruitVisible = false;
-        fruitTimer = 0;
     }
 
     if ((eatenSnacks >= 70 && fruitsCount == 0) || (eatenSnacks >= 170 && fruitsCount == 1)) {
@@ -130,7 +125,7 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     txtRecord->setString("high score\n" + to_string(highScore));
 
-    if (!dialog) {
+    if (!dialog.isVisible()) {
         pacman->update(dt);
 
         for (auto snack: snacks)
@@ -149,8 +144,8 @@ void GameForm::render(sf::RenderWindow *window) {
     for (auto heart: hearts) window->draw(heart);
     pacman->render(window);
     window->draw(btnBackIc);
-    if (dialog)
-        dialog->render(window);
+    if (dialog.isVisible())
+        dialog.render(window);
 }
 
 list<Snack *> &GameForm::getSnacks() {
@@ -185,6 +180,7 @@ void GameForm::lose() {
 
 void GameForm::resetBoard() {
     isFruitVisible = false;
+    fruitTimer=0;
     if (score > highScore)
         storeRecord();
     readRecord();

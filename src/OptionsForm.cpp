@@ -8,7 +8,7 @@ OptionsForm::OptionsForm(Application &context) : Form("../res/map_menu.txt", con
 OptionsForm::~OptionsForm() {
     delete menuView;
     delete logoIV;
-    delete dialog;
+//    delete dialog;
 }
 
 void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
@@ -21,43 +21,41 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                 case sf::Keyboard::Enter:
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:
-                            if (!dialog) {
-                                dialog = new DialogView("Reset game", "clear all game data", "reset",
-                                                        "cancel", window->getSize(),
-                                                        [&]() -> void {
-                                                            getApplicationContext().resetGame();
-                                                            getApplicationContext().pushFront(
-                                                                    new GameForm(getApplicationContext()));
-                                                            delete dialog;
-                                                            dialog = nullptr;
-                                                        },
-                                                        [&]() -> void {
-                                                            delete dialog;
-                                                            dialog = nullptr;
-                                                        });
+                            if (!dialog.isVisible()) {
+                                dialog.create("Reset game", "clear all game data", "reset",
+                                              "cancel", window->getSize(),
+                                              [&]() -> void {
+                                                  getApplicationContext().resetGame();
+                                                  getApplicationContext().pushFront(
+                                                          new GameForm(getApplicationContext()));
+                                                  dialog.hide();
+                                              },
+                                              [&]() -> void {
+                                                  dialog.hide();
+
+                                              }).show();
                             }
                             break;
                         case 1:
-                            if (!dialog) {
-                                dialog = new DialogView("Clear Record", "reset game record", "clear",
-                                                        "cancel", window->getSize(),
-                                                        [&]() -> void {
+                            if (!dialog.isVisible()) {
+                                dialog.create("Clear Record", "reset game record", "clear",
+                                              "cancel", window->getSize(),
+                                              [&]() -> void {
 
-                                                            try {
-                                                                File file("../res/high_score.txt");
-                                                                file.open(ios::out);
-                                                                file << 0;
-                                                            } catch (file_open_exception ex) {
-                                                                cerr << "error resetting highscore";
-                                                            }
+                                                  try {
+                                                      File file("../res/high_score.txt");
+                                                      file.open(ios::out);
+                                                      file << 0;
+                                                  } catch (file_open_exception ex) {
+                                                      cerr << "error resetting highscore";
+                                                  }
 
-                                                            delete dialog;
-                                                            dialog = nullptr;
-                                                        },
-                                                        [&]() -> void {
-                                                            delete dialog;
-                                                            dialog = nullptr;
-                                                        });
+                                                  dialog.hide();
+                                              },
+                                              [&]() -> void {
+                                                  dialog.hide();
+
+                                              }).show();
                             }
                             break;
                         case 2:
@@ -77,8 +75,8 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::MouseButtonReleased:
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left) {
-                if (dialog)
-                    dialog->pollEvents(event, window);
+                if (dialog.isVisible())
+                    dialog.pollEvents(event, window);
             }
             break;
     }
@@ -91,8 +89,8 @@ void OptionsForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 void OptionsForm::render(sf::RenderWindow *window) {
     menuView->render(window);
     window->draw(*logoIV);
-    if (dialog)
-        dialog->render(window);
+    if (dialog.isVisible())
+        dialog.render(window);
 }
 
 void OptionsForm::initMenuView() {

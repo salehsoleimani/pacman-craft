@@ -1,21 +1,7 @@
 #include "DialogView.h"
 
-DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, const sf::Vector2u &size,
-                       const function<void()> &onClick) : size(size) {
+DialogView::DialogView() {
 
-    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
-
-    initTexts(dialogTitle, dialogTxt);
-    initDialog();
-}
-
-DialogView::DialogView(string dialogTitle, string dialogTxt, string cta, string secondaryCta, const sf::Vector2u &size,
-                       const function<void()> &onClick, const function<void()> &onSecondaryClick) : size(size) {
-    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::SMALL, onClick);
-    secondaryBtn = new ButtonView(secondaryCta, {0, 0}, ButtonView::ButtonSize::SMALL, onSecondaryClick);
-
-    initTexts(dialogTitle, dialogTxt);
-    initDialog();
 }
 
 void DialogView::initTexts(string dialogTitle, string dialogTxt) {
@@ -24,15 +10,17 @@ void DialogView::initTexts(string dialogTitle, string dialogTxt) {
 }
 
 void DialogView::render(sf::RenderTarget *target) {
-    target->draw(*this);
-    target->draw(dialogBox);
-    target->draw(line);
-    target->draw(*titleTV);
-    target->draw(*txtTV);
-    ctaBtn->render(target);
-    if (secondaryBtn) target->draw(*secondaryBtn);
+    if (visible) {
+        target->draw(*this);
+        target->draw(dialogBox);
+        target->draw(line);
+        target->draw(*titleTV);
+        target->draw(*txtTV);
+        ctaBtn->render(target);
+        //just render text for secondary
+        if (secondaryBtn) target->draw(*secondaryBtn);
+    }
 }
-
 
 void DialogView::initDialog() {
     setFillColor(Colors::colorTransparent);
@@ -66,24 +54,71 @@ void DialogView::initDialog() {
         secondaryBtn->setFillColor(sf::Color::White);
 
         secondaryBtn->setButtonPosition(
-                {dialogBox.getGlobalBounds().left + ctaBtn->getWidth()/2,
+                {dialogBox.getGlobalBounds().left + ctaBtn->getWidth() / 2,
                  txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
 
         ctaBtn->setButtonPosition(
-                { dialogBox.getGlobalBounds().left + dialogBox.getGlobalBounds().width - ctaBtn->getWidth() / 2,
+                {dialogBox.getGlobalBounds().left + dialogBox.getGlobalBounds().width - ctaBtn->getWidth() / 2,
                  txtTV->getGlobalBounds().top + txtTV->getGlobalBounds().height + 26});
 
     }
 }
 
 void DialogView::pollEvents(const sf::Event &event, const sf::Window *target) {
-    ctaBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
-    secondaryBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
+    if (ctaBtn) {
+        ctaBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
+    }
+
+    if (secondaryBtn) {
+        secondaryBtn->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*target)));
+    }
 }
 
 DialogView::~DialogView() {
+}
+
+DialogView &DialogView::create(string dialogTitle, string dialogTxt, string cta, const sf::Vector2u &size,
+                               const function<void()> &onClick) {
+    this->size = size;
+
+    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
+
+    initTexts(dialogTitle, dialogTxt);
+    initDialog();
+
+    return *this;
+}
+
+DialogView &
+DialogView::create(string dialogTitle, string dialogTxt, string cta, string secondaryCta, const sf::Vector2u &size,
+                   const function<void()> &onClick, const function<void()> &onSecondaryClick) {
+    this->size = size;
+
+    ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::SMALL, onClick);
+    secondaryBtn = new ButtonView(secondaryCta, {0, 0}, ButtonView::ButtonSize::SMALL, onSecondaryClick);
+
+    initTexts(dialogTitle, dialogTxt);
+    initDialog();
+
+    return *this;
+}
+
+bool DialogView::show() {
+    visible = true;
+}
+
+bool DialogView::hide() {
+    visible = false;
     delete txtTV;
     delete titleTV;
     delete ctaBtn;
     delete secondaryBtn;
+    secondaryBtn = nullptr;
+    ctaBtn = nullptr;
+    titleTV = nullptr;
+    txtTV = nullptr;
+}
+
+bool DialogView::isVisible() const {
+    return visible;
 }

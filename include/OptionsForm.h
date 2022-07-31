@@ -15,7 +15,7 @@ public:
     ~OptionsForm();
 
 private:
-    DialogView *dialog = nullptr;
+    DialogView dialog;
 
     MenuView *menuView;
 

@@ -35,9 +35,6 @@ void ButtonView::initShapes() {
     buttonShape = new sf::RectangleShape(size);
     buttonShadow = new sf::RectangleShape(size);
 
-//    buttonShape->setSize(size);
-//    buttonShadow->setSize(size);
-
     buttonShape->setFillColor(Colors::colorActive);
     buttonShadow->setFillColor(Colors::colorShadow);
 

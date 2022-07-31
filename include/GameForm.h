@@ -60,7 +60,7 @@ private:
     unsigned eatenSnacks;
     unsigned snacksCount;
     unsigned long int highScore;
-    bool isFruitVisible;
+    bool isFruitVisible = false;
     sf::Vector2f pacmanPosition;
     list<Snack *> snacks;
     list<Ghost *> ghosts;
@@ -71,7 +71,7 @@ private:
     TextView *btnBack;
     sf::Sprite btnBackIc;
     sf::Texture *heartTexture;
-    DialogView *dialog = nullptr;
+    DialogView dialog;
 };
 
 #endif //PACMAN_GAMEFORM_H
