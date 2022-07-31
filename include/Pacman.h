@@ -29,6 +29,7 @@ private:
     sf::Vector2f lastMove;
     sf::Sprite pacman;
     float speed = 3;
+    float pacmanSpeed;
     bool isFirst = true;
 
     void updateRelativePosition();

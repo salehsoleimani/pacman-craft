@@ -33,6 +33,8 @@ public:
 
     void lose();
 
+    unsigned getLevel() const;
+
 private:
 
     void pollEvents(sf::Event &, sf::RenderWindow *) override;
@@ -41,17 +43,23 @@ private:
 
     void render(sf::RenderWindow *) override;
 
-    void initTexts();
+    void initGame();
 
     void initSprites();
 
+    void resetBoard();
+
+    void readRecord();
+
+    void storeRecord();
+
     float fruitTimer = 0;
     unsigned level = 1;
-    unsigned score;
+    unsigned long int score;
     unsigned fruitsCount;
     unsigned eatenSnacks;
     unsigned snacksCount;
-    unsigned highScore;
+    unsigned long int highScore;
     bool isFruitVisible;
     sf::Vector2f pacmanPosition;
     list<Snack *> snacks;

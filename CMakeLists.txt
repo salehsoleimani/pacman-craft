@@ -21,6 +21,9 @@ add_executable(Pacman main.cpp
         src/Pellet.cpp
         src/Ghost.cpp
         src/Inky.cpp
+        src/Clyde.cpp
+        src/Blinky.cpp
+        src/Pinky.cpp
         src/Fruit.cpp)
 include_directories(/usr/local/include include)
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)

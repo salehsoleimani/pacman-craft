@@ -1,6 +1,6 @@
 #include "OptionsForm.h"
 
-OptionsForm::OptionsForm(Application& context) : Form("../res/map_menu.txt",context) {
+OptionsForm::OptionsForm(Application &context) : Form("../res/map_menu.txt", context) {
     initMenuView();
     initImages();
 }
@@ -26,7 +26,8 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                                         "cancel", window->getSize(),
                                                         [&]() -> void {
                                                             getApplicationContext().resetGame();
-                                                            getApplicationContext().pushFront(new GameForm(getApplicationContext()));
+                                                            getApplicationContext().pushFront(
+                                                                    new GameForm(getApplicationContext()));
                                                             delete dialog;
                                                             dialog = nullptr;
                                                         },
@@ -41,8 +42,15 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                 dialog = new DialogView("Clear Record", "reset game record", "clear",
                                                         "cancel", window->getSize(),
                                                         [&]() -> void {
-                                                            if (remove("high_score.txt") != 0)
-                                                                cerr << "Error deleting file";
+
+                                                            try {
+                                                                File file("../res/high_score.txt");
+                                                                file.open(ios::out);
+                                                                file << 0;
+                                                            } catch (file_open_exception ex) {
+                                                                cerr << "error resetting highscore";
+                                                            }
+
                                                             delete dialog;
                                                             dialog = nullptr;
                                                         },

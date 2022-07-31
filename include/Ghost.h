@@ -9,6 +9,10 @@
 
 class Ghost : public GameObject {
 public:
+    enum class GhostState {
+        CHASE, SCATTER, FRIGHTENED, DEAD
+    };
+
     explicit Ghost(sf::Vector2f, GameForm *);
 
     virtual ~Ghost() = default;
@@ -22,12 +26,10 @@ protected:
     GameForm *context = nullptr;
     //animator used for ghost sprite
     Animator *animator = nullptr;
-
     Directions direction;
-
     sf::Sprite ghost;
-
     float speed = 3;
+    GhostState ghostState;
 
     void updateRelativePosition();
 };

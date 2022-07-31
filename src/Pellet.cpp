@@ -39,6 +39,11 @@ void Pellet::update(sf::Time dt) {
 }
 
 void Pellet::eat() {
+    if (foodType == PelletType::NORMAL)
+        sf::sleep(sf::seconds(1 / Config::windowFrameRate));
+    else
+        sf::sleep(sf::seconds(3 / Config::windowFrameRate));
+
     eaten = true;
     food.setFillColor(sf::Color::Transparent);
 }
