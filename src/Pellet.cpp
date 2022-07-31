@@ -1,11 +1,14 @@
 #include "Pellet.h"
 
 Pellet::Pellet(sf::Vector2f position, PelletType foodType) : Snack(position), foodType(foodType) {
-    if (foodType == PelletType::NORMAL)
+    if (foodType == PelletType::NORMAL) {
+        snackType = Snack::SnackType::PELLET;
         food.setRadius(3.0f);
-    else
+    }
+    else {
+        snackType = Snack::SnackType::POWER;
         food.setRadius(7.0f);
-
+    }
     food.setOrigin(food.getGlobalBounds().width / 2, food.getGlobalBounds().height / 2);
     food.setPosition({position.x + Dimensions::wallSize.x / 2, position.y + Dimensions::wallSize.y / 2});
     food.setFillColor(Colors::colorDot);

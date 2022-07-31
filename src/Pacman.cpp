@@ -80,6 +80,9 @@ void Pacman::update(sf::Time dt) {
     for (auto snack: context->getSnacks()) {
         if (snack->getRelativePosition() == relativePosition && !snack->isEaten()) {
             snack->eat();
+            if (snack->getSnackType() == Snack::SnackType::POWER)
+                for (auto ghost: context->getGhosts())
+                    ghost->changeState(Ghost::GhostState::FRIGHTENED);
             context->raiseScore(snack->getPpt());
         }
     }
@@ -87,8 +90,12 @@ void Pacman::update(sf::Time dt) {
     //check collision with ghosts
     for (auto ghost: context->getGhosts()) {
         if (ghost->getRelativePosition() == relativePosition && isFirst) {
-            animator->setAnimation("die");
-            isFirst = false;
+            if (ghost->getGhostState() == Ghost::GhostState::FRIGHTENED) {
+                ghost->die();
+            } else if(ghost->getGhostState() != Ghost::GhostState::DEAD) {
+                animator->setAnimation("die");
+                isFirst = false;
+            }
         }
     }
     //destruct class after dying animation

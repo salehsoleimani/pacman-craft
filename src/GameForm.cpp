@@ -131,6 +131,9 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
         for (auto snack: snacks)
             if (snack) snack->update(dt);
 
+        for (auto ghost: ghosts)
+            if (ghost) ghost->update(dt);
+
         txtScore->setString("score\n" + to_string(this->score));
     }
 }
@@ -194,6 +197,7 @@ void GameForm::resetBoard() {
 }
 
 void GameForm::initGame() {
+    score = 0;
     readRecord();
 
     txtScore = new TextView("score\n0", {251, 21});

@@ -68,3 +68,7 @@ Animator::~Animator() {
 bool Animator::isFinished() const {
     return !currentAnimation->isLoop() && finished;
 }
+
+const string Animator::getCurrentAnimationId() const {
+    return currentAnimation->getId();
+}

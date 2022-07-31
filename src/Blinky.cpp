@@ -8,11 +8,6 @@ Blinky::Blinky(sf::Vector2f position, GameForm *context) : Ghost(position, conte
     animator->add("down", sf::milliseconds(300), "../res/sprites/blinky.png", sf::Vector2i(0,0), 2);
 
     animator->setAnimation("right");
-    animator->update(sf::milliseconds(300));
-}
-
-void Blinky::update(sf::Time dt) {
-
 }
 
 Blinky::~Blinky() {

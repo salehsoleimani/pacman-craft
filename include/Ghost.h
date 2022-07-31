@@ -15,11 +15,19 @@ public:
 
     explicit Ghost(sf::Vector2f, GameForm *);
 
-    virtual ~Ghost() = default;
+    virtual ~Ghost();
 
     void pollEvents(sf::Event &);
 
     void render(sf::RenderTarget *) override;
+
+    void update(sf::Time);
+
+    void changeState(GhostState state);
+
+    const GhostState &getGhostState() const;
+
+    void die();
 
 protected:
     //using game context and it's properties
@@ -30,6 +38,9 @@ protected:
     sf::Sprite ghost;
     float speed = 3;
     GhostState ghostState;
+    float frightenedTimer = 0;
+
+    static int deadGhosts;
 
     void updateRelativePosition();
 };

@@ -9,8 +9,6 @@ public:
 
     ~Blinky();
 
-    void update(sf::Time) override;
-
 };
 
 

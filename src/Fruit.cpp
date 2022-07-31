@@ -4,6 +4,8 @@
 Fruit::Fruit(sf::Vector2f position, FruitType fruitType) : Snack(position), fruitType(fruitType) {
     eaten = false;
 
+    snackType = Snack::SnackType::FRUIT;
+
     string texturePath = Path::fruit;
 
     switch (fruitType) {

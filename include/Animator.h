@@ -21,6 +21,8 @@ public:
     void setAnimation(string id);
 
     bool isFinished() const;
+
+    const string getCurrentAnimationId() const;
 private:
     bool finished = false;
     //store a reference to the sprite to set it's texture

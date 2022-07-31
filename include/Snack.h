@@ -7,6 +7,12 @@
 
 class Snack : public GameObject {
 public:
+    enum class SnackType {
+        PELLET,
+        POWER,
+        FRUIT
+    };
+
     explicit Snack(sf::Vector2f position) : GameObject(position) {}
 
     virtual ~Snack() = default;
@@ -23,8 +29,13 @@ public:
         this->eaten = eaten;
     }
 
+    const SnackType &getSnackType() const {
+        return snackType;
+    }
+
 protected:
     bool eaten;
+    SnackType snackType;
 };
 
 

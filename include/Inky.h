@@ -9,8 +9,6 @@ public:
 
     ~Inky();
 
-    void update(sf::Time) override;
-
 };
 
 
