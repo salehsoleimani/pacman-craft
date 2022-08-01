@@ -25,10 +25,10 @@ private:
     //animator used for pacman sprite
     Animator *animator;
     Directions direction;
-    sf::Vector2f nextMove;
-    sf::Vector2f lastMove;
+    sf::Vector2i nextMove;
+    sf::Vector2i lastMove;
     sf::Sprite pacman;
-    float speed = 210;
+    float speed = 4;
     float pacmanSpeed;
     bool isFirst = true;
 

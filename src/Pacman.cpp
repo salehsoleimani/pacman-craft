@@ -52,10 +52,14 @@ void Pacman::update(sf::Time dt) {
 
     animator->update(dt);
 
-    sf::Vector2f currentPosition = pacman.getPosition();
-
     //a vector to hold next move coordinates
-    int x = speed * dt.asSeconds() ;
+    int x = speed;
+
+    if (context->getLevel() >= 33) x *= .9;
+    else if (context->getLevel() >= 21) x *= 1;
+    else if (context->getLevel() >= 5) x *= .9;
+    else x *= .8;
+
     nextMove = {0, 0};
 
     switch (direction) {
@@ -76,7 +80,11 @@ void Pacman::update(sf::Time dt) {
             break;
     }
 
-    pacman.move(nextMove);
+    nextMove = {((int) nextMove.x), ((int) nextMove.y)};
+
+    sf::Vector2f currentPosition = pacman.getPosition();
+    pacman.move(sf::Vector2f(nextMove));
+
 
     //eating fruits
     for (auto snack: context->getSnacks()) {
@@ -128,7 +136,7 @@ void Pacman::update(sf::Time dt) {
             updateRelativePosition();
 
             if (lastMove != nextMove && !checkCollision(relativePosition.x, relativePosition.y))
-                pacman.move(lastMove);
+                pacman.move(sf::Vector2f(lastMove));
 
             updateRelativePosition();
 
@@ -147,23 +155,27 @@ bool Pacman::checkCollision(float x, float y) {
             break;
         case Directions::UP:
             if (context->getBoard()[floor(y)][ceil(x)] == ObjectType::WALL ||
-                context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL)
+                context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL) {
                 return true;
+            }
             break;
         case Directions::DOWN:
             if (context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL ||
-                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL)
+                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL) {
                 return true;
+            }
             break;
         case Directions::LEFT:
             if (context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL ||
-                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL)
+                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL) {
                 return true;
+            }
             break;
         case Directions::RIGHT:
             if (context->getBoard()[floor(y)][ceil(x)] == ObjectType::WALL ||
-                context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL)
+                context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL) {
                 return true;
+            }
             break;
     }
     return false;
