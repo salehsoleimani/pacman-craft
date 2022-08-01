@@ -22,8 +22,7 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:
                             if (!dialog.isVisible()) {
-                                dialog.create("Reset game", "clear all game data", "reset",
-                                              "cancel", window->getSize(),
+                                dialog.create("Reset game", "clear all game data", "reset", "cancel",
                                               [&]() -> void {
                                                   getApplicationContext().resetGame();
                                                   getApplicationContext().pushFront(
@@ -38,8 +37,7 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                             break;
                         case 1:
                             if (!dialog.isVisible()) {
-                                dialog.create("Clear Record", "reset game record", "clear",
-                                              "cancel", window->getSize(),
+                                dialog.create("Clear Record", "reset game record", "clear", "cancel",
                                               [&]() -> void {
 
                                                   try {

@@ -9,6 +9,10 @@
 GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
     initGame();
     initSprites();
+    dialog.create("Welcome!", "arrow keys to move", "continue",
+                  [&]() -> void {
+                      dialog.hide();
+                  }).show();
 }
 
 GameForm::~GameForm() {
@@ -60,7 +64,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                 if (!dialog.isVisible())
                     if (btnBack->getGlobalBounds().contains(mousePosition) ||
                         btnBackIc.getGlobalBounds().contains(mousePosition)) {
-                        dialog.create("Pause", "pause the game", "okay", "cancel", window->getSize(),
+                        dialog.create("Pause", "pause the game", "okay", "cancel",
                                       [&]() -> void {
                                           getApplicationContext().pushForm(
                                                   new MainForm(getApplicationContext()));
@@ -84,7 +88,6 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
     //if pacman ate all snacks rearrange board - reach to next level
     if (eatenSnacks == snacksCount) {
         dialog.create("Victory", "reached level " + to_string(level + 1), "Hooray!",
-                      {Config::videoMode.width, Config::videoMode.height},
                       [&]() -> void {
                           dialog.hide();
                           level++;
@@ -175,7 +178,7 @@ void GameForm::lose() {
         pacman = new Pacman(pacmanPosition, this);
         score -= 20;
     } else {
-        dialog.create("Game Over!", "you lose", "continue", {Config::videoMode.width, Config::videoMode.height},
+        dialog.create("Game Over!", "you lose", "continue",
                       [&]() -> void {
                           level = 1;
                           resetBoard();

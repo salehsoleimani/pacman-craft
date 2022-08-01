@@ -14,6 +14,8 @@ Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position),
 
     animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(24, 0), 12, false);
 
+    direction = Directions::INIT;
+
     updateRelativePosition();
 }
 
@@ -42,7 +44,6 @@ void Pacman::pollEvents(sf::Event &event) {
                 break;
             default:
                 direction = Directions::INIT;
-                animator->setAnimation("die");
                 break;
         }
 }
@@ -54,20 +55,21 @@ void Pacman::update(sf::Time dt) {
     sf::Vector2f currentPosition = pacman.getPosition();
 
     //a vector to hold next move coordinates
+    int x = speed * dt.asSeconds() ;
     nextMove = {0, 0};
 
     switch (direction) {
         case Directions::DOWN:
-            nextMove.y += speed;
+            nextMove.y += x;
             break;
         case Directions::UP:
-            nextMove.y -= speed;
+            nextMove.y -= x;
             break;
         case Directions::LEFT:
-            nextMove.x -= speed;
+            nextMove.x -= x;
             break;
         case Directions::RIGHT:
-            nextMove.x += speed;
+            nextMove.x += x;
             break;
         case Directions::INIT:
             nextMove = {0, 0};
@@ -92,7 +94,7 @@ void Pacman::update(sf::Time dt) {
         if (ghost->getRelativePosition() == relativePosition && isFirst) {
             if (ghost->getGhostState() == Ghost::GhostState::FRIGHTENED) {
                 ghost->die();
-            } else if(ghost->getGhostState() != Ghost::GhostState::DEAD) {
+            } else if (ghost->getGhostState() != Ghost::GhostState::DEAD) {
                 animator->setAnimation("die");
                 isFirst = false;
             }
@@ -140,11 +142,30 @@ void Pacman::update(sf::Time dt) {
 }
 
 bool Pacman::checkCollision(float x, float y) {
-    if (context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL ||
-        context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL ||
-        context->getBoard()[floor(y)][ceil(x)] == ObjectType::WALL ||
-        context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL)
-        return true;
+    switch (direction) {
+        case Directions::INIT:
+            break;
+        case Directions::UP:
+            if (context->getBoard()[floor(y)][ceil(x)] == ObjectType::WALL ||
+                context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL)
+                return true;
+            break;
+        case Directions::DOWN:
+            if (context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL ||
+                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL)
+                return true;
+            break;
+        case Directions::LEFT:
+            if (context->getBoard()[floor(y)][floor(x)] == ObjectType::WALL ||
+                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL)
+                return true;
+            break;
+        case Directions::RIGHT:
+            if (context->getBoard()[floor(y)][ceil(x)] == ObjectType::WALL ||
+                context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL)
+                return true;
+            break;
+    }
     return false;
 }
 

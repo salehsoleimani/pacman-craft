@@ -18,9 +18,9 @@ public:
 
     void pollEvents(const sf::Event &, const sf::Window *);
 
-    DialogView &create(string, string, string, const sf::Vector2u &, const function<void()> &);
+    DialogView &create(string, string, string, const function<void()> &);
 
-    DialogView &create(string, string, string, string, const sf::Vector2u &, const function<void()> &,
+    DialogView &create(string, string, string, string, const function<void()> &,
                        const function<void()> &);
 
     bool show();

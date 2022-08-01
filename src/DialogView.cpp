@@ -77,9 +77,9 @@ void DialogView::pollEvents(const sf::Event &event, const sf::Window *target) {
 DialogView::~DialogView() {
 }
 
-DialogView &DialogView::create(string dialogTitle, string dialogTxt, string cta, const sf::Vector2u &size,
+DialogView &DialogView::create(string dialogTitle, string dialogTxt, string cta,
                                const function<void()> &onClick) {
-    this->size = size;
+    this->size = {Config::videoMode.width, Config::videoMode.height};
 
     ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::BIG, onClick);
 
@@ -90,9 +90,9 @@ DialogView &DialogView::create(string dialogTitle, string dialogTxt, string cta,
 }
 
 DialogView &
-DialogView::create(string dialogTitle, string dialogTxt, string cta, string secondaryCta, const sf::Vector2u &size,
+DialogView::create(string dialogTitle, string dialogTxt, string cta, string secondaryCta,
                    const function<void()> &onClick, const function<void()> &onSecondaryClick) {
-    this->size = size;
+    this->size = {Config::videoMode.width, Config::videoMode.height};
 
     ctaBtn = new ButtonView(cta, {0, 0}, ButtonView::ButtonSize::SMALL, onClick);
     secondaryBtn = new ButtonView(secondaryCta, {0, 0}, ButtonView::ButtonSize::SMALL, onSecondaryClick);
