@@ -59,7 +59,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                 }
                 if (!dialog.isVisible())
                     if (btnBack->getGlobalBounds().contains(mousePosition) ||
-                    btnBackIc.getGlobalBounds().contains(mousePosition)) {
+                        btnBackIc.getGlobalBounds().contains(mousePosition)) {
                         dialog.create("Pause", "pause the game", "okay", "cancel", window->getSize(),
                                       [&]() -> void {
                                           getApplicationContext().pushForm(
@@ -69,7 +69,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                       [&]() -> void {
                                           dialog.hide();
                                       }).show();
-                }
+                    }
             }
             break;
         case sf::Event::KeyPressed:
@@ -83,7 +83,8 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     //if pacman ate all snacks rearrange board - reach to next level
     if (eatenSnacks == snacksCount) {
-        dialog.create("Victory", "reached level " + to_string(level + 1), "Hoooray!", window->getSize(),
+        dialog.create("Victory", "reached level " + to_string(level + 1), "Hooray!",
+                      {Config::videoMode.width, Config::videoMode.height},
                       [&]() -> void {
                           dialog.hide();
                           level++;
@@ -174,16 +175,20 @@ void GameForm::lose() {
         pacman = new Pacman(pacmanPosition, this);
         score -= 20;
     } else {
-        level = 1;
-        initGame();
-        resetBoard();
-        score = 0;
+        dialog.create("Game Over!", "you lose", "continue", {Config::videoMode.width, Config::videoMode.height},
+                      [&]() -> void {
+                          level = 1;
+                          resetBoard();
+                          initGame();
+                          score = 0;
+                          dialog.hide();
+                      }).show();
     }
 }
 
 void GameForm::resetBoard() {
     isFruitVisible = false;
-    fruitTimer=0;
+    fruitTimer = 0;
     if (score > highScore)
         storeRecord();
     readRecord();

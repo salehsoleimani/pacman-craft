@@ -6,8 +6,6 @@ Clyde::Clyde(sf::Vector2f position, GameForm *context) : Ghost(position, context
     animator->add("left", sf::milliseconds(300), "../res/sprites/clyde.png", sf::Vector2i(60, 0), 2);
     animator->add("up", sf::milliseconds(300), "../res/sprites/clyde.png", sf::Vector2i(180, 0), 2);
     animator->add("down", sf::milliseconds(300), "../res/sprites/clyde.png", sf::Vector2i(0,0), 2);
-
-    animator->setAnimation("right");
 }
 
 Clyde::~Clyde() {

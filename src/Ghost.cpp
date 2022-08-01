@@ -11,7 +11,8 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position),co
     animator->add("die", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(0, 0), 8);
     animator->add("frightened", sf::seconds(2), "../res/sprites/frightened.png", sf::Vector2i(0, 0), 8);
 
-    animator->update(sf::milliseconds(300));
+//    animator->setAnimation("right");
+//    animator->update(sf::milliseconds(300));
 
     updateRelativePosition();
 }
