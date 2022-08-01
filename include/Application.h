@@ -7,6 +7,7 @@
 #include <cmath>
 #include "Values.h"
 #include "Form.h"
+#include "DialogView.h"
 
 //main state-machine for game
 class Application {
@@ -26,7 +27,8 @@ public:
             sf::Time dt = clock.restart();
 
             //update
-            currentForm()->update(&window,dt);
+            if (!dialog.isVisible())
+                currentForm()->update(&window, dt);
 
             //render
             window.clear(Colors::colorBlue);
@@ -34,13 +36,22 @@ public:
             currentForm()->clear(&window);
             currentForm()->render(&window);
 
+            if (dialog.isVisible())
+                dialog.render(&window);
+
             //handle events
             sf::Event event;
             while (window.pollEvent(event)) {
+                //close window btn
                 if (event.type == sf::Event::Closed)
                     window.close();
-                //abstract event handler in Form class
-                currentForm()->pollEvents(event, &window);
+
+                if (dialog.isVisible())
+                    dialog.pollEvents(event, &window);
+                else {
+                    //abstract event handler in Form class
+                    currentForm()->pollEvents(event, &window);
+                }
             }
 
             window.display();
@@ -69,8 +80,12 @@ public:
         forms.pop_front();
     }
 
-    void pushFront(Form *form){
+    void pushFront(Form *form) {
         forms.push_front(form);
+    }
+
+    DialogView &getDialog() {
+        return dialog;
     }
 
     ///deleting Form pointers from memory
@@ -82,6 +97,8 @@ private:
     sf::RenderWindow window;
 
     deque<Form *> forms;
+
+    DialogView dialog;
 };
 
 

@@ -15,8 +15,6 @@ public:
     ~OptionsForm();
 
 private:
-    DialogView dialog;
-
     MenuView *menuView;
 
     sf::Texture logoSrc;

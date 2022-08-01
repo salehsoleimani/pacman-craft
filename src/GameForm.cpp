@@ -9,10 +9,11 @@
 GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
     initGame();
     initSprites();
-    dialog.create("Welcome!", "arrow keys to move", "continue",
-                  [&]() -> void {
-                      dialog.hide();
-                  }).show();
+
+    getApplicationContext().getDialog().create("Welcome!", "arrow keys to move", "continue",
+                                               [&]() -> void {
+                                                   getApplicationContext().getDialog().hide();
+                                               }).show();
 }
 
 GameForm::~GameForm() {
@@ -58,21 +59,18 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::MouseButtonReleased:
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left) {
-                if (dialog.isVisible()) {
-                    dialog.pollEvents(event, window);
-                }
-                if (!dialog.isVisible())
+                if (!getApplicationContext().getDialog().isVisible())
                     if (btnBack->getGlobalBounds().contains(mousePosition) ||
                         btnBackIc.getGlobalBounds().contains(mousePosition)) {
-                        dialog.create("Pause", "pause the game", "okay", "cancel",
-                                      [&]() -> void {
-                                          getApplicationContext().pushForm(
-                                                  new MainForm(getApplicationContext()));
-                                          dialog.hide();
-                                      },
-                                      [&]() -> void {
-                                          dialog.hide();
-                                      }).show();
+                        getApplicationContext().getDialog().create("Pause", "pause the game", "okay", "cancel",
+                                                                   [&]() -> void {
+                                                                       getApplicationContext().pushForm(
+                                                                               new MainForm(getApplicationContext()));
+                                                                       getApplicationContext().getDialog().hide();
+                                                                   },
+                                                                   [&]() -> void {
+                                                                       getApplicationContext().getDialog().hide();
+                                                                   }).show();
                     }
             }
             break;
@@ -87,12 +85,12 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     //if pacman ate all snacks rearrange board - reach to next level
     if (eatenSnacks == snacksCount) {
-        dialog.create("Victory", "reached level " + to_string(level + 1), "Hooray!",
-                      [&]() -> void {
-                          dialog.hide();
-                          level++;
-                          resetBoard();
-                      }).show();
+        getApplicationContext().getDialog().create("Victory", "reached level " + to_string(level + 1), "Hooray!",
+                                                   [&]() -> void {
+                                                       getApplicationContext().getDialog().hide();
+                                                       level++;
+                                                       resetBoard();
+                                                   }).show();
     }
 
     if (isFruitVisible) fruitTimer += dt.asSeconds();
@@ -129,17 +127,15 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     txtRecord->setString("high score\n" + to_string(highScore));
 
-    if (!dialog.isVisible()) {
-        pacman->update(dt);
+    pacman->update(dt);
 
-        for (auto snack: snacks)
-            if (snack) snack->update(dt);
+    for (auto snack: snacks)
+        if (snack) snack->update(dt);
 
-        for (auto ghost: ghosts)
-            if (ghost) ghost->update(dt);
+    for (auto ghost: ghosts)
+        if (ghost) ghost->update(dt);
 
-        txtScore->setString("score\n" + to_string(this->score));
-    }
+    txtScore->setString("score\n" + to_string(this->score));
 }
 
 void GameForm::render(sf::RenderWindow *window) {
@@ -151,8 +147,6 @@ void GameForm::render(sf::RenderWindow *window) {
     for (auto heart: hearts) window->draw(heart);
     pacman->render(window);
     window->draw(btnBackIc);
-    if (dialog.isVisible())
-        dialog.render(window);
 }
 
 list<Snack *> &GameForm::getSnacks() {
@@ -178,14 +172,14 @@ void GameForm::lose() {
         pacman = new Pacman(pacmanPosition, this);
         score -= 20;
     } else {
-        dialog.create("Game Over!", "you lose", "continue",
-                      [&]() -> void {
-                          level = 1;
-                          resetBoard();
-                          initGame();
-                          score = 0;
-                          dialog.hide();
-                      }).show();
+        getApplicationContext().getDialog().create("Game Over!", "you lose", "continue",
+                                                   [&]() -> void {
+                                                       level = 1;
+                                                       resetBoard();
+                                                       initGame();
+                                                       score = 0;
+                                                       getApplicationContext().getDialog().hide();
+                                                   }).show();
     }
 }
 

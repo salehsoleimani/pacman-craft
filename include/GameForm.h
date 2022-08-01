@@ -10,7 +10,6 @@
 #include "Form.h"
 #include "File.h"
 #include "ButtonView.h"
-#include "DialogView.h"
 #include "Fruit.h"
 
 using namespace std;
@@ -71,7 +70,6 @@ private:
     TextView *btnBack;
     sf::Sprite btnBackIc;
     sf::Texture *heartTexture;
-    DialogView dialog;
 };
 
 #endif //PACMAN_GAMEFORM_H
