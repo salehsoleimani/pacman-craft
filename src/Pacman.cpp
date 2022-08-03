@@ -85,7 +85,6 @@ void Pacman::update(sf::Time dt) {
     sf::Vector2f currentPosition = pacman.getPosition();
     pacman.move(sf::Vector2f(nextMove));
 
-
     //eating fruits
     for (auto snack: context->getSnacks()) {
         if (snack->getRelativePosition() == relativePosition && !snack->isEaten()) {

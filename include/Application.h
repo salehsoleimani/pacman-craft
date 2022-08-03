@@ -22,7 +22,6 @@ public:
     void run() {
         sf::Clock clock;
         while (window.isOpen()) {
-
             //calculating dt(delta time) between frames
             sf::Time dt = clock.restart();
 
@@ -53,9 +52,7 @@ public:
                     currentForm()->pollEvents(event, &window);
                 }
             }
-
             window.display();
-
         }
     }
 

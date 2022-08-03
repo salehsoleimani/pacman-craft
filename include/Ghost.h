@@ -39,10 +39,18 @@ protected:
     float speed = 3;
     GhostState ghostState;
     float frightenedTimer = 0;
+    vector<sf::Vector2f> possibleRoutes;
 
+    sf::Vector2f nextMove;
+//    sf::Vector2f lastMove;
+    sf::Vector2f nextTile;
     static int deadGhosts;
 
     void updateRelativePosition();
+
+    void checkPossibleRoutes();
+
+    bool checkCollision(float x, float y);
 };
 
 
