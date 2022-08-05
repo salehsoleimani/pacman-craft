@@ -192,6 +192,7 @@ void GameForm::resetBoard() {
     for (auto snack: snacks) delete snack;
     for (auto ghost: ghosts) delete ghost;
     snacks.clear();
+    hearts.clear();
     ghosts.clear();
     initSprites();
     eatenSnacks = 0;

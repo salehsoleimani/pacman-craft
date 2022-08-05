@@ -8,15 +8,23 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
 
     animator = new Animator(ghost);
 
+    if (context->getLevel() > 128) frightenedDuration = sf::Time::Zero;
+    else if (context->getLevel() >= 64) frightenedDuration = sf::seconds(1);
+    else if (context->getLevel() >= 32) frightenedDuration = sf::seconds(1);
+    else if (context->getLevel() >= 17) frightenedDuration = sf::seconds(2);
+    else if (context->getLevel() >= 11) frightenedDuration = sf::seconds(3);
+    else if (context->getLevel() >= 6) frightenedDuration = sf::seconds(4);
+    else if (context->getLevel() == 5) frightenedDuration = sf::seconds(2);
+    else if (context->getLevel() == 4) frightenedDuration = sf::seconds(3);
+    else if (context->getLevel() == 3) frightenedDuration = sf::seconds(4);
+    else if (context->getLevel() == 2) frightenedDuration = sf::seconds(5);
+    else frightenedDuration = sf::seconds(6);
+
     //same for all ghosts
     animator->add("die", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(0, 0), 8);
     animator->add("frightened", sf::seconds(2), "../res/sprites/frightened.png", sf::Vector2i(0, 0), 8);
 
-    animator->setAnimation("right");
-//    animator->update(sf::milliseconds(300));
-
     updateRelativePosition();
-    direction = Directions::RIGHT;
 
     nextTile = relativePosition;
 }
@@ -50,17 +58,22 @@ void Ghost::update(sf::Time dt) {
 
     nextMove = {0, 0};
 
+
     switch (direction) {
         case Directions::DOWN:
+            animator->setAnimation("down");
             nextMove.y += x;
             break;
         case Directions::UP:
+            animator->setAnimation("up");
             nextMove.y -= x;
             break;
         case Directions::LEFT:
+            animator->setAnimation("left");
             nextMove.x -= x;
             break;
         case Directions::RIGHT:
+            animator->setAnimation("right");
             nextMove.x += x;
             break;
         case Directions::INIT:
@@ -68,55 +81,58 @@ void Ghost::update(sf::Time dt) {
             break;
     }
 
-    if (frightenedTimer >= 10) {
+    if (frightenedTimer >= frightenedDuration.asSeconds()) {
         ghostState = GhostState::CHASE;
         frightenedTimer = 0;
         deadGhosts = 0;
     }
 
-    ghost.move(nextMove);
+    if (isInTile()) {
 
-    updateRelativePosition();
+        if (relativePosition != nextTile)
+            ghost.setPosition(nextTile.x * Dimensions::wallSize.x, nextTile.y * Dimensions::wallSize.y);
 
-    //when we reached a fixed tile switch route
-//    cout << "RELATIVE POSITION ISSSSS" << relativePosition.x << "     " << relativePosition.y << "NEXT TYLE    "
-//         << nextTile.x << "     " << nextTile.y << endl;
-    if (checkCollision(relativePosition.x, relativePosition.y)) {
-//    if (relativePosition == nextTile) {
+        updateRelativePosition();
+
+        possibleRoutes.clear();
         checkPossibleRoutes();
-        cout << "EMPTY" << endl;
 
         std::random_device dev;
         std::mt19937 rng(dev());
-        std::uniform_int_distribution<std::mt19937::result_type> randomRoute(0,
-                                                                             possibleRoutes.size() -
-                                                                             1); // distribution in range [1, 6]
+        std::uniform_int_distribution<std::mt19937::result_type> randomRoute(0, possibleRoutes.size() - 1);
 
-        nextTile = possibleRoutes[randomRoute(rng)];
+        Direction nextDirection = possibleRoutes[randomRoute(rng)];
 
+        if (nextDirection.tile != lastTile || possibleRoutes.size() == 1) {
+            lastTile = nextTile;
 
-        if (nextTile.x > relativePosition.x) direction = Directions::RIGHT;
-        else if (nextTile.x < relativePosition.x) direction = Directions::LEFT;
-        else if (nextTile.y > relativePosition.y) direction = Directions::DOWN;
-        else if (nextTile.y > relativePosition.y) direction = Directions::UP;
+            direction = nextDirection.direction;
 
-        for (auto v: possibleRoutes) {
-            cout << v.x << " and y is " << v.y << endl;
+            nextTile = nextDirection.tile;
         }
-
-        cout << "SELECTED IS    " << nextTile.x << "    AND Y : " << nextTile.y << endl;
     }
 
+    ghost.
+            move(nextMove);
+
+    updateRelativePosition();
 
     switch (ghostState) {
         case Ghost::GhostState::FRIGHTENED:
-            if (animator->getCurrentAnimationId() != "frightened")
+            if (animator->
+
+                    getCurrentAnimationId()
+
+                != "frightened")
                 animator->setAnimation("frightened");
             else
-                frightenedTimer += dt.asSeconds();
+                frightenedTimer += dt.
+
+                        asSeconds();
+
             break;
         case GhostState::CHASE:
-            animator->setAnimation("right");
+//            animator->setAnimation("right");
             break;
         case GhostState::SCATTER:
             break;
@@ -127,24 +143,24 @@ void Ghost::update(sf::Time dt) {
 }
 
 
-bool Ghost::checkCollision(float x, float y) {
+bool Ghost::isInTile() {
     switch (direction) {
         case Directions::INIT:
-            break;
+            return true;
         case Directions::UP:
-            if (x == nextTile.x && floor(y) == nextTile.y)
+            if (relativePosition.y <= nextTile.y)
                 return true;
             break;
         case Directions::DOWN:
-            if (x == nextTile.x && ceil(y) == nextTile.y)
+            if (relativePosition.y >= nextTile.y)
                 return true;
             break;
         case Directions::LEFT:
-            if (ceil(x) == nextTile.x && y == nextTile.y)
+            if (relativePosition.x <= nextTile.x)
                 return true;
             break;
         case Directions::RIGHT:
-            if (floor(x) == nextTile.x && y == nextTile.y)
+            if (relativePosition.x >= nextTile.x)
                 return true;
     }
     return false;
@@ -152,22 +168,23 @@ bool Ghost::checkCollision(float x, float y) {
 
 
 void Ghost::checkPossibleRoutes() {
+
     if (context->getBoard()[relativePosition.y][relativePosition.x + 1] !=
         GameObject::ObjectType::WALL) {
-        possibleRoutes.push_back({relativePosition.x + 1, relativePosition.y});
+        possibleRoutes.push_back({Directions::RIGHT, {relativePosition.x + 1, relativePosition.y}});
     }
     if (context->getBoard()[relativePosition.y][relativePosition.x - 1] !=
         GameObject::ObjectType::WALL) {
-        possibleRoutes.push_back({relativePosition.x - 1, relativePosition.y});
+        possibleRoutes.push_back({Directions::LEFT, {relativePosition.x - 1, relativePosition.y}});
     }
     if (context->getBoard()[relativePosition.y + 1][relativePosition.x] !=
         GameObject::ObjectType::WALL) {
-        possibleRoutes.push_back({relativePosition.x, relativePosition.y + 1});
+        possibleRoutes.push_back({Directions::DOWN, {relativePosition.x, relativePosition.y + 1}});
     }
     if (context->getBoard()[relativePosition.y - 1][relativePosition.x] !=
         GameObject::ObjectType::WALL) {
-        possibleRoutes.push_back(
-                {relativePosition.x, relativePosition.y - 1});
+        possibleRoutes.push_back({Directions::UP,
+                                  {relativePosition.x, relativePosition.y - 1}});
     }
 }
 
@@ -184,4 +201,8 @@ void Ghost::die() {
     ghostState = GhostState::DEAD;
     animator->setAnimation("die");
     context->raiseScore((++deadGhosts) * 200);
+}
+
+bool Ghost::isColided(const sf::Rect<float> &rect) const {
+    return ghost.getGlobalBounds().intersects(rect);
 }

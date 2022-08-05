@@ -24,6 +24,7 @@ public:
     void eat() override;
 
     unsigned getPpt() const override;
+
 private:
     sf::Time progress, blinkAnimation = sf::milliseconds(400.0f);
 

@@ -13,6 +13,11 @@ public:
         CHASE, SCATTER, FRIGHTENED, DEAD
     };
 
+    struct Direction {
+        Directions direction;
+        sf::Vector2f tile;
+    };
+
     explicit Ghost(sf::Vector2f, GameForm *);
 
     virtual ~Ghost();
@@ -29,28 +34,34 @@ public:
 
     void die();
 
+    bool isColided(const sf::Rect<float> &rect) const;
+
 protected:
     //using game context and it's properties
     GameForm *context = nullptr;
     //animator used for ghost sprite
     Animator *animator = nullptr;
     Directions direction;
+    Directions lastDirection;
     sf::Sprite ghost;
     float speed = 3;
     GhostState ghostState;
     float frightenedTimer = 0;
-    vector<sf::Vector2f> possibleRoutes;
-
+    sf::Time frightenedDuration;
+    vector<Direction> possibleRoutes;
+    sf::Vector2f lastMove;
     sf::Vector2f nextMove;
 //    sf::Vector2f lastMove;
     sf::Vector2f nextTile;
+    sf::Vector2f lastTile;
     static int deadGhosts;
 
     void updateRelativePosition();
 
+    bool isInTile();
+
     void checkPossibleRoutes();
 
-    bool checkCollision(float x, float y);
 };
 
 

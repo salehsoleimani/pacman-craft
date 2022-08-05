@@ -30,6 +30,7 @@ private:
     sf::Sprite pacman;
     float speed = 4;
     bool isFirst = true;
+    bool isDead = false;
 
     void updateRelativePosition();
 

@@ -24,6 +24,8 @@ Pacman::~Pacman() {
 }
 
 void Pacman::pollEvents(sf::Event &event) {
+    if (isDead) return;
+
     if (event.type == sf::Event::KeyPressed)
         switch (event.key.code) {
             case sf::Keyboard::Down:
@@ -98,15 +100,16 @@ void Pacman::update(sf::Time dt) {
 
     //check collision with ghosts
     for (auto ghost: context->getGhosts()) {
-        if (ghost->getRelativePosition() == relativePosition && isFirst) {
+        if (ghost->isColided(pacman.getGlobalBounds()) && !isDead) {
             if (ghost->getGhostState() == Ghost::GhostState::FRIGHTENED) {
                 ghost->die();
             } else if (ghost->getGhostState() != Ghost::GhostState::DEAD) {
                 animator->setAnimation("die");
-                isFirst = false;
+                isDead = true;
             }
         }
     }
+
     //destruct class after dying animation
     if (animator->isFinished())
         context->lose();
