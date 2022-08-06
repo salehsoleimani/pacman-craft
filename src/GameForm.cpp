@@ -259,15 +259,15 @@ void GameForm::initSprites() {
                 case GameObject::ObjectType::INKY:
                     ghosts.push_back(new Inky(position, this));
                     break;
-//                case GameObject::ObjectType::BLINKY:
-//                    ghosts.push_back(new Blinky(position, this));
-//                    break;
-//                case GameObject::ObjectType::CLYDE:
-//                    ghosts.push_back(new Clyde(position, this));
-//                    break;
-//                case GameObject::ObjectType::PINKY:
-//                    ghosts.push_back(new Pinky(position, this));
-//                    break;
+                case GameObject::ObjectType::BLINKY:
+                    ghosts.push_back(new Blinky(position, this));
+                    break;
+                case GameObject::ObjectType::CLYDE:
+                    ghosts.push_back(new Clyde(position, this));
+                    break;
+                case GameObject::ObjectType::PINKY:
+                    ghosts.push_back(new Pinky(position, this));
+                    break;
             }
         }
     }

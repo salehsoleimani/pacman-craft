@@ -9,6 +9,13 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
 
     animator = new Animator(ghost);
 
+    animator->add("die_right", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(120, 0), 8);
+    animator->add("die_left", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(60, 0), 8);
+    animator->add("die_top", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(180, 0), 8);
+    animator->add("die_down", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(0, 0), 8);
+
+    animator->add("frightened", sf::seconds(2), "../res/sprites/frightened.png", sf::Vector2i(0, 0), 8);
+
     if (context->getLevel() > 128) frightenedDuration = sf::Time::Zero;
     else if (context->getLevel() >= 64) frightenedDuration = sf::seconds(1);
     else if (context->getLevel() >= 32) frightenedDuration = sf::seconds(1);
@@ -76,21 +83,29 @@ void Ghost::update(sf::Time dt) {
         case Directions::DOWN:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("down");
+            else if(isDead)
+                animator->setAnimation("die_down");
             nextMove.y += x;
             break;
         case Directions::UP:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("up");
+            else if(isDead)
+                animator->setAnimation("die_up");
             nextMove.y -= x;
             break;
         case Directions::LEFT:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("left");
+            else if(isDead)
+                animator->setAnimation("die_left");
             nextMove.x -= x;
             break;
         case Directions::RIGHT:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("right");
+            else if(isDead)
+                animator->setAnimation("die_right");
             nextMove.x += x;
             break;
         case Directions::INIT:
