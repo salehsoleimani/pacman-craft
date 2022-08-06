@@ -52,6 +52,8 @@ void Ghost::changeState(GhostState state) {
         case GhostState::SCATTER:
             break;
         case GhostState::DEAD:
+            context->raiseScore((++deadGhosts) * 200);
+            isDead = true;
             animator->setAnimation("die");
             break;
     }
@@ -72,22 +74,22 @@ void Ghost::update(sf::Time dt) {
 
     switch (direction) {
         case Directions::DOWN:
-            if (ghostState != GhostState::FRIGHTENED)
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("down");
             nextMove.y += x;
             break;
         case Directions::UP:
-            if (ghostState != GhostState::FRIGHTENED)
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("up");
             nextMove.y -= x;
             break;
         case Directions::LEFT:
-            if (ghostState != GhostState::FRIGHTENED)
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("left");
             nextMove.x -= x;
             break;
         case Directions::RIGHT:
-            if (ghostState != GhostState::FRIGHTENED)
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("right");
             nextMove.x += x;
             break;
@@ -110,24 +112,56 @@ void Ghost::update(sf::Time dt) {
         case GhostState::SCATTER:
             break;
         case GhostState::DEAD:
+//            if (relativePosition ==
+//                sf::Vector2f(initialPosition.x / Dimensions::wallSize.x, initialPosition.y / Dimensions::wallSize.x)) {
+//                ghostState = GhostState::CHASE;
+//                isDead = false;
+//            }
             break;
     }
 
     if (isInTile()) {
 
-        if (relativePosition != nextTile)
-            ghost.setPosition(nextTile.x * Dimensions::wallSize.x, nextTile.y * Dimensions::wallSize.y);
+        if (nextTile ==
+            sf::Vector2f(initialPosition.x / Dimensions::wallSize.x, initialPosition.y / Dimensions::wallSize.x) &&
+            isDead) {
+            ghostState = GhostState::CHASE;
+            isDead = false;
+        }
 
-        updateRelativePosition();
+        if (relativePosition != nextTile) {
+            ghost.setPosition(nextTile.x * Dimensions::wallSize.x, nextTile.y * Dimensions::wallSize.y);
+            relativePosition = nextTile;
+        }
 
         possibleRoutes.clear();
         checkPossibleRoutes();
 
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        std::uniform_int_distribution<std::mt19937::result_type> randomRoute(0, possibleRoutes.size() - 1);
+        Direction nextDirection;
 
-        Direction nextDirection = possibleRoutes[randomRoute(rng)];
+        if (isDead) {
+            std::sort(possibleRoutes.begin(), possibleRoutes.end(),
+                      [&](const Direction &d1, const Direction &d2) -> bool {
+                          return sqrt(pow(d1.tile.x - initialPosition.x / Dimensions::wallSize.x, 2) +
+                                      pow(d1.tile.y - initialPosition.y / Dimensions::wallSize.x, 2)) <
+                                 sqrt(pow(d2.tile.x - initialPosition.x / Dimensions::wallSize.x, 2) +
+                                      pow(d2.tile.y - initialPosition.y / Dimensions::wallSize.x, 2));
+                      });
+            int index = 0;
+            for (int i = 0; i < possibleRoutes.size(); ++i) {
+                if (possibleRoutes[i].tile != lastTile) {
+                    index = i;
+                    break;
+                }
+            }
+            nextDirection = possibleRoutes[index];
+        } else {
+            std::random_device dev;
+            std::mt19937 rng(dev());
+            std::uniform_int_distribution<std::mt19937::result_type> randomRoute(0, possibleRoutes.size() - 1);
+
+            nextDirection = possibleRoutes[randomRoute(rng)];
+        }
 
         if (nextDirection.tile != lastTile || possibleRoutes.size() == 1) {
             lastTile = nextTile;
@@ -135,8 +169,8 @@ void Ghost::update(sf::Time dt) {
             nextTile = nextDirection.tile;
         }
     }
-
     ghost.move(nextMove);
+
 }
 
 
@@ -194,12 +228,6 @@ void Ghost::updateRelativePosition() {
 
 const Ghost::GhostState &Ghost::getGhostState() const {
     return ghostState;
-}
-
-void Ghost::die() {
-    ghostState = GhostState::DEAD;
-    animator->setAnimation("die");
-    context->raiseScore((++deadGhosts) * 200);
 }
 
 bool Ghost::isColided(const sf::Rect<float> &rect) const {

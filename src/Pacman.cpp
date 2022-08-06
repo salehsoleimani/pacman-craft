@@ -102,7 +102,7 @@ void Pacman::update(sf::Time dt) {
     for (auto ghost: context->getGhosts()) {
         if (ghost->isColided(pacman.getGlobalBounds()) && !isDead) {
             if (ghost->getGhostState() == Ghost::GhostState::FRIGHTENED) {
-                ghost->die();
+                ghost->changeState(Ghost::GhostState::DEAD);
             } else if (ghost->getGhostState() != Ghost::GhostState::DEAD) {
                 animator->setAnimation("die");
                 isDead = true;

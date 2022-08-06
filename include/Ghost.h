@@ -32,8 +32,6 @@ public:
 
     const GhostState &getGhostState() const;
 
-    void die();
-
     bool isColided(const sf::Rect<float> &rect) const;
 
     const sf::Vector2f &getInitialPosition() const;
@@ -54,6 +52,7 @@ protected:
     sf::Vector2f lastTile;
     sf::Vector2f initialPosition;
     sf::Sprite ghost;
+    bool isDead;
     float speed = 3;
     float frightenedTimer = 0;
     static int deadGhosts;
