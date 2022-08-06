@@ -11,15 +11,13 @@ using namespace std;
 //custom MenuView class for implementing game menus
 class MenuView {
 public:
-
-    MenuView(sf::Vector2f);
+    explicit MenuView(sf::Vector2f);
 
     ~MenuView();
 
-    void update(sf::RenderTarget *);
-
     void render(sf::RenderTarget *);
 
+    //inserting menu item
     void pushItem(const string &);
 
     int getSelectedItemIndex();
@@ -31,7 +29,7 @@ private:
 
     sf::Vector2f position;
 
-    //menu items
+    //menu items as TextView
     std::vector<TextView *> items;
 
     //shadow behind textview when selected

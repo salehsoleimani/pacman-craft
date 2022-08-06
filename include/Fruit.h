@@ -5,6 +5,7 @@
 
 class Fruit : public Snack {
 public:
+    //we need this to access eaten fruit type later
     enum class FruitType {
         APPLE,
         STRAWBERRY,
@@ -20,6 +21,7 @@ public:
 
     void eat() override;
 
+    //returns each fruit points
     unsigned getPpt() const override;
 
     void update(sf::Time) override;

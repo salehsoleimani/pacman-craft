@@ -20,7 +20,7 @@ Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position),
 }
 
 Pacman::~Pacman() {
-
+    delete animator;
 }
 
 void Pacman::pollEvents(sf::Event &event) {

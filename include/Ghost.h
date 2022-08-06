@@ -12,15 +12,15 @@ public:
     enum class GhostState {
         CHASE, SCATTER, FRIGHTENED, DEAD
     };
-
+    //switching to random routs/directions we need next tile and next direction as a struct
     struct Direction {
         Directions direction;
         sf::Vector2f tile;
     };
 
-    explicit Ghost(sf::Vector2f, GameForm *);
+    Ghost(sf::Vector2f, GameForm *);
 
-    virtual ~Ghost();
+    ~Ghost() override;
 
     void pollEvents(sf::Event &);
 
@@ -28,10 +28,12 @@ public:
 
     void update(sf::Time);
 
+    //switching states between ghosts from outside
     void changeState(GhostState state);
 
     const GhostState &getGhostState() const;
 
+    //if pacman or other views intersects with ghost
     bool isColided(const sf::Rect<float> &rect) const;
 
     const sf::Vector2f &getInitialPosition() const;
@@ -45,6 +47,7 @@ protected:
     Animator *animator = nullptr;
     Directions direction;
     GhostState ghostState;
+    //we randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
     sf::Time frightenedDuration;
     sf::Vector2f nextMove;

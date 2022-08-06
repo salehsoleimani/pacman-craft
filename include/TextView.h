@@ -6,16 +6,16 @@
 
 using namespace std;
 
+// a simple textview with app font and textsize
 class TextView : public sf::Text {
 public:
     TextView(string, sf::Vector2f);
-
-    TextView();
 
     void update(sf::RenderTarget *);
 
     virtual void render(sf::RenderTarget *);
 
+    //set text origin to center for placing in center of window for example
     void setCenterHorizontal(bool);
 
 private:

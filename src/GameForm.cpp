@@ -24,6 +24,7 @@ GameForm::~GameForm() {
     delete txtRecord;
     delete btnBack;
     delete txtScore;
+    //saving highscore
     if (score > highScore)
         storeRecord();
 }
@@ -58,6 +59,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     switch (event.type) {
         case sf::Event::MouseButtonReleased:
         case sf::Event::MouseButtonPressed:
+            // user pauses the game
             if (event.mouseButton.button == sf::Mouse::Left)
                 if (btnBack->getGlobalBounds().contains(mousePosition) ||
                     btnBackIc.getGlobalBounds().contains(mousePosition)) {
@@ -72,6 +74,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                                                }).show();
                 }
             break;
+            //handling pacman moves
         case sf::Event::KeyPressed:
             pacman->pollEvents(event);
             break;
@@ -90,8 +93,10 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
                                                    }).show();
     }
 
+    //counting timer when fruit is shown
     if (isFruitVisible) fruitTimer += dt.asSeconds();
 
+    //when fruit hides
     if (fruitTimer >= 10 && isFruitVisible) {
         fruitTimer = 0;
         delete snacks.back();
@@ -99,6 +104,7 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
         isFruitVisible = false;
     }
 
+    //showing fruit after a range of snacks
     if ((eatenSnacks >= 70 && fruitsCount == 0) || (eatenSnacks >= 170 && fruitsCount == 1)) {
         fruitsCount++;
         isFruitVisible = true;
@@ -124,6 +130,7 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     txtRecord->setString("high score\n" + to_string(highScore));
 
+    //updating other views
     pacman->update(dt);
 
     for (auto snack: snacks)
@@ -163,6 +170,7 @@ void GameForm::raiseScore(int score) {
 void GameForm::lose() {
     sf::sleep(sf::milliseconds(300));
     int lives = hearts.size();
+    //if herats remaining
     if (lives > 1) {
         hearts.pop_back();
         delete pacman;

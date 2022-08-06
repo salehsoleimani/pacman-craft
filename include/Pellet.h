@@ -9,11 +9,12 @@ public:
         NORMAL, POWER
     };
 
+    //for blinking power pellets
     enum class PelletState {
         NORMAL, BLINK
     };
 
-    explicit Pellet(sf::Vector2f, PelletType);
+    Pellet(sf::Vector2f, PelletType);
 
     ~Pellet() override;
 
@@ -23,15 +24,18 @@ public:
 
     void eat() override;
 
+    //we use this method from base class in other classes
     unsigned getPpt() const override;
 
 private:
+    //blink each 400 milliseconds
     sf::Time progress, blinkAnimation = sf::milliseconds(400.0f);
 
     PelletType foodType;
 
     PelletState foodState = PelletState::NORMAL;
 
+    //we use a circle for each pellet
     sf::CircleShape food;
 
 };

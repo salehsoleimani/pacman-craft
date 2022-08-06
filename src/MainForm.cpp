@@ -40,6 +40,7 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
             break;
         case sf::Event::KeyPressed:
             switch (event.key.code) {
+                //switching between menu items
                 case sf::Keyboard::Enter:
                     switch (menuView->getSelectedItemIndex()) {
                         case 0:

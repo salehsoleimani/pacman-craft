@@ -5,6 +5,7 @@
 #include "Values.h"
 #include "Animator.h"
 
+//base class for all game eatable objects
 class Snack : public GameObject {
 public:
     enum class SnackType {
@@ -23,10 +24,6 @@ public:
 
     bool isEaten() const {
         return eaten;
-    }
-
-    void setEaten(bool eaten) {
-        this->eaten = eaten;
     }
 
     const SnackType &getSnackType() const {

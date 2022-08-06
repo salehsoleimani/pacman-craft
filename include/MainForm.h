@@ -12,10 +12,8 @@
 
 class MainForm : public Form {
 public:
-    MainForm(Application&z);
-
+    MainForm(Application&);
     ~MainForm();
-
 private:
     MenuView *menuView;
 

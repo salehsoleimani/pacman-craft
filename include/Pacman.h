@@ -9,7 +9,7 @@
 
 class Pacman : public GameObject {
 public:
-    explicit Pacman(sf::Vector2f, GameForm *);
+    Pacman(sf::Vector2f, GameForm *);
 
     ~Pacman();
 
@@ -29,7 +29,6 @@ private:
     sf::Vector2i lastMove;
     sf::Sprite pacman;
     float speed = 4;
-    bool isFirst = true;
     bool isDead = false;
 
     void updateRelativePosition();

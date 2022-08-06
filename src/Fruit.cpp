@@ -8,6 +8,7 @@ Fruit::Fruit(sf::Vector2f position, FruitType fruitType) : Snack(position), frui
 
     string texturePath = Path::fruit;
 
+    //handling fruits for each level range
     switch (fruitType) {
         case FruitType::APPLE:
             texturePath += "apple.png";

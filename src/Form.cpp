@@ -17,6 +17,7 @@ void Form::initGrid() {
     File file(mapFileName);
     file.open(ios::in);
 
+    //read and insert board map to array
     string line;
     for (int i = 0; i < 26; ++i) {
         line = file.getline();
@@ -56,6 +57,7 @@ void Form::initGrid() {
         }
     }
 
+    //drawing wall is common for all forms
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             if (board[i][j] == GameObject::ObjectType::WALL)

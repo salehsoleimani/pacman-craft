@@ -10,23 +10,20 @@
 
 class OptionsForm : public Form {
 public:
-    OptionsForm(Application&);
+    OptionsForm(Application &);
 
     ~OptionsForm();
 
 private:
     MenuView *menuView;
-
     sf::Texture logoSrc;
     sf::RectangleShape *logoIV;
 
-    void pollEvents(sf::Event&,sf::RenderWindow*) override;
+    void pollEvents(sf::Event &, sf::RenderWindow *) override;
 
-    void update(sf::RenderWindow *,const sf::Time&) override;
+    void update(sf::RenderWindow *, const sf::Time &) override;
 
     void render(sf::RenderWindow *) override;
-
-    void initTexts();
 
     void initMenuView();
 

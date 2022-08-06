@@ -32,6 +32,7 @@ public:
 
     void pushFront(Form *form);
 
+    //use instance of dialog in forms
     DialogView &getDialog();
 
     ///deleting Form pointers from memory

@@ -20,6 +20,7 @@ class Ghost;
 
 class GameForm : public Form {
 public:
+    //initializes base class context property
     GameForm(Application &);
 
     ~GameForm();
@@ -28,6 +29,7 @@ public:
 
     list<Ghost *> &getGhosts();
 
+    //raising score if pacman eats fruits
     void raiseScore(int);
 
     void lose();
@@ -46,27 +48,34 @@ private:
 
     void initSprites();
 
+    //resetting when gameover/new level
     void resetBoard();
 
+
+    //read/write record from txt file in assets
     void readRecord();
 
     void storeRecord();
 
+    //handling fruit visiblity duration
     float fruitTimer = 0;
+    bool isFruitVisible = false;
     unsigned level = 1;
     unsigned long int score;
+    //to know which time user eats all candies:)
     unsigned fruitsCount;
     unsigned eatenSnacks;
     unsigned snacksCount;
     unsigned long int highScore;
-    bool isFruitVisible = false;
     sf::Vector2f pacmanPosition;
+    //a list of ghosts and snacks
     list<Snack *> snacks;
     list<Ghost *> ghosts;
     vector<sf::Sprite> hearts;
     Pacman *pacman;
     TextView *txtScore;
     TextView *txtRecord;
+    //back/pause to menu buttons
     TextView *btnBack;
     sf::Sprite btnBackIc;
     sf::Texture *heartTexture;

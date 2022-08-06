@@ -6,20 +6,22 @@
 #include <functional>
 #include <sstream>
 
+//inherits a rectangleshape as it's transparent background
 class DialogView : public sf::RectangleShape {
 public:
     DialogView();
 
-//    DialogView();
-
-    ~DialogView();
+    ~DialogView() override;
 
     void render(sf::RenderTarget *target);
 
     void pollEvents(const sf::Event &, const sf::Window *);
 
+    //2 overloads for creating dialog
+    //creating single button(cta) dialog
     DialogView &create(string, string, string, const function<void()> &);
 
+    //a dialog with secondary button
     DialogView &create(string, string, string, string, const function<void()> &,
                        const function<void()> &);
 

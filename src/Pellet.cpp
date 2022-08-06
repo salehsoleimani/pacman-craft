@@ -25,6 +25,7 @@ void Pellet::render(sf::RenderTarget *target) {
 }
 
 void Pellet::update(sf::Time dt) {
+    //blinking power state
     if (foodType == PelletType::POWER && !isEaten()) {
         progress += dt;
         if (progress >= blinkAnimation) {
@@ -42,6 +43,7 @@ void Pellet::update(sf::Time dt) {
 }
 
 void Pellet::eat() {
+    //amount of pause before eating pellet
     if (foodType == PelletType::NORMAL)
         sf::sleep(sf::seconds(1 / Config::windowFrameRate));
     else

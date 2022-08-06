@@ -20,11 +20,13 @@ public:
 
     void render(sf::RenderTarget *target);
 
+    //we need this function to set shadow and buttonShape positions
     void setButtonPosition(const sf::Vector2f &position);
 
     //handling button states
     void eventHandler(const sf::Event &, const sf::Vector2f &);
 
+    //calculate and returns button's width
     float getWidth() const;
 
 private:
