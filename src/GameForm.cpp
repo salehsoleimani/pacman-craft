@@ -16,197 +16,6 @@ GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
                                                }).show();
 }
 
-GameForm::~GameForm() {
-    delete pacman;
-    for (auto snack: snacks) delete snack;
-    for (auto ghost: ghosts) delete ghost;
-    delete heartTexture;
-    delete txtRecord;
-    delete btnBack;
-    delete txtScore;
-    //saving highscore
-    if (score > highScore)
-        storeRecord();
-}
-
-void GameForm::storeRecord() {
-    try {
-        File file("../res/high_score.txt");
-        file.open(ios::out);
-        file << score;
-    } catch (file_open_exception ex) {
-        cerr << "error reading highscore";
-    }
-}
-
-void GameForm::readRecord() {
-    try {
-        File file("../res/high_score.txt");
-        file.open(ios::in);
-        file.seekg(0);
-        file.clear();
-        string line = file.getline();
-        highScore = stoul(line);
-    } catch (const file_open_exception &ex) {
-        cerr << "error reading record" << endl;
-        highScore = 0;
-    }
-}
-
-void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
-    sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window).x,
-                                              sf::Mouse::getPosition((*window)).y);
-    switch (event.type) {
-        case sf::Event::MouseButtonReleased:
-        case sf::Event::MouseButtonPressed:
-            // user pauses the game
-            if (event.mouseButton.button == sf::Mouse::Left)
-                if (btnBack->getGlobalBounds().contains(mousePosition) ||
-                    btnBackIc.getGlobalBounds().contains(mousePosition)) {
-                    getApplicationContext().getDialog().create("Pause", "pause the game", "okay", "cancel",
-                                                               [&]() -> void {
-                                                                   getApplicationContext().pushForm(
-                                                                           new MainForm(getApplicationContext()));
-                                                                   getApplicationContext().getDialog().hide();
-                                                               },
-                                                               [&]() -> void {
-                                                                   getApplicationContext().getDialog().hide();
-                                                               }).show();
-                }
-            break;
-            //handling pacman moves
-        case sf::Event::KeyPressed:
-            pacman->pollEvents(event);
-            break;
-    }
-}
-
-void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
-
-    //if pacman ate all snacks rearrange board - reach to next level
-    if (eatenSnacks == snacksCount) {
-        getApplicationContext().getDialog().create("Victory", "reached level " + to_string(level + 1), "Hooray!",
-                                                   [&]() -> void {
-                                                       getApplicationContext().getDialog().hide();
-                                                       level++;
-                                                       resetBoard();
-                                                   }).show();
-    }
-
-    //counting timer when fruit is shown
-    if (isFruitVisible) fruitTimer += dt.asSeconds();
-
-    //when fruit hides
-    if (fruitTimer >= 10 && isFruitVisible) {
-        fruitTimer = 0;
-        delete snacks.back();
-        snacks.pop_back();
-        isFruitVisible = false;
-    }
-
-    //showing fruit after a range of snacks
-    if ((eatenSnacks >= 70 && fruitsCount == 0) || (eatenSnacks >= 170 && fruitsCount == 1)) {
-        fruitsCount++;
-        isFruitVisible = true;
-        vector<Snack *> randomSnacks;
-        for (auto snack: snacks) {
-            if (snack->isEaten())
-                randomSnacks.push_back(snack);
-        }
-        std::shuffle(randomSnacks.begin(), randomSnacks.end(), std::mt19937(std::random_device()()));
-
-        Fruit::FruitType fruitType = Fruit::FruitType::APPLE;
-
-        if (level >= 241) fruitType = Fruit::FruitType::BANANA;
-        else if (level >= 225) fruitType = Fruit::FruitType::GRAPES;
-        else if (level >= 192) fruitType = Fruit::FruitType::PEACH;
-        else if (level >= 129) fruitType = Fruit::FruitType::CHERRY;
-        else if (level >= 65) fruitType = Fruit::FruitType::STRAWBERRY;
-
-        Fruit *newFruit = new Fruit(randomSnacks[0]->getPosition(), fruitType);
-        newFruit->setRelativePosition(randomSnacks[0]->getRelativePosition());
-        snacks.push_back(newFruit);
-    }
-
-    txtRecord->setString("high score\n" + to_string(highScore));
-
-    //updating other views
-    pacman->update(dt);
-
-    for (auto snack: snacks)
-        if (snack) snack->update(dt);
-
-    for (auto ghost: ghosts)
-        if (ghost) ghost->update(dt);
-
-    txtScore->setString("score\n" + to_string(this->score));
-}
-
-void GameForm::render(sf::RenderWindow *window) {
-    txtRecord->render(window);
-    txtScore->render(window);
-    btnBack->render(window);
-    for (auto snack: snacks) snack->render(window);
-    for (auto ghost: ghosts) ghost->render(window);
-    for (auto heart: hearts) window->draw(heart);
-    pacman->render(window);
-    window->draw(btnBackIc);
-}
-
-list<Snack *> &GameForm::getSnacks() {
-    return snacks;
-}
-
-list<Ghost *> &GameForm::getGhosts() {
-    return ghosts;
-}
-
-void GameForm::raiseScore(int score) {
-    this->score += score;
-    if (score <= 50)
-        eatenSnacks++;
-}
-
-void GameForm::lose() {
-    sf::sleep(sf::milliseconds(300));
-    int lives = hearts.size();
-    //if herats remaining
-    if (lives > 1) {
-        hearts.pop_back();
-        delete pacman;
-        pacman = new Pacman(pacmanPosition, this);
-
-        for (auto ghost: ghosts) ghost->setPosition(ghost->getInitialPosition());
-
-        score -= 20;
-    } else {
-        getApplicationContext().getDialog().create("Game Over!", "you lose", "continue",
-                                                   [&]() -> void {
-                                                       level = 1;
-                                                       resetBoard();
-                                                       initGame();
-                                                       score = 0;
-                                                       getApplicationContext().getDialog().hide();
-                                                   }).show();
-    }
-}
-
-void GameForm::resetBoard() {
-    isFruitVisible = false;
-    fruitTimer = 0;
-    if (score > highScore)
-        storeRecord();
-    readRecord();
-    for (auto snack: snacks) delete snack;
-    for (auto ghost: ghosts) delete ghost;
-    snacks.clear();
-    hearts.clear();
-    ghosts.clear();
-    initSprites();
-    eatenSnacks = 0;
-    fruitsCount = 0;
-}
-
 void GameForm::initGame() {
     score = 0;
     readRecord();
@@ -281,6 +90,201 @@ void GameForm::initSprites() {
     }
 }
 
+GameForm::~GameForm() {
+    delete pacman;
+    for (auto snack: snacks) delete snack;
+    for (auto ghost: ghosts) delete ghost;
+    delete heartTexture;
+    delete txtRecord;
+    delete btnBack;
+    delete txtScore;
+    //saving highscore
+    if (score > highScore)
+        storeRecord();
+}
+
+void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
+    sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window).x,
+                                              sf::Mouse::getPosition((*window)).y);
+    switch (event.type) {
+        case sf::Event::MouseButtonReleased:
+        case sf::Event::MouseButtonPressed:
+            // user pauses the game
+            if (event.mouseButton.button == sf::Mouse::Left)
+                if (btnBack->getGlobalBounds().contains(mousePosition) ||
+                    btnBackIc.getGlobalBounds().contains(mousePosition)) {
+                    getApplicationContext().getDialog().create("Pause", "pause the game", "okay", "cancel",
+                                                               [&]() -> void {
+                                                                   getApplicationContext().pushForm(
+                                                                           new MainForm(getApplicationContext()));
+                                                                   getApplicationContext().getDialog().hide();
+                                                               },
+                                                               [&]() -> void {
+                                                                   getApplicationContext().getDialog().hide();
+                                                               }).show();
+                }
+            break;
+            //handling pacman moves
+        case sf::Event::KeyPressed:
+            pacman->pollEvents(event);
+            break;
+    }
+}
+
+void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
+
+    //if pacman ate all snacks rearrange board - reach to next level
+    if (eatenSnacks == snacksCount) {
+        getApplicationContext().getDialog().create("Victory", "reached level " + to_string(level + 1), "Hooray!",
+                                                   [&]() -> void {
+                                                       getApplicationContext().getDialog().hide();
+                                                       level++;
+                                                       resetBoard();
+                                                   }).show();
+    }
+
+    //updating other views
+    pacman->update(dt);
+
+    updateFruits(dt);
+
+    for (auto snack: snacks)
+        if (snack) snack->update(dt);
+
+    for (auto ghost: ghosts)
+        if (ghost) ghost->update(dt);
+
+    txtRecord->setString("high score\n" + to_string(highScore));
+
+    txtScore->setString("score\n" + to_string(this->score));
+}
+
+void GameForm::updateFruits(const sf::Time &dt) {
+//counting timer when fruit is shown
+    if (isFruitVisible) fruitTimer += dt.asSeconds();
+
+    //when fruit hides
+    if (fruitTimer >= 10 && isFruitVisible) {
+        fruitTimer = 0;
+        delete snacks.back();
+        snacks.pop_back();
+        isFruitVisible = false;
+    }
+
+    //showing fruit after a range of snacks
+    if ((eatenSnacks >= 70 && fruitsCount == 0) || (eatenSnacks >= 170 && fruitsCount == 1)) {
+        fruitsCount++;
+        isFruitVisible = true;
+        vector<Snack *> randomSnacks;
+        for (auto snack: snacks) {
+            if (snack->isEaten())
+                randomSnacks.push_back(snack);
+        }
+        std::shuffle(randomSnacks.begin(), randomSnacks.end(), std::mt19937(std::random_device()()));
+
+        Fruit::FruitType fruitType = Fruit::FruitType::APPLE;
+
+        if (level >= 241) fruitType = Fruit::FruitType::BANANA;
+        else if (level >= 225) fruitType = Fruit::FruitType::GRAPES;
+        else if (level >= 192) fruitType = Fruit::FruitType::PEACH;
+        else if (level >= 129) fruitType = Fruit::FruitType::CHERRY;
+        else if (level >= 65) fruitType = Fruit::FruitType::STRAWBERRY;
+
+        Fruit *newFruit = new Fruit(randomSnacks[0]->getPosition(), fruitType);
+        newFruit->setRelativePosition(randomSnacks[0]->getRelativePosition());
+        snacks.push_back(newFruit);
+    }
+}
+
+void GameForm::render(sf::RenderWindow *window) {
+    txtRecord->render(window);
+    txtScore->render(window);
+    btnBack->render(window);
+    for (auto snack: snacks) snack->render(window);
+    for (auto ghost: ghosts) ghost->render(window);
+    for (auto heart: hearts) window->draw(heart);
+    pacman->render(window);
+    window->draw(btnBackIc);
+}
+
+void GameForm::lose() {
+    sf::sleep(sf::milliseconds(300));
+    int lives = hearts.size();
+    //if herats remaining
+    if (lives > 1) {
+        hearts.pop_back();
+        delete pacman;
+        pacman = new Pacman(pacmanPosition, this);
+
+        for (auto ghost: ghosts) ghost->setPosition(ghost->getInitialPosition());
+
+        score -= 20;
+    } else {
+        getApplicationContext().getDialog().create("Game Over!", "you lose", "continue",
+                                                   [&]() -> void {
+                                                       level = 1;
+                                                       hearts.clear();
+                                                       resetBoard();
+                                                       initGame();
+                                                       score = 0;
+                                                       getApplicationContext().getDialog().hide();
+                                                   }).show();
+    }
+}
+
+void GameForm::resetBoard() {
+    isFruitVisible = false;
+    fruitTimer = 0;
+    if (score > highScore)
+        storeRecord();
+    readRecord();
+    for (auto snack: snacks) delete snack;
+    for (auto ghost: ghosts) delete ghost;
+    snacks.clear();
+    ghosts.clear();
+    initSprites();
+    eatenSnacks = 0;
+    fruitsCount = 0;
+}
+
 unsigned GameForm::getLevel() const {
     return level;
+}
+
+list<Snack *> &GameForm::getSnacks() {
+    return snacks;
+}
+
+list<Ghost *> &GameForm::getGhosts() {
+    return ghosts;
+}
+
+void GameForm::raiseScore(int score) {
+    this->score += score;
+    if (score <= 50)
+        eatenSnacks++;
+}
+
+void GameForm::storeRecord() {
+    try {
+        File file("../res/high_score.txt");
+        file.open(ios::out);
+        file << score;
+    } catch (file_open_exception ex) {
+        cerr << "error reading highscore";
+    }
+}
+
+void GameForm::readRecord() {
+    try {
+        File file("../res/high_score.txt");
+        file.open(ios::in);
+        file.seekg(0);
+        file.clear();
+        string line = file.getline();
+        highScore = stoul(line);
+    } catch (const file_open_exception &ex) {
+        cerr << "error reading record" << endl;
+        highScore = 0;
+    }
 }

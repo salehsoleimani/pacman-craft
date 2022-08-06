@@ -79,6 +79,8 @@ private:
     TextView *btnBack;
     sf::Sprite btnBackIc;
     sf::Texture *heartTexture;
+
+    void updateFruits(const sf::Time &dt);
 };
 
 #endif //PACMAN_GAMEFORM_H
