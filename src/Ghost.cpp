@@ -60,6 +60,7 @@ void Ghost::changeState(GhostState state) {
             break;
         case GhostState::DEAD:
             context->raiseScore((++deadGhosts) * 200);
+            speed = 6;
             isDead = true;
             animator->setAnimation("die");
             break;
@@ -83,28 +84,28 @@ void Ghost::update(sf::Time dt) {
         case Directions::DOWN:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("down");
-            else if(isDead)
+            else if (isDead)
                 animator->setAnimation("die_down");
             nextMove.y += x;
             break;
         case Directions::UP:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("up");
-            else if(isDead)
+            else if (isDead)
                 animator->setAnimation("die_up");
             nextMove.y -= x;
             break;
         case Directions::LEFT:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("left");
-            else if(isDead)
+            else if (isDead)
                 animator->setAnimation("die_left");
             nextMove.x -= x;
             break;
         case Directions::RIGHT:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("right");
-            else if(isDead)
+            else if (isDead)
                 animator->setAnimation("die_right");
             nextMove.x += x;
             break;
@@ -142,6 +143,7 @@ void Ghost::update(sf::Time dt) {
             isDead) {
             ghostState = GhostState::CHASE;
             isDead = false;
+            speed = 3;
         }
 
         if (relativePosition != nextTile) {
