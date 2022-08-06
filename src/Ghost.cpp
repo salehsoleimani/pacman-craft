@@ -205,3 +205,15 @@ void Ghost::die() {
 bool Ghost::isColided(const sf::Rect<float> &rect) const {
     return ghost.getGlobalBounds().intersects(rect);
 }
+
+void Ghost::setPosition(const sf::Vector2f &pos) {
+    ghost.setPosition(pos);
+    updateRelativePosition();
+    nextTile = relativePosition;
+    lastTile = {0, 0};
+    frightenedTimer = 0;
+}
+
+const sf::Vector2f &Ghost::getInitialPosition() const {
+    return initialPosition;
+}

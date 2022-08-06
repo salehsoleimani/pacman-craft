@@ -13,82 +13,29 @@
 class Application {
 public:
     //setting up window
-    Application() {
-        window.create(Config::videoMode, Config::appName, Config::style);
-        window.setFramerateLimit(Config::windowFrameRate);
-    }
+    Application();
 
     //game-loop
-    void run() {
-        sf::Clock clock;
-        while (window.isOpen()) {
-            //calculating dt(delta time) between frames
-            sf::Time dt = clock.restart();
-
-            //update
-            if (!dialog.isVisible())
-                currentForm()->update(&window, dt);
-
-            //render
-            window.clear(Colors::colorBlue);
-            //draw walls background
-            currentForm()->clear(&window);
-            currentForm()->render(&window);
-
-            if (dialog.isVisible())
-                dialog.render(&window);
-
-            //handle events
-            sf::Event event;
-            while (window.pollEvent(event)) {
-                //close window btn
-                if (event.type == sf::Event::Closed)
-                    window.close();
-
-                if (dialog.isVisible())
-                    dialog.pollEvents(event, &window);
-                else {
-                    //abstract event handler in Form class
-                    currentForm()->pollEvents(event, &window);
-                }
-            }
-            window.display();
-        }
-    }
+    void run();
 
     //functions used to switch between states
-    Form *currentForm() {
-        if (forms.empty()) return nullptr;
-        return forms.back();
-    }
+    Form *currentForm();
 
     void pushForm(Form *form) {
         forms.push_back(form);
     }
 
-    void popForm() {
-        delete forms.back();
-        forms.pop_back();
-    }
+    void popForm();
 
     //reset button in options menu
-    void resetGame() {
-        delete forms.front();
-        forms.pop_front();
-    }
+    void resetGame();
 
-    void pushFront(Form *form) {
-        forms.push_front(form);
-    }
+    void pushFront(Form *form);
 
-    DialogView &getDialog() {
-        return dialog;
-    }
+    DialogView &getDialog();
 
     ///deleting Form pointers from memory
-    ~Application() {
-        while (!forms.empty()) popForm();
-    }
+    ~Application();
 
 private:
     sf::RenderWindow window;

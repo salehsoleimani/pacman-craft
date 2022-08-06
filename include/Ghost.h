@@ -36,17 +36,9 @@ public:
 
     bool isColided(const sf::Rect<float> &rect) const;
 
-    const sf::Vector2f &getInitialPosition() const {
-        return initialPosition;
-    }
+    const sf::Vector2f &getInitialPosition() const;
 
-    void setPosition(const sf::Vector2f &pos) {
-        ghost.setPosition(pos);
-        updateRelativePosition();
-        nextTile = relativePosition;
-        lastTile = {0, 0};
-        frightenedTimer = 0;
-    }
+    void setPosition(const sf::Vector2f &pos);
 
 protected:
     //using game context and it's properties
