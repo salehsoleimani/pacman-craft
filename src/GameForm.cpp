@@ -58,26 +58,23 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     switch (event.type) {
         case sf::Event::MouseButtonReleased:
         case sf::Event::MouseButtonPressed:
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                if (!getApplicationContext().getDialog().isVisible())
-                    if (btnBack->getGlobalBounds().contains(mousePosition) ||
-                        btnBackIc.getGlobalBounds().contains(mousePosition)) {
-                        getApplicationContext().getDialog().create("Pause", "pause the game", "okay", "cancel",
-                                                                   [&]() -> void {
-                                                                       getApplicationContext().pushForm(
-                                                                               new MainForm(getApplicationContext()));
-                                                                       getApplicationContext().getDialog().hide();
-                                                                   },
-                                                                   [&]() -> void {
-                                                                       getApplicationContext().getDialog().hide();
-                                                                   }).show();
-                    }
-            }
+            if (event.mouseButton.button == sf::Mouse::Left)
+                if (btnBack->getGlobalBounds().contains(mousePosition) ||
+                    btnBackIc.getGlobalBounds().contains(mousePosition)) {
+                    getApplicationContext().getDialog().create("Pause", "pause the game", "okay", "cancel",
+                                                               [&]() -> void {
+                                                                   getApplicationContext().pushForm(
+                                                                           new MainForm(getApplicationContext()));
+                                                                   getApplicationContext().getDialog().hide();
+                                                               },
+                                                               [&]() -> void {
+                                                                   getApplicationContext().getDialog().hide();
+                                                               }).show();
+                }
             break;
         case sf::Event::KeyPressed:
             pacman->pollEvents(event);
             break;
-
     }
 }
 
@@ -170,6 +167,9 @@ void GameForm::lose() {
         hearts.pop_back();
         delete pacman;
         pacman = new Pacman(pacmanPosition, this);
+
+        for (auto ghost: ghosts) ghost->setPosition(ghost->getInitialPosition());
+
         score -= 20;
     } else {
         getApplicationContext().getDialog().create("Game Over!", "you lose", "continue",
@@ -259,15 +259,15 @@ void GameForm::initSprites() {
                 case GameObject::ObjectType::INKY:
                     ghosts.push_back(new Inky(position, this));
                     break;
-//                case GameObject::ObjectType::BLINKY:
-//                    ghosts.push_back(new Blinky(position, this));
-//                    break;
-//                case GameObject::ObjectType::CLYDE:
-//                    ghosts.push_back(new Clyde(position, this));
-//                    break;
-//                case GameObject::ObjectType::PINKY:
-//                    ghosts.push_back(new Pinky(position, this));
-//                    break;
+                case GameObject::ObjectType::BLINKY:
+                    ghosts.push_back(new Blinky(position, this));
+                    break;
+                case GameObject::ObjectType::CLYDE:
+                    ghosts.push_back(new Clyde(position, this));
+                    break;
+                case GameObject::ObjectType::PINKY:
+                    ghosts.push_back(new Pinky(position, this));
+                    break;
             }
         }
     }

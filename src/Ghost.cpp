@@ -5,6 +5,7 @@ int Ghost::deadGhosts = 0;
 
 Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), context(context) {
     ghost.setPosition(position);
+    initialPosition = position;
 
     animator = new Animator(ghost);
 
@@ -19,10 +20,6 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
     else if (context->getLevel() == 3) frightenedDuration = sf::seconds(4);
     else if (context->getLevel() == 2) frightenedDuration = sf::seconds(5);
     else frightenedDuration = sf::seconds(6);
-
-    //same for all ghosts
-    animator->add("die", sf::milliseconds(300), "../res/sprites/ghost_die.png", sf::Vector2i(0, 0), 8);
-    animator->add("frightened", sf::seconds(2), "../res/sprites/frightened.png", sf::Vector2i(0, 0), 8);
 
     updateRelativePosition();
 
@@ -43,6 +40,21 @@ void Ghost::render(sf::RenderTarget *target) {
 
 void Ghost::changeState(GhostState state) {
     ghostState = state;
+
+    switch (ghostState) {
+        case Ghost::GhostState::FRIGHTENED:
+            if (animator->getCurrentAnimationId() != "frightened")
+                animator->setAnimation("frightened");
+            frightenedTimer -= frightenedDuration.asSeconds();
+            break;
+        case GhostState::CHASE:
+            break;
+        case GhostState::SCATTER:
+            break;
+        case GhostState::DEAD:
+            animator->setAnimation("die");
+            break;
+    }
 }
 
 void Ghost::update(sf::Time dt) {
@@ -58,22 +70,25 @@ void Ghost::update(sf::Time dt) {
 
     nextMove = {0, 0};
 
-
     switch (direction) {
         case Directions::DOWN:
-            animator->setAnimation("down");
+            if (ghostState != GhostState::FRIGHTENED)
+                animator->setAnimation("down");
             nextMove.y += x;
             break;
         case Directions::UP:
-            animator->setAnimation("up");
+            if (ghostState != GhostState::FRIGHTENED)
+                animator->setAnimation("up");
             nextMove.y -= x;
             break;
         case Directions::LEFT:
-            animator->setAnimation("left");
+            if (ghostState != GhostState::FRIGHTENED)
+                animator->setAnimation("left");
             nextMove.x -= x;
             break;
         case Directions::RIGHT:
-            animator->setAnimation("right");
+            if (ghostState != GhostState::FRIGHTENED)
+                animator->setAnimation("right");
             nextMove.x += x;
             break;
         case Directions::INIT:
@@ -81,10 +96,21 @@ void Ghost::update(sf::Time dt) {
             break;
     }
 
-    if (frightenedTimer >= frightenedDuration.asSeconds()) {
-        ghostState = GhostState::CHASE;
-        frightenedTimer = 0;
-        deadGhosts = 0;
+    switch (ghostState) {
+        case Ghost::GhostState::FRIGHTENED:
+            frightenedTimer += dt.asSeconds();
+            if (frightenedTimer >= frightenedDuration.asSeconds()) {
+                frightenedTimer = 0;
+                ghostState = GhostState::CHASE;
+                deadGhosts = 0;
+            }
+            break;
+        case GhostState::CHASE:
+            break;
+        case GhostState::SCATTER:
+            break;
+        case GhostState::DEAD:
+            break;
     }
 
     if (isInTile()) {
@@ -105,45 +131,18 @@ void Ghost::update(sf::Time dt) {
 
         if (nextDirection.tile != lastTile || possibleRoutes.size() == 1) {
             lastTile = nextTile;
-
             direction = nextDirection.direction;
-
             nextTile = nextDirection.tile;
         }
     }
 
-    ghost.
-            move(nextMove);
-
-    updateRelativePosition();
-
-    switch (ghostState) {
-        case Ghost::GhostState::FRIGHTENED:
-            if (animator->
-
-                    getCurrentAnimationId()
-
-                != "frightened")
-                animator->setAnimation("frightened");
-            else
-                frightenedTimer += dt.
-
-                        asSeconds();
-
-            break;
-        case GhostState::CHASE:
-//            animator->setAnimation("right");
-            break;
-        case GhostState::SCATTER:
-            break;
-        case GhostState::DEAD:
-            animator->setAnimation("die");
-            break;
-    }
+    ghost.move(nextMove);
 }
 
 
 bool Ghost::isInTile() {
+    updateRelativePosition();
+
     switch (direction) {
         case Directions::INIT:
             return true;

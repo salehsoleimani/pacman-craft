@@ -36,24 +36,34 @@ public:
 
     bool isColided(const sf::Rect<float> &rect) const;
 
+    const sf::Vector2f &getInitialPosition() const {
+        return initialPosition;
+    }
+
+    void setPosition(const sf::Vector2f &pos) {
+        ghost.setPosition(pos);
+        updateRelativePosition();
+        nextTile = relativePosition;
+        lastTile = {0, 0};
+        frightenedTimer = 0;
+    }
+
 protected:
     //using game context and it's properties
     GameForm *context = nullptr;
     //animator used for ghost sprite
     Animator *animator = nullptr;
     Directions direction;
-    Directions lastDirection;
-    sf::Sprite ghost;
-    float speed = 3;
     GhostState ghostState;
-    float frightenedTimer = 0;
-    sf::Time frightenedDuration;
     vector<Direction> possibleRoutes;
-    sf::Vector2f lastMove;
+    sf::Time frightenedDuration;
     sf::Vector2f nextMove;
-//    sf::Vector2f lastMove;
     sf::Vector2f nextTile;
     sf::Vector2f lastTile;
+    sf::Vector2f initialPosition;
+    sf::Sprite ghost;
+    float speed = 3;
+    float frightenedTimer = 0;
     static int deadGhosts;
 
     void updateRelativePosition();

@@ -111,7 +111,7 @@ void Pacman::update(sf::Time dt) {
     }
 
     //destruct class after dying animation
-    if (animator->isFinished())
+    if (animator->isFinished() && isDead)
         context->lose();
 
     updateRelativePosition();
@@ -163,7 +163,9 @@ bool Pacman::checkCollision(float x, float y) {
             break;
         case Directions::DOWN:
             if (context->getBoard()[ceil(y)][ceil(x)] == ObjectType::WALL ||
-                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL) {
+                context->getBoard()[ceil(y)][floor(x)] == ObjectType::WALL ||
+                //extra condition for not pacman entering ghost's house
+                context->getBoard()[ceil(y)][floor(x)] == ObjectType::BLINKY) {
                 return true;
             }
             break;
