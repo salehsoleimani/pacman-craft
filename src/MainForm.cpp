@@ -23,6 +23,7 @@ void MainForm::initMenuView() {
     menuView->pushItem("continue");
     menuView->pushItem("options");
     menuView->pushItem("quit");
+    menuView->selectItem(0);
 }
 
 void MainForm::initImages() {

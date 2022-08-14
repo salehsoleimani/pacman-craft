@@ -8,7 +8,6 @@ OptionsForm::OptionsForm(Application &context) : Form("../res/map_menu.txt", con
 OptionsForm::~OptionsForm() {
     delete menuView;
     delete logoIV;
-//    delete dialog;
 }
 
 void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
@@ -83,6 +82,7 @@ void OptionsForm::initMenuView() {
     menuView->pushItem("reset");
     menuView->pushItem("clear score");
     menuView->pushItem("back to menu");
+    menuView->selectItem(0);
 }
 
 void OptionsForm::initImages() {

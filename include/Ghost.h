@@ -45,8 +45,8 @@ protected:
     GameForm *context = nullptr;
     //animator used for ghost sprite
     Animator *animator = nullptr;
-    Directions direction;
-    GhostState ghostState;
+    Directions direction = Directions::INIT;
+    GhostState ghostState = GhostState::CHASE;
     //we randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
     sf::Time frightenedDuration;
@@ -55,7 +55,7 @@ protected:
     sf::Vector2f lastTile;
     sf::Vector2f initialPosition;
     sf::Sprite ghost;
-    bool isDead;
+    bool isDead = false;
     float speed = 3;
     float frightenedTimer = 0;
     static int deadGhosts;

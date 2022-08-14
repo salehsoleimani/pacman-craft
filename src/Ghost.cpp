@@ -7,6 +7,9 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
     ghost.setPosition(position);
     initialPosition = position;
 
+    updateRelativePosition();
+    nextTile = relativePosition;
+
     animator = new Animator(ghost);
 
     //common animation between all ghosts
@@ -28,10 +31,6 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
     else if (context->getLevel() == 3) frightenedDuration = sf::seconds(4);
     else if (context->getLevel() == 2) frightenedDuration = sf::seconds(5);
     else frightenedDuration = sf::seconds(6);
-
-    updateRelativePosition();
-
-    nextTile = relativePosition;
 }
 
 Ghost::~Ghost() {
