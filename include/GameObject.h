@@ -16,7 +16,8 @@ public:
         CLYDE,
         PINKY,
         HEART,
-        EMPTY
+        EMPTY,
+        INIT
     };
 
     GameObject(sf::Vector2f position) : position(position) {}
@@ -40,7 +41,7 @@ public:
     }
 
 protected:
-    ObjectType gameObjectType;
+    ObjectType gameObjectType = ObjectType::INIT;
 
     sf::Vector2f position;
     //relative position based on game grids

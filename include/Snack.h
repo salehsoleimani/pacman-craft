@@ -11,7 +11,8 @@ public:
     enum class SnackType {
         PELLET,
         POWER,
-        FRUIT
+        FRUIT,
+        INIT
     };
 
     explicit Snack(sf::Vector2f position) : GameObject(position) {}
@@ -32,7 +33,7 @@ public:
 
 protected:
     bool eaten;
-    SnackType snackType;
+    SnackType snackType = SnackType::INIT;
 };
 
 

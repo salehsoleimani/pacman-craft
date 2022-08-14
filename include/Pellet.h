@@ -6,7 +6,7 @@
 class Pellet : public Snack {
 public:
     enum class PelletType {
-        NORMAL, POWER
+        NORMAL, POWER , INIT
     };
 
     //for blinking power pellets
@@ -31,7 +31,7 @@ private:
     //blink each 400 milliseconds
     sf::Time progress, blinkAnimation = sf::milliseconds(400.0f);
 
-    PelletType foodType;
+    PelletType foodType = PelletType::INIT;
 
     PelletState foodState = PelletState::NORMAL;
 

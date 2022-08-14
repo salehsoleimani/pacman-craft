@@ -12,7 +12,8 @@ public:
         CHERRY,
         PEACH,
         GRAPES,
-        BANANA
+        BANANA,
+        INIT
     };
 
     Fruit(sf::Vector2f, FruitType);
@@ -29,7 +30,7 @@ public:
     void render(sf::RenderTarget *) override;
 
 private:
-    FruitType fruitType;
+    FruitType fruitType = FruitType::INIT;
     sf::Sprite fruit;
     sf::Texture *fruitTexture;
 };
