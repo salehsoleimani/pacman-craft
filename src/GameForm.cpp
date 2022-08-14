@@ -10,7 +10,7 @@ GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
     initGame();
     initSprites();
 
-    getApplicationContext().getDialog().create("Welcome!", "arrow keys to move", "continue",
+    getApplicationContext().getDialog().create("Welcome!", "use keys to move", "continue",
                                                [&]() -> void {
                                                    getApplicationContext().getDialog().hide();
                                                }).show();

@@ -78,6 +78,10 @@ void DialogView::pollEvents(const sf::Event &event, const sf::Window *target) {
 }
 
 DialogView::~DialogView() {
+    delete ctaBtn;
+    delete secondaryBtn;
+    delete titleTV;
+    delete txtTV;
 }
 
 DialogView &DialogView::create(string dialogTitle, string dialogTxt, string cta,

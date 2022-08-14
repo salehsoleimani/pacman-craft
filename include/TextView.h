@@ -11,7 +11,7 @@ class TextView : public sf::Text {
 public:
     TextView(string, sf::Vector2f);
 
-    void update(sf::RenderTarget *);
+    explicit TextView(string);
 
     virtual void render(sf::RenderTarget *);
 

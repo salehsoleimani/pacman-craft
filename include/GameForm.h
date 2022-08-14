@@ -61,12 +61,12 @@ private:
     float fruitTimer = 0;
     bool isFruitVisible = false;
     unsigned level = 1;
-    unsigned long int score;
+    long int score;
     //to know which time user eats all candies:)
     unsigned fruitsCount;
     unsigned eatenSnacks;
     unsigned snacksCount;
-    unsigned long int highScore;
+    long int highScore;
     sf::Vector2f pacmanPosition;
     //a list of ghosts and snacks
     list<Snack *> snacks;
