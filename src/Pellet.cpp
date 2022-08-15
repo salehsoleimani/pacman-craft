@@ -1,14 +1,13 @@
 #include "Pellet.h"
 
-Pellet::Pellet(sf::Vector2f position, PelletType foodType) : Snack(position), foodType(foodType) {
-    if (foodType == PelletType::NORMAL) {
-        snackType = Snack::SnackType::PELLET;
+Pellet::Pellet(sf::Vector2f position, SnackType snackType) : Snack(position) {
+    this->snackType = snackType;
+
+    if (snackType == SnackType::PELLET)
         food.setRadius(3.0f);
-    }
-    else {
-        snackType = Snack::SnackType::POWER;
+    else
         food.setRadius(7.0f);
-    }
+
     food.setOrigin(food.getGlobalBounds().width / 2, food.getGlobalBounds().height / 2);
     food.setPosition({position.x + Dimensions::wallSize.x / 2, position.y + Dimensions::wallSize.y / 2});
     food.setFillColor(Colors::colorDot);
@@ -16,9 +15,7 @@ Pellet::Pellet(sf::Vector2f position, PelletType foodType) : Snack(position), fo
     eaten = false;
 }
 
-Pellet::~Pellet() {
-
-}
+Pellet::~Pellet() = default;
 
 void Pellet::render(sf::RenderTarget *target) {
     target->draw(food);
@@ -26,7 +23,7 @@ void Pellet::render(sf::RenderTarget *target) {
 
 void Pellet::update(sf::Time dt) {
     //blinking power state
-    if (foodType == PelletType::POWER && !isEaten()) {
+    if (snackType == SnackType::POWER && !isEaten()) {
         progress += dt;
         if (progress >= blinkAnimation) {
             progress = sf::Time::Zero;
@@ -44,7 +41,7 @@ void Pellet::update(sf::Time dt) {
 
 void Pellet::eat() {
     //amount of pause before eating pellet
-    if (foodType == PelletType::NORMAL)
+    if (snackType == SnackType::PELLET)
         sf::sleep(sf::seconds(1 / Config::windowFrameRate));
     else
         sf::sleep(sf::seconds(3 / Config::windowFrameRate));
@@ -55,10 +52,10 @@ void Pellet::eat() {
 
 //enhance this later
 unsigned Pellet::getPpt() const {
-    switch (foodType) {
-        case PelletType::NORMAL:
+    switch (snackType) {
+        case SnackType::PELLET:
             return 20;
-        case PelletType::POWER:
+        case SnackType::POWER:
             return 50;
         default:
             return 0;

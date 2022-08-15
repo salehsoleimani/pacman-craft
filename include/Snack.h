@@ -17,7 +17,7 @@ public:
 
     explicit Snack(sf::Vector2f position) : GameObject(position) {}
 
-    virtual ~Snack() = default;
+    ~Snack() override = default;
 
     virtual void eat() = 0;
 
@@ -32,7 +32,7 @@ public:
     }
 
 protected:
-    bool eaten;
+    bool eaten{};
     SnackType snackType = SnackType::INIT;
 };
 

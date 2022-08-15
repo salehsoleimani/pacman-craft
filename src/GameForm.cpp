@@ -61,15 +61,15 @@ void GameForm::initSprites() {
                     pacman = new Pacman(position, this);
                     pacmanPosition = position;
                     break;
-                case GameObject::ObjectType::FOOD: //normal foods
+                case GameObject::ObjectType::PELLET: //normal foods
                     snacksCount++;
-                    snack = new Pellet(position, Pellet::PelletType::NORMAL);
+                    snack = new Pellet(position, Snack::SnackType::PELLET);
                     snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     snacks.push_back(snack);
                     break;
-                case GameObject::ObjectType::FOOD_POWER: //power foods
+                case GameObject::ObjectType::PELLET_POWER: //power foods
                     snacksCount++;
-                    snack = new Pellet(position, Pellet::PelletType::POWER);
+                    snack = new Pellet(position, Snack::SnackType::POWER);
                     snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     snacks.push_back(snack);
                     break;
@@ -261,6 +261,7 @@ list<Ghost *> &GameForm::getGhosts() {
 
 void GameForm::raiseScore(int score) {
     this->score += score;
+    //if pacman is eating normal,power pellets raise eaten snacks
     if (score <= 50)
         eatenSnacks++;
 }

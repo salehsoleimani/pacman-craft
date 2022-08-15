@@ -30,10 +30,10 @@ void Form::initGrid() {
                     board[i][j] = GameObject::ObjectType::PACMAN;
                     break;
                 case 'F': //Normal Food
-                    board[i][j] = GameObject::ObjectType::FOOD;
+                    board[i][j] = GameObject::ObjectType::PELLET;
                     break;
                 case 'S' ://Power food
-                    board[i][j] = GameObject::ObjectType::FOOD_POWER;
+                    board[i][j] = GameObject::ObjectType::PELLET_POWER;
                     break;
                 case 'E':
                     board[i][j] = GameObject::ObjectType::EMPTY;

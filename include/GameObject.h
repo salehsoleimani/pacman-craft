@@ -9,8 +9,8 @@ public:
     enum class ObjectType {
         WALL,
         PACMAN,
-        FOOD,
-        FOOD_POWER,
+        PELLET,
+        PELLET_POWER,
         INKY,
         BLINKY,
         CLYDE,
