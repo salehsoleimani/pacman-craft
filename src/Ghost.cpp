@@ -50,13 +50,16 @@ void Ghost::changeState(GhostState state) {
 
     switch (ghostState) {
         case Ghost::GhostState::FRIGHTENED:
+            speed = 2;
             if (animator->getCurrentAnimationId() != "frightened")
                 animator->setAnimation("frightened");
             frightenedTimer -= frightenedDuration.asSeconds();
             break;
         case GhostState::CHASE:
+            speed = 3;
             break;
         case GhostState::SCATTER:
+            speed = 3;
             break;
         case GhostState::DEAD:
             context->raiseScore((++deadGhosts) * 200);
@@ -124,6 +127,7 @@ void Ghost::update(sf::Time dt) {
                 frightenedTimer = 0;
                 ghostState = GhostState::CHASE;
                 deadGhosts = 0;
+                speed = 3;
             }
             break;
         case GhostState::CHASE:

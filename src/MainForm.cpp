@@ -1,6 +1,6 @@
 #include "MainForm.h"
 
-MainForm::MainForm(Application& context) : Form("../res/map_menu.txt",context) {
+MainForm::MainForm(Application &context) : Form("../res/map_menu.txt", context) {
     initTexts();
     initMenuView();
     initImages();
@@ -60,6 +60,8 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                     break;
                 case sf::Keyboard::Up:
                     menuView->selectItem(menuView->getSelectedItemIndex() - 1);
+                    break;
+                default:
                     break;
             }
 

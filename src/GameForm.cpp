@@ -10,10 +10,13 @@ GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
     initGame();
     initSprites();
 
-    getApplicationContext().getDialog().create("Welcome!", "use keys to move", "continue",
-                                               [&]() -> void {
-                                                   getApplicationContext().getDialog().hide();
-                                               }).show();
+    getApplicationContext().getDialog()
+            .create("Welcome!",
+                    "use keys to move",
+                    "continue",
+                    [&]() -> void {
+                        getApplicationContext().getDialog().hide();
+                    }).show();
 }
 
 void GameForm::initGame() {
@@ -38,13 +41,11 @@ void GameForm::initGame() {
 
     sf::Sprite heartSprite(*heartTexture);
 
-    for (int i = 0; i < 26; ++i) {
-        for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x};
-            if (board[i][j] == GameObject::ObjectType::HEART) {
-                heartSprite.setPosition(position);
-                hearts.push_back(heartSprite);
-            }
+    for (int j = 2; j < 5; ++j) {
+        sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, 25 * Dimensions::wallSize.x};
+        if (board[25][j] == GameObject::ObjectType::HEART) {
+            heartSprite.setPosition(position);
+            hearts.push_back(heartSprite);
         }
     }
 }
@@ -85,6 +86,8 @@ void GameForm::initSprites() {
                 case GameObject::ObjectType::PINKY:
                     ghosts.push_back(new Pinky(position, this));
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -98,7 +101,7 @@ GameForm::~GameForm() {
     delete txtRecord;
     delete btnBack;
     delete txtScore;
-    //saving highscore
+    //saving high score
     if (score > highScore)
         storeRecord();
 }
@@ -113,15 +116,19 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
             if (event.mouseButton.button == sf::Mouse::Left)
                 if (btnBack->getGlobalBounds().contains(mousePosition) ||
                     btnBackIc.getGlobalBounds().contains(mousePosition)) {
-                    getApplicationContext().getDialog().create("Pause", "pause the game", "okay", "cancel",
-                                                               [&]() -> void {
-                                                                   getApplicationContext().pushForm(
-                                                                           new MainForm(getApplicationContext()));
-                                                                   getApplicationContext().getDialog().hide();
-                                                               },
-                                                               [&]() -> void {
-                                                                   getApplicationContext().getDialog().hide();
-                                                               }).show();
+                    getApplicationContext().getDialog()
+                            .create("Pause",
+                                    "pause the game",
+                                    "okay",
+                                    "cancel",
+                                    [&]() -> void {
+                                        getApplicationContext().pushForm(
+                                                new MainForm(getApplicationContext()));
+                                        getApplicationContext().getDialog().hide();
+                                    },
+                                    [&]() -> void {
+                                        getApplicationContext().getDialog().hide();
+                                    }).show();
                 }
             break;
             //handling pacman moves
@@ -135,12 +142,15 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 
     //if pacman ate all snacks rearrange board - reach to next level
     if (eatenSnacks == snacksCount) {
-        getApplicationContext().getDialog().create("Victory", "reached level " + to_string(level + 1), "Hooray!",
-                                                   [&]() -> void {
-                                                       getApplicationContext().getDialog().hide();
-                                                       level++;
-                                                       resetBoard();
-                                                   }).show();
+        getApplicationContext().getDialog()
+                .create("Victory",
+                        "reached level " + to_string(level + 1),
+                        "Hooray!",
+                        [&]() -> void {
+                            getApplicationContext().getDialog().hide();
+                            level++;
+                            resetBoard();
+                        }).show();
     }
 
     //updating other views
@@ -210,7 +220,7 @@ void GameForm::render(sf::RenderWindow *window) {
 void GameForm::lose() {
     sf::sleep(sf::milliseconds(300));
     int lives = hearts.size();
-    //if herats remaining
+    //if hearts remaining
     if (lives > 1) {
         hearts.pop_back();
         delete pacman;
@@ -220,15 +230,18 @@ void GameForm::lose() {
 
         score -= 20;
     } else {
-        getApplicationContext().getDialog().create("Game Over!", "you lose", "continue",
-                                                   [&]() -> void {
-                                                       level = 1;
-                                                       hearts.clear();
-                                                       resetBoard();
-                                                       initGame();
-                                                       score = 0;
-                                                       getApplicationContext().getDialog().hide();
-                                                   }).show();
+        getApplicationContext().getDialog()
+                .create("Game Over!",
+                        "you lose",
+                        "continue",
+                        [&]() -> void {
+                            level = 1;
+                            hearts.clear();
+                            resetBoard();
+                            initGame();
+                            score = 0;
+                            getApplicationContext().getDialog().hide();
+                        }).show();
     }
 }
 
@@ -271,7 +284,7 @@ void GameForm::storeRecord() {
         File file("../res/high_score.txt");
         file.open(ios::out);
         file << score;
-    } catch (file_open_exception ex) {
+    } catch (const file_open_exception &ex) {
         cerr << "error reading highscore";
     }
 }
@@ -280,10 +293,7 @@ void GameForm::readRecord() {
     try {
         File file("../res/high_score.txt");
         file.open(ios::in);
-        file.seekg(0);
-        file.clear();
-        string line = file.getline();
-        highScore = stoul(line);
+        file >> highScore;
     } catch (const file_open_exception &ex) {
         cerr << "error reading record" << endl;
         highScore = 0;

@@ -16,43 +16,45 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
             case sf::Keyboard::Enter:
                 switch (menuView->getSelectedItemIndex()) {
                     case 0:
-                        if (!getApplicationContext().getDialog().isVisible()) {
-                            getApplicationContext().getDialog().create("Reset game", "clear all game data", "reset",
-                                                                       "cancel",
-                                                                       [&]() -> void {
-                                                                           getApplicationContext().resetGame();
-                                                                           getApplicationContext().pushFront(
-                                                                                   new GameForm(
-                                                                                           getApplicationContext()));
-                                                                           getApplicationContext().getDialog().hide();
-                                                                       },
-                                                                       [&]() -> void {
-                                                                           getApplicationContext().getDialog().hide();
+                        getApplicationContext().getDialog()
+                                .create("Reset game",
+                                        "clear all game data",
+                                        "reset",
+                                        "cancel",
+                                        [&]() -> void {
+                                            getApplicationContext().resetGame();
+                                            getApplicationContext().pushFront(
+                                                    new GameForm(
+                                                            getApplicationContext()));
+                                            getApplicationContext().getDialog().hide();
+                                        },
+                                        [&]() -> void {
+                                            getApplicationContext().getDialog().hide();
 
-                                                                       }).show();
-                        }
+                                        }).show();
                         break;
                     case 1:
-                        if (!getApplicationContext().getDialog().isVisible()) {
-                            getApplicationContext().getDialog().create("Clear Record", "reset game record", "clear",
-                                                                       "cancel",
-                                                                       [&]() -> void {
+                        getApplicationContext().getDialog()
+                                .create("Clear Record",
+                                        "reset game record",
+                                        "clear",
+                                        "cancel",
+                                        [&]() -> void {
 
-                                                                           try {
-                                                                               File file("../res/high_score.txt");
-                                                                               file.open(ios::out);
-                                                                               file << 0;
-                                                                           } catch (file_open_exception ex) {
-                                                                               cerr << "error resetting highscore";
-                                                                           }
+                                            try {
+                                                File file("../res/high_score.txt");
+                                                file.open(ios::out);
+                                                file << 0;
+                                            } catch (const file_open_exception &ex) {
+                                                cerr << "error resetting high score";
+                                            }
 
-                                                                           getApplicationContext().getDialog().hide();
-                                                                       },
-                                                                       [&]() -> void {
-                                                                           getApplicationContext().getDialog().hide();
+                                            getApplicationContext().getDialog().hide();
+                                        },
+                                        [&]() -> void {
+                                            getApplicationContext().getDialog().hide();
 
-                                                                       }).show();
-                        }
+                                        }).show();
                         break;
                     case 2:
                         getApplicationContext().popForm();
@@ -64,6 +66,8 @@ void OptionsForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                 break;
             case sf::Keyboard::Up:
                 menuView->selectItem(menuView->getSelectedItemIndex() - 1);
+                break;
+            default:
                 break;
         }
     }
