@@ -20,17 +20,32 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
 
     animator->add("frightened", sf::seconds(2), "../res/sprites/frightened.png", sf::Vector2i(0, 0), 8);
 
-    if (context->getLevel() > 128) frightenedDuration = sf::Time::Zero;
-    else if (context->getLevel() >= 64) frightenedDuration = sf::seconds(1);
-    else if (context->getLevel() >= 32) frightenedDuration = sf::seconds(1);
-    else if (context->getLevel() >= 17) frightenedDuration = sf::seconds(2);
-    else if (context->getLevel() >= 11) frightenedDuration = sf::seconds(3);
-    else if (context->getLevel() >= 6) frightenedDuration = sf::seconds(4);
-    else if (context->getLevel() == 5) frightenedDuration = sf::seconds(2);
-    else if (context->getLevel() == 4) frightenedDuration = sf::seconds(3);
-    else if (context->getLevel() == 3) frightenedDuration = sf::seconds(4);
-    else if (context->getLevel() == 2) frightenedDuration = sf::seconds(5);
+    configSpeed();
+}
+
+void Ghost::configSpeed() {
+    unsigned level = context->getLevel();
+    if (level > 128) frightenedDuration = sf::Time::Zero;
+    else if (level >= 64) frightenedDuration = sf::seconds(1);
+    else if (level >= 32) frightenedDuration = sf::seconds(1);
+    else if (level >= 17) frightenedDuration = sf::seconds(2);
+    else if (level >= 11) frightenedDuration = sf::seconds(3);
+    else if (level >= 6) frightenedDuration = sf::seconds(4);
+    else if (level == 5) frightenedDuration = sf::seconds(2);
+    else if (level == 4) frightenedDuration = sf::seconds(3);
+    else if (level == 3) frightenedDuration = sf::seconds(4);
+    else if (level == 2) frightenedDuration = sf::seconds(5);
     else frightenedDuration = sf::seconds(6);
+
+    if (level >= 21) ghostSpeed = .95 * maxSpeed;
+    else if (level >= 5) ghostSpeed = .85 * maxSpeed;
+    else ghostSpeed = .75 * maxSpeed;
+
+    if (level >= 21) frightenedSpeed = .5 * maxSpeed;
+    else if (level >= 5) frightenedSpeed = .55 * maxSpeed;
+    else frightenedSpeed = .6 * maxSpeed;
+
+    speed = ghostSpeed;
 }
 
 Ghost::~Ghost() {
@@ -46,20 +61,21 @@ void Ghost::render(sf::RenderTarget *target) {
 }
 
 void Ghost::changeState(GhostState state) {
-    ghostState = state;
+    if (ghostState != GhostState::DEAD)
+        ghostState = state;
 
     switch (ghostState) {
         case Ghost::GhostState::FRIGHTENED:
-            speed = 2;
+            speed = frightenedSpeed;
             if (animator->getCurrentAnimationId() != "frightened")
                 animator->setAnimation("frightened");
             frightenedTimer -= frightenedDuration.asSeconds();
             break;
         case GhostState::CHASE:
-            speed = 3;
+            speed = ghostSpeed;
             break;
         case GhostState::SCATTER:
-            speed = 3;
+            speed = ghostSpeed;
             break;
         case GhostState::DEAD:
             context->raiseScore((++deadGhosts) * 200);
@@ -74,13 +90,6 @@ void Ghost::update(sf::Time dt) {
 
     animator->update(dt);
 
-    int x = speed;
-
-    //normal speeds!
-    if (context->getLevel() >= 21) x *= .95;
-    else if (context->getLevel() >= 5) x *= .85;
-    else x *= .75;
-
     //move vector
     nextMove = {0, 0};
 
@@ -91,28 +100,28 @@ void Ghost::update(sf::Time dt) {
                 animator->setAnimation("down");
             else if (isDead)
                 animator->setAnimation("die_down");
-            nextMove.y += x;
+            nextMove.y += speed;
             break;
         case Directions::UP:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("up");
             else if (isDead)
                 animator->setAnimation("die_up");
-            nextMove.y -= x;
+            nextMove.y -= speed;
             break;
         case Directions::LEFT:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("left");
             else if (isDead)
                 animator->setAnimation("die_left");
-            nextMove.x -= x;
+            nextMove.x -= speed;
             break;
         case Directions::RIGHT:
             if (ghostState != GhostState::FRIGHTENED && !isDead)
                 animator->setAnimation("right");
             else if (isDead)
                 animator->setAnimation("die_right");
-            nextMove.x += x;
+            nextMove.x += speed;
             break;
         case Directions::INIT:
             nextMove = {0, 0};
@@ -127,7 +136,7 @@ void Ghost::update(sf::Time dt) {
                 frightenedTimer = 0;
                 ghostState = GhostState::CHASE;
                 deadGhosts = 0;
-                speed = 3;
+                speed = ghostSpeed;
             }
             break;
         case GhostState::CHASE:
@@ -146,7 +155,7 @@ void Ghost::update(sf::Time dt) {
             isDead) {
             ghostState = GhostState::CHASE;
             isDead = false;
-            speed = 3;
+            speed = ghostSpeed;
         }
 
         //rounding relativeposition to fixed size grid item

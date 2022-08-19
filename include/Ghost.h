@@ -26,7 +26,7 @@ public:
 
     void render(sf::RenderTarget *) override;
 
-    void update(sf::Time);
+    void update(sf::Time) override;
 
     //switching states between ghosts from outside
     void changeState(GhostState state);
@@ -49,16 +49,9 @@ protected:
     GhostState ghostState = GhostState::CHASE;
     //we randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
-    sf::Time frightenedDuration;
-    sf::Vector2f nextMove;
-    sf::Vector2f nextTile;
-    sf::Vector2f lastTile;
-    sf::Vector2f initialPosition;
-    sf::Sprite ghost;
-    bool isDead = false;
-    float speed = 3;
-    float frightenedTimer = 0;
-    static int deadGhosts;
+
+private:
+    void configSpeed();
 
     void updateRelativePosition();
 
@@ -66,7 +59,19 @@ protected:
 
     void checkPossibleRoutes();
 
+    sf::Time frightenedDuration;
+    sf::Vector2f nextMove;
+    sf::Vector2f nextTile;
+    sf::Vector2f lastTile;
+    sf::Vector2f initialPosition;
+    sf::Sprite ghost;
+    bool isDead = false;
+    float maxSpeed = 3;
+    float speed;
+    float ghostSpeed;
+    float frightenedSpeed;
+    float frightenedTimer = 0;
+    static int deadGhosts;
 };
-
 
 #endif //PACMAN_GHOST_H

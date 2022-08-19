@@ -28,12 +28,15 @@ private:
     sf::Vector2i nextMove;
     sf::Vector2i lastMove;
     sf::Sprite pacman;
-    float speed = 4;
+    float maxSpeed = 4;
+    float speed;
     bool isDead = false;
 
     void updateRelativePosition();
 
     bool checkCollision(float x, float y);
+
+    void configSpeed();
 };
 
 

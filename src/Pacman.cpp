@@ -17,6 +17,16 @@ Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position),
     direction = Directions::INIT;
 
     updateRelativePosition();
+
+    configSpeed();
+}
+
+void Pacman::configSpeed(){
+    unsigned level = context->getLevel();
+    if (level >= 33) speed = .9 * maxSpeed;
+    else if (level >= 21) speed = maxSpeed;
+    else if (level >= 5) speed = .9 * maxSpeed;
+    else speed = .8 * maxSpeed;
 }
 
 Pacman::~Pacman() {
@@ -55,34 +65,25 @@ void Pacman::update(sf::Time dt) {
     animator->update(dt);
 
     //a vector to hold next move coordinates
-    int x = speed;
-
-    if (context->getLevel() >= 33) x *= .9;
-    else if (context->getLevel() >= 21) x *= 1;
-    else if (context->getLevel() >= 5) x *= .9;
-    else x *= .8;
-
     nextMove = {0, 0};
 
     switch (direction) {
         case Directions::DOWN:
-            nextMove.y += x;
+            nextMove.y += speed;
             break;
         case Directions::UP:
-            nextMove.y -= x;
+            nextMove.y -= speed;
             break;
         case Directions::LEFT:
-            nextMove.x -= x;
+            nextMove.x -= speed;
             break;
         case Directions::RIGHT:
-            nextMove.x += x;
+            nextMove.x += speed;
             break;
         case Directions::INIT:
             nextMove = {0, 0};
             break;
     }
-
-    nextMove = {((int) nextMove.x), ((int) nextMove.y)};
 
     sf::Vector2f currentPosition = pacman.getPosition();
     pacman.move(sf::Vector2f(nextMove));
