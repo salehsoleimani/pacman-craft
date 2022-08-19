@@ -25,14 +25,14 @@ void GameForm::initGame() {
 
     txtScore = new TextView("score\n0", {251, 21});
     txtRecord = new TextView("high score\n" + to_string(highScore), {380, 21});
-    btnBack = new TextView("pause\nto menu", {82, 21});
-    btnBack->setCharacterSize(Font::smallFontSize);
+    txtLevel = new TextView("level\n1", {122, 21});
+    txtLevel->setCharacterSize(Font::smallFontSize);
     txtScore->setCharacterSize(Font::smallFontSize);
     txtRecord->setCharacterSize(Font::smallFontSize);
 
     auto *icBackTexture = new sf::Texture;
     icBackTexture->loadFromFile("../res/icons/ic_back.png");
-    btnBackIc.setPosition({30, (btnBack->getGlobalBounds().top + btnBack->getGlobalBounds().height) / 2});
+    btnBackIc.setPosition({43, (txtLevel->getGlobalBounds().top + txtLevel->getGlobalBounds().height) / 2});
     btnBackIc.setTexture(*icBackTexture);
 
     heartTexture = new sf::Texture;
@@ -99,7 +99,7 @@ GameForm::~GameForm() {
     for (auto ghost: ghosts) delete ghost;
     delete heartTexture;
     delete txtRecord;
-    delete btnBack;
+    delete txtLevel;
     delete txtScore;
     //saving high score
     if (score > highScore)
@@ -114,8 +114,7 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
         case sf::Event::MouseButtonPressed:
             // user pauses the game
             if (event.mouseButton.button == sf::Mouse::Left)
-                if (btnBack->getGlobalBounds().contains(mousePosition) ||
-                    btnBackIc.getGlobalBounds().contains(mousePosition)) {
+                if (btnBackIc.getGlobalBounds().contains(mousePosition)) {
                     getApplicationContext().getDialog()
                             .create("Pause",
                                     "pause the game",
@@ -149,6 +148,7 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
                         [&]() -> void {
                             getApplicationContext().getDialog().hide();
                             level++;
+                            txtLevel->setString("level\n" + to_string(this->level));
                             resetBoard();
                         }).show();
     }
@@ -164,6 +164,7 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
     for (auto ghost: ghosts)
         if (ghost) ghost->update(dt);
 
+    readRecord();
     txtRecord->setString("high score\n" + to_string(highScore));
 
     txtScore->setString("score\n" + to_string(this->score));
@@ -209,7 +210,7 @@ void GameForm::updateFruits(const sf::Time &dt) {
 void GameForm::render(sf::RenderWindow *window) {
     txtRecord->render(window);
     txtScore->render(window);
-    btnBack->render(window);
+    txtLevel->render(window);
     for (auto snack: snacks) snack->render(window);
     for (auto ghost: ghosts) ghost->render(window);
     for (auto heart: hearts) window->draw(heart);

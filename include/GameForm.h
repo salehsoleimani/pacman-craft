@@ -68,6 +68,7 @@ private:
     unsigned snacksCount = 0;
     long int highScore = 0;
     sf::Vector2f pacmanPosition;
+
     //a list of ghosts and snacks
     list<Snack *> snacks;
     list<Ghost *> ghosts;
@@ -76,7 +77,7 @@ private:
     TextView *txtScore;
     TextView *txtRecord;
     //back/pause to menu buttons
-    TextView *btnBack;
+    TextView *txtLevel;
     sf::Sprite btnBackIc;
     sf::Texture *heartTexture;
 
