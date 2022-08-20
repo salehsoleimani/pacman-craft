@@ -21,7 +21,7 @@ Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position),
     configSpeed();
 }
 
-void Pacman::configSpeed(){
+void Pacman::configSpeed() {
     unsigned level = context->getLevel();
     if (level >= 33) speed = .9 * maxSpeed;
     else if (level >= 21) speed = maxSpeed;
@@ -92,9 +92,16 @@ void Pacman::update(sf::Time dt) {
     for (auto snack: context->getSnacks()) {
         if (snack->getRelativePosition() == relativePosition && !snack->isEaten()) {
             snack->eat();
-            if (snack->getSnackType() == Snack::SnackType::POWER)
+            if (snack->getSnackType() == Snack::SnackType::POWER) {
                 for (auto ghost: context->getGhosts())
                     ghost->changeState(Ghost::GhostState::FRIGHTENED);
+                context->playSound(GameForm::SoundTracks::INTERMISSION);
+            }
+            if (snack->getSnackType() == Snack::SnackType::FRUIT)
+                context->playSound(GameForm::SoundTracks::EAT_FRUIT);
+            else
+                context->playSound(GameForm::SoundTracks::CHOMP);
+
             context->raiseScore(snack->getPpt());
         }
     }
@@ -104,7 +111,9 @@ void Pacman::update(sf::Time dt) {
         if (ghost->isColided(pacman.getGlobalBounds()) && !isDead) {
             if (ghost->getGhostState() == Ghost::GhostState::FRIGHTENED) {
                 ghost->changeState(Ghost::GhostState::DEAD);
+                context->playSound(GameForm::SoundTracks::EAT_GHOST);
             } else if (ghost->getGhostState() != Ghost::GhostState::DEAD) {
+                context->playSound(GameForm::SoundTracks::DEATH);
                 animator->setAnimation("die");
                 isDead = true;
             }

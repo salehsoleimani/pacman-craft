@@ -9,35 +9,66 @@
 GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
     initGame();
     initSprites();
-
+    initSounds();
     getApplicationContext().getDialog()
             .create("Welcome!",
                     "use keys to move",
                     "continue",
                     [&]() -> void {
+                        //play pacman beginning welcome sound
+                        introMusic.setBuffer(introBuffer);
+                        introMusic.play();
                         getApplicationContext().getDialog().hide();
                     }).show();
+}
+
+void GameForm::initSounds() {
+    string path = "../res/sounds/";
+    introBuffer.loadFromFile(path + "pacman_beginning.wav");
+    introMusic.setBuffer(introBuffer);
+    chompBuffer.loadFromFile(path + "pacman_chomp.wav");
+    chompSound.setBuffer(chompBuffer);
+    deathBuffer.loadFromFile(path + "pacman_death.wav");
+    deathSound.setBuffer(deathBuffer);
+    eatFruitBuffer.loadFromFile(path + "pacman_eatfruit.wav");
+    eatFruitSound.setBuffer(eatFruitBuffer);
+    eatGhostBuffer.loadFromFile(path + "pacman_eatghost.wav");
+    eatGhostSound.setBuffer(eatGhostBuffer);
+    intermissionBuffer.loadFromFile(path + "pacman_intermission.wav");
+    intermissionSound.setBuffer(intermissionBuffer);
 }
 
 void GameForm::initGame() {
     score = 0;
     readRecord();
 
-    txtScore = new TextView("score\n0", {251, 21});
-    txtRecord = new TextView("high score\n" + to_string(highScore), {380, 21});
-    txtLevel = new TextView("level\n1", {122, 21});
+    txtScore = new TextView("score\n0", {219, 22});
+    txtRecord = new TextView("high score\n" + to_string(highScore), {329, 22});
+    txtLevel = new TextView("level\n1", {109, 22});
     txtLevel->setCharacterSize(Font::smallFontSize);
     txtScore->setCharacterSize(Font::smallFontSize);
     txtRecord->setCharacterSize(Font::smallFontSize);
 
     auto *icBackTexture = new sf::Texture;
     icBackTexture->loadFromFile("../res/icons/ic_back.png");
-    btnBackIc.setPosition({43, (txtLevel->getGlobalBounds().top + txtLevel->getGlobalBounds().height) / 2});
+    btnBackIc.setPosition({32, (txtLevel->getGlobalBounds().top + txtLevel->getGlobalBounds().height) / 2});
     btnBackIc.setTexture(*icBackTexture);
 
     heartTexture = new sf::Texture;
     heartTexture->loadFromFile("../res/sprites/heart.png");
     heartTexture->setSmooth(true);
+
+    //sound icon
+    soundIcon = new sf::Texture;
+    soundIcon->loadFromFile("../res/icons/ic_sound_on.png");
+    soundIcon->setSmooth(true);
+
+    soundOffIcon = new sf::Texture;
+    soundOffIcon->loadFromFile("../res/icons/ic_sound_off.png");
+    soundOffIcon->setSmooth(true);
+
+    btnSound.setPosition({500, 27});
+    btnSound.setTexture(*soundIcon);
 
     sf::Sprite heartSprite(*heartTexture);
 
@@ -53,7 +84,7 @@ void GameForm::initGame() {
 void GameForm::initSprites() {
     snacksCount = 0;
 
-    for (int i = 0; i < 26; ++i) {
+    for (int i = 0; i < 26; ++i)
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             Pellet *snack = nullptr;
             sf::Vector2f position = sf::Vector2f{j * Dimensions::wallSize.x, i * Dimensions::wallSize.x};
@@ -90,7 +121,6 @@ void GameForm::initSprites() {
                     break;
             }
         }
-    }
 }
 
 GameForm::~GameForm() {
@@ -98,6 +128,8 @@ GameForm::~GameForm() {
     for (auto snack: snacks) delete snack;
     for (auto ghost: ghosts) delete ghost;
     delete heartTexture;
+    delete soundOffIcon;
+    delete soundIcon;
     delete txtRecord;
     delete txtLevel;
     delete txtScore;
@@ -111,9 +143,23 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                               sf::Mouse::getPosition((*window)).y);
     switch (event.type) {
         case sf::Event::MouseButtonReleased:
+            if (btnSound.getGlobalBounds().contains(mousePosition)) {
+                soundOn = !soundOn;
+                if (soundOn)
+                    btnSound.setTexture(*soundIcon);
+                else {
+                    btnSound.setTexture(*soundOffIcon);
+                    introMusic.stop();
+                    chompSound.stop();
+                    deathSound.stop();
+                    eatFruitSound.stop();
+                    eatGhostSound.stop();
+                    intermissionSound.stop();
+                }
+            }
         case sf::Event::MouseButtonPressed:
             // user pauses the game
-            if (event.mouseButton.button == sf::Mouse::Left)
+            if (event.mouseButton.button == sf::Mouse::Left) {
                 if (btnBackIc.getGlobalBounds().contains(mousePosition)) {
                     getApplicationContext().getDialog()
                             .create("Pause",
@@ -129,10 +175,13 @@ void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                                         getApplicationContext().getDialog().hide();
                                     }).show();
                 }
+            }
             break;
             //handling pacman moves
         case sf::Event::KeyPressed:
             pacman->pollEvents(event);
+            break;
+        default:
             break;
     }
 }
@@ -216,6 +265,7 @@ void GameForm::render(sf::RenderWindow *window) {
     for (auto heart: hearts) window->draw(heart);
     pacman->render(window);
     window->draw(btnBackIc);
+    window->draw(btnSound);
 }
 
 void GameForm::lose() {
@@ -286,7 +336,7 @@ void GameForm::storeRecord() {
         file.open(ios::out);
         file << score;
     } catch (const file_open_exception &ex) {
-        cerr << "error reading highscore";
+        cerr << "error reading high score";
     }
 }
 
@@ -298,5 +348,28 @@ void GameForm::readRecord() {
     } catch (const file_open_exception &ex) {
         cerr << "error reading record" << endl;
         highScore = 0;
+    }
+}
+
+void GameForm::playSound(SoundTracks soundTrack) {
+    if (introMusic.getStatus() == sf::Sound::Playing || !soundOn) return;
+    switch (soundTrack) {
+        case SoundTracks::CHOMP:
+            if (deathSound.getStatus() != sf::Sound::Playing)
+                chompSound.play();
+            break;
+        case SoundTracks::DEATH:
+            chompSound.stop();
+            deathSound.play();
+            break;
+        case SoundTracks::EAT_GHOST:
+            eatGhostSound.play();
+            break;
+        case SoundTracks::EAT_FRUIT:
+            eatFruitSound.play();
+            break;
+        case SoundTracks::INTERMISSION:
+            intermissionSound.play();
+            break;
     }
 }

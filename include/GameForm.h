@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <list>
+#include <SFML/Audio.hpp>
 #include "Wall.h"
 #include "TextView.h"
 #include "MainForm.h"
@@ -20,6 +21,10 @@ class Ghost;
 
 class GameForm : public Form {
 public:
+    enum class SoundTracks {
+        CHOMP, DEATH, EAT_GHOST, EAT_FRUIT, INTERMISSION
+    };
+
     //initializes base class context property
     GameForm(Application &);
 
@@ -36,6 +41,8 @@ public:
 
     unsigned getLevel() const;
 
+    void playSound(SoundTracks);
+
 private:
 
     void pollEvents(sf::Event &, sf::RenderWindow *) override;
@@ -48,7 +55,7 @@ private:
 
     void initSprites();
 
-    //resetting when gameover/new level
+    //resetting when game over / new level
     void resetBoard();
 
 
@@ -57,7 +64,9 @@ private:
 
     void storeRecord();
 
-    //handling fruit visiblity duration
+    void updateFruits(const sf::Time &dt);
+
+    //handling fruit visibility duration
     float fruitTimer = 0;
     bool isFruitVisible = false;
     unsigned level = 1;
@@ -81,7 +90,27 @@ private:
     sf::Sprite btnBackIc;
     sf::Texture *heartTexture;
 
-    void updateFruits(const sf::Time &dt);
+    //handling sounds
+    bool soundOn = true;
+    sf::Sprite btnSound;
+    sf::Texture *soundIcon;
+    sf::Texture *soundOffIcon;
+
+    sf::Sound introMusic;
+    sf::Sound chompSound;
+    sf::Sound deathSound;
+    sf::Sound eatFruitSound;
+    sf::Sound eatGhostSound;
+    sf::Sound intermissionSound;
+
+    sf::SoundBuffer introBuffer;
+    sf::SoundBuffer chompBuffer;
+    sf::SoundBuffer deathBuffer;
+    sf::SoundBuffer eatFruitBuffer;
+    sf::SoundBuffer eatGhostBuffer;
+    sf::SoundBuffer intermissionBuffer;
+
+    void initSounds();
 };
 
 #endif //PACMAN_GAMEFORM_H

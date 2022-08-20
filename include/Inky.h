@@ -9,7 +9,6 @@ public:
     Inky(sf::Vector2f, GameForm *);
 
     ~Inky();
-
 };
 
 

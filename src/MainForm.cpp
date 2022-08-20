@@ -64,7 +64,8 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                 default:
                     break;
             }
-
+        default:
+            break;
     }
 }
 
