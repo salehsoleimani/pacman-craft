@@ -11,8 +11,7 @@ namespace Config {
     const sf::VideoMode videoMode = {570, 780};
     const int windowFrameRate = 60;
     const std::string appName = "Pacman";
-
-    const sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
+    const sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close | sf::Style::Default;
 }
 
 //colors

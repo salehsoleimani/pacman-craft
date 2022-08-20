@@ -25,9 +25,9 @@ public:
     DialogView &create(string, string, string, string, const function<void()> &,
                        const function<void()> &);
 
-    bool show();
+    void show();
 
-    bool hide();
+    void hide();
 
     bool isVisible() const;
 

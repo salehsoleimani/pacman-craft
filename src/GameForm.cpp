@@ -68,7 +68,10 @@ void GameForm::initGame() {
     soundOffIcon->setSmooth(true);
 
     btnSound.setPosition({500, 27});
-    btnSound.setTexture(*soundIcon);
+    if (soundOn)
+        btnSound.setTexture(*soundIcon);
+    else
+        btnSound.setTexture(*soundOffIcon);
 
     sf::Sprite heartSprite(*heartTexture);
 

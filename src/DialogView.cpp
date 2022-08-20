@@ -110,11 +110,11 @@ DialogView::create(string dialogTitle, string dialogTxt, string cta, string seco
     return *this;
 }
 
-bool DialogView::show() {
+void DialogView::show() {
     visible = true;
 }
 
-bool DialogView::hide() {
+void DialogView::hide() {
     visible = false;
     delete txtTV;
     delete titleTV;

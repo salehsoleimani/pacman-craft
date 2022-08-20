@@ -40,6 +40,8 @@ public:
 
     void setPosition(const sf::Vector2f &pos);
 
+    void setDirection(Directions direction);
+
 protected:
     //using game context and it's properties
     GameForm *context = nullptr;
@@ -47,7 +49,7 @@ protected:
     Animator *animator = nullptr;
     Directions direction = Directions::INIT;
     GhostState ghostState = GhostState::CHASE;
-    //we randomly choose a route between possibleRoutes
+    //randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
 
 private:
@@ -58,6 +60,7 @@ private:
     bool isInTile();
 
     void checkPossibleRoutes();
+
 
     sf::Time frightenedDuration;
     sf::Vector2f nextMove;

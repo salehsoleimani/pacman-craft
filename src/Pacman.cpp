@@ -12,7 +12,7 @@ Pacman::Pacman(sf::Vector2f position, GameForm *context) : GameObject(position),
     animator->add("up", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 30), 5);
     animator->add("down", sf::milliseconds(300), "../res/sprites/pacman.png", sf::Vector2i(30, 90), 5);
 
-    animator->add("die", sf::milliseconds(300), "../res/sprites/pacman_die.png", sf::Vector2i(24, 0), 12, false);
+    animator->add("die", sf::milliseconds(900), "../res/sprites/pacman_die.png", sf::Vector2i(24, 0), 15, false);
 
     direction = Directions::INIT;
 
@@ -95,6 +95,7 @@ void Pacman::update(sf::Time dt) {
             if (snack->getSnackType() == Snack::SnackType::POWER) {
                 for (auto ghost: context->getGhosts())
                     ghost->changeState(Ghost::GhostState::FRIGHTENED);
+
                 context->playSound(GameForm::SoundTracks::INTERMISSION);
             }
             if (snack->getSnackType() == Snack::SnackType::FRUIT)
@@ -109,11 +110,15 @@ void Pacman::update(sf::Time dt) {
     //check collision with ghosts
     for (auto ghost: context->getGhosts()) {
         if (ghost->isColided(pacman.getGlobalBounds()) && !isDead) {
+            //if pacman eats a ghost
             if (ghost->getGhostState() == Ghost::GhostState::FRIGHTENED) {
                 ghost->changeState(Ghost::GhostState::DEAD);
                 context->playSound(GameForm::SoundTracks::EAT_GHOST);
+                //if pacman dies
             } else if (ghost->getGhostState() != Ghost::GhostState::DEAD) {
                 context->playSound(GameForm::SoundTracks::DEATH);
+                //if pacman dies stop moving
+                direction = Directions::INIT;
                 animator->setAnimation("die");
                 isDead = true;
             }

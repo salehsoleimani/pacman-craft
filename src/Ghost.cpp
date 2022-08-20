@@ -93,34 +93,18 @@ void Ghost::update(sf::Time dt) {
     //move vector
     nextMove = {0, 0};
 
-    //setting animation and vector
+    //updating move vector
     switch (direction) {
         case Directions::DOWN:
-            if (ghostState != GhostState::FRIGHTENED && !isDead)
-                animator->setAnimation("down");
-            else if (isDead)
-                animator->setAnimation("die_down");
             nextMove.y += speed;
             break;
         case Directions::UP:
-            if (ghostState != GhostState::FRIGHTENED && !isDead)
-                animator->setAnimation("up");
-            else if (isDead)
-                animator->setAnimation("die_up");
             nextMove.y -= speed;
             break;
         case Directions::LEFT:
-            if (ghostState != GhostState::FRIGHTENED && !isDead)
-                animator->setAnimation("left");
-            else if (isDead)
-                animator->setAnimation("die_left");
             nextMove.x -= speed;
             break;
         case Directions::RIGHT:
-            if (ghostState != GhostState::FRIGHTENED && !isDead)
-                animator->setAnimation("right");
-            else if (isDead)
-                animator->setAnimation("die_right");
             nextMove.x += speed;
             break;
         case Directions::INIT:
@@ -149,18 +133,16 @@ void Ghost::update(sf::Time dt) {
 
     //if ghost places in fixed size grid item
     if (isInTile()) {
-        //if ghost was in dead state and now we reach home
-        if (nextTile ==
-            sf::Vector2f(initialPosition.x / Dimensions::wallSize.x, initialPosition.y / Dimensions::wallSize.x) &&
-            isDead) {
+        //if ghost was in dead state, and now we reach home
+        if (nextTile == initialPosition / Dimensions::wallSize.x) {
             ghostState = GhostState::CHASE;
             isDead = false;
             speed = ghostSpeed;
         }
 
-        //rounding relativeposition to fixed size grid item
+        //rounding relative position to fixed size grid item
         if (relativePosition != nextTile) {
-            ghost.setPosition(nextTile.x * Dimensions::wallSize.x, nextTile.y * Dimensions::wallSize.y);
+            ghost.setPosition(nextTile * Dimensions::wallSize.x);
             relativePosition = nextTile;
         }
 
@@ -170,7 +152,7 @@ void Ghost::update(sf::Time dt) {
 
         Direction nextDirection;
 
-        //if ghost is dead choose nearest position to ghosts house
+        //if ghost is dead choose the nearest position to ghosts house
         if (isDead) {
             std::sort(possibleRoutes.begin(), possibleRoutes.end(),
                       [&](const Direction &d1, const Direction &d2) -> bool {
@@ -179,7 +161,7 @@ void Ghost::update(sf::Time dt) {
                                  sqrt(pow(d2.tile.x - initialPosition.x / Dimensions::wallSize.x, 2) +
                                       pow(d2.tile.y - initialPosition.y / Dimensions::wallSize.x, 2));
                       });
-            // we want the smallest way which ghost doesnt have to turn back
+            // we want the smallest way which ghost doesn't have to turn back
             int index = 0;
             for (int i = 0; i < possibleRoutes.size(); ++i) {
                 if (possibleRoutes[i].tile != lastTile) {
@@ -196,13 +178,14 @@ void Ghost::update(sf::Time dt) {
 
             nextDirection = possibleRoutes[randomRoute(rng)];
         }
-        //dont turn back otherwise you have to
+        //don't turn back otherwise you have to
         if (nextDirection.tile != lastTile || possibleRoutes.size() == 1) {
             lastTile = nextTile;
-            direction = nextDirection.direction;
+            setDirection(nextDirection.direction);
             nextTile = nextDirection.tile;
         }
     }
+
     ghost.move(nextMove);
 
 }
@@ -236,23 +219,17 @@ bool Ghost::isInTile() {
 
 void Ghost::checkPossibleRoutes() {
     //check if neighbour tiles are free
-    if (context->getBoard()[relativePosition.y][relativePosition.x + 1] !=
-        GameObject::ObjectType::WALL) {
+    auto board = context->getBoard();
+    int y = relativePosition.y;
+    int x = relativePosition.x;
+    if (board[y][x + 1] != GameObject::ObjectType::WALL)
         possibleRoutes.push_back({Directions::RIGHT, {relativePosition.x + 1, relativePosition.y}});
-    }
-    if (context->getBoard()[relativePosition.y][relativePosition.x - 1] !=
-        GameObject::ObjectType::WALL) {
+    if (board[y][x - 1] != GameObject::ObjectType::WALL)
         possibleRoutes.push_back({Directions::LEFT, {relativePosition.x - 1, relativePosition.y}});
-    }
-    if (context->getBoard()[relativePosition.y + 1][relativePosition.x] !=
-        GameObject::ObjectType::WALL) {
+    if (board[y + 1][x] != GameObject::ObjectType::WALL)
         possibleRoutes.push_back({Directions::DOWN, {relativePosition.x, relativePosition.y + 1}});
-    }
-    if (context->getBoard()[relativePosition.y - 1][relativePosition.x] !=
-        GameObject::ObjectType::WALL) {
-        possibleRoutes.push_back({Directions::UP,
-                                  {relativePosition.x, relativePosition.y - 1}});
-    }
+    if (board[y - 1][x] != GameObject::ObjectType::WALL)
+        possibleRoutes.push_back({Directions::UP, {relativePosition.x, relativePosition.y - 1}});
 }
 
 void Ghost::updateRelativePosition() {
@@ -278,4 +255,39 @@ void Ghost::setPosition(const sf::Vector2f &pos) {
 
 const sf::Vector2f &Ghost::getInitialPosition() const {
     return initialPosition;
+}
+
+void Ghost::setDirection(Directions direction) {
+    this->direction = direction;
+
+
+    //setting animation
+    switch (direction) {
+        case Directions::DOWN:
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
+                animator->setAnimation("down");
+            else if (isDead)
+                animator->setAnimation("die_down");
+            break;
+        case Directions::UP:
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
+                animator->setAnimation("up");
+            else if (isDead)
+                animator->setAnimation("die_up");
+            break;
+        case Directions::LEFT:
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
+                animator->setAnimation("left");
+            else if (isDead)
+                animator->setAnimation("die_left");
+            break;
+        case Directions::RIGHT:
+            if (ghostState != GhostState::FRIGHTENED && !isDead)
+                animator->setAnimation("right");
+            else if (isDead)
+                animator->setAnimation("die_right");
+            break;
+        case Directions::INIT:
+            break;
+    }
 }
