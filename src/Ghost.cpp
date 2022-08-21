@@ -21,6 +21,7 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
     animator->add("frightened", sf::seconds(2), "../res/sprites/frightened.png", sf::Vector2i(0, 0), 8);
 
     configSpeed();
+
 }
 
 void Ghost::configSpeed() {
@@ -83,6 +84,8 @@ void Ghost::changeState(GhostState state) {
             speed = 6;
             isDead = true;
             break;
+        case GhostState::INIT:
+            break;
     }
 }
 
@@ -126,18 +129,28 @@ void Ghost::update(sf::Time dt) {
         case GhostState::CHASE:
             break;
         case GhostState::SCATTER:
+            targetTile = targetScatter;
             break;
         case GhostState::DEAD:
+            targetTile = initialPosition;
+            break;
+        case GhostState::INIT:
+            targetTile = doorPosition;
             break;
     }
 
     //if ghost places in fixed size grid item
     if (isInTile()) {
         //if ghost was in dead state, and now we reach home
-        if (nextTile == initialPosition / Dimensions::wallSize.x) {
-            ghostState = GhostState::CHASE;
+        if (nextTile == initialPosition / Dimensions::wallSize.x && ghostState != GhostState::INIT) {
+            ghostState = GhostState::INIT;
             isDead = false;
             speed = ghostSpeed;
+        }
+
+        //whenever ghost gets out of the door, switch state
+        if (nextTile == doorPosition / Dimensions::wallSize.x) {
+            ghostState = GhostState::SCATTER;
         }
 
         //rounding relative position to fixed size grid item
@@ -153,39 +166,30 @@ void Ghost::update(sf::Time dt) {
         Direction nextDirection;
 
         float grid = Dimensions::wallSize.x;
-        float x = initialPosition.x, y = initialPosition.y;
+        float x = targetTile.x, y = targetTile.y;
 
-        //if ghost is dead choose the nearest position to ghosts house
-        if (isDead) {
-            std::sort(possibleRoutes.begin(), possibleRoutes.end(),
-                      [&](const Direction &d1, const Direction &d2) -> bool {
-                          float side1 = sqrt(pow(d1.tile.x - x / grid, 2) +
-                                             pow(d1.tile.y - y / grid, 2));
-                          float side2 = sqrt(pow(d2.tile.x - x / grid, 2) +
-                                             pow(d2.tile.y - y / grid, 2));
-                          //if distance is same perform with directions priority
-                          if (side1 == side2)
-                              return d1.direction < d2.direction;
-                          return side1 < side2;
-                      });
-            // we want the smallest way which ghost doesn't have to turn back
-            int index = 0;
-            for (int i = 0; i < possibleRoutes.size(); ++i) {
-                if (possibleRoutes[i].tile != lastTile) {
-                    index = i;
-                    break;
-                }
+        //choose the nearest position to target position
+        std::sort(possibleRoutes.begin(), possibleRoutes.end(),
+                  [&](const Direction &d1, const Direction &d2) -> bool {
+                      float side1 = sqrt(pow(d1.tile.x - x / grid, 2) +
+                                         pow(d1.tile.y - y / grid, 2));
+                      float side2 = sqrt(pow(d2.tile.x - x / grid, 2) +
+                                         pow(d2.tile.y - y / grid, 2));
+                      //if distance is same perform with directions priority
+                      if (side1 == side2)
+                          return d1.direction < d2.direction;
+                      return side1 < side2;
+                  });
+        // we want the smallest way which ghost doesn't have to turn back
+        int index = 0;
+        for (int i = 0; i < possibleRoutes.size(); ++i) {
+            if (possibleRoutes[i].tile != lastTile) {
+                index = i;
+                break;
             }
-            nextDirection = possibleRoutes[index];
-        } else {
-            //moving randomly across map
-            std::random_device dev;
-            std::mt19937 rng(dev());
-            std::uniform_int_distribution<std::mt19937::result_type> randomRoute(0, possibleRoutes.size() - 1);
-
-            nextDirection = possibleRoutes[randomRoute(rng)];
         }
-        //don't turn back otherwise you have to
+        nextDirection = possibleRoutes[index];
+
         if (nextDirection.tile != lastTile || possibleRoutes.size() == 1) {
             lastTile = nextTile;
             setDirection(nextDirection.direction);
@@ -256,6 +260,7 @@ void Ghost::setPosition(const sf::Vector2f &pos) {
     ghost.setPosition(pos);
     updateRelativePosition();
     nextTile = relativePosition;
+    ghostState = GhostState::INIT;
     lastTile = {0, 0};
     frightenedTimer = 0;
 }

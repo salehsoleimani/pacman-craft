@@ -10,7 +10,7 @@
 class Ghost : public GameObject {
 public:
     enum class GhostState {
-        CHASE, SCATTER, FRIGHTENED, DEAD
+        INIT, CHASE, SCATTER, FRIGHTENED, DEAD
     };
     //switching to random routs/directions we need next tile and next direction as a struct
     struct Direction {
@@ -48,9 +48,12 @@ protected:
     //animator used for ghost sprite
     Animator *animator = nullptr;
     Directions direction = Directions::INIT;
-    GhostState ghostState = GhostState::CHASE;
+    GhostState ghostState = GhostState::INIT;
     //randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
+
+    sf::Vector2f targetScatter;
+
 
 private:
     void configSpeed();
@@ -66,6 +69,7 @@ private:
     sf::Vector2f nextMove;
     sf::Vector2f nextTile;
     sf::Vector2f lastTile;
+    sf::Vector2f targetTile;
     sf::Vector2f initialPosition;
     sf::Sprite ghost;
     bool isDead = false;
@@ -75,6 +79,8 @@ private:
     float frightenedSpeed;
     float frightenedTimer = 0;
     static int deadGhosts;
+    //position ghosts exits the door
+    sf::Vector2f doorPosition = {Dimensions::wallSize.x * 9, Dimensions::wallSize.y * 11};
 };
 
 #endif //PACMAN_GHOST_H

@@ -50,20 +50,10 @@ namespace Dimensions {
 }
 
 namespace Path {
-
     const std::string fruit = "../res/sprites/fruits/";
-
-    const float shadowOffset = 6;
-
-    const sf::Vector2f wallSize = {30, 30};
-
-    const int WALL_ROW = 26;
-    const int WALL_COL = 19;
-
-    const sf::Vector2f BUTTON_SIZE_SMALL = {138, 74};
-    const sf::Vector2f BUTTON_SIZE_BIG = {298, 74};
 }
 
+//direction values are based on rotate direction priority
 enum class Directions {
     INIT = 0, UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4
 };
