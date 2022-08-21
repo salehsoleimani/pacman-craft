@@ -45,7 +45,7 @@ public:
 
     void setDirection(Directions direction);
 
-    const GhostType& getGhost() const;
+    const GhostType &getGhost() const;
 
 protected:
     //using game context and it's properties
@@ -53,6 +53,7 @@ protected:
     //animator used for ghost sprite
     Animator *animator = nullptr;
     Directions direction = Directions::INIT;
+    Directions lastDirection;
     GhostState ghostState = GhostState::INIT;
     //randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
@@ -73,6 +74,9 @@ private:
 
     void checkPossibleRoutes();
 
+    void reverseGhost();
+
+    void configTimer();
 
     sf::Time frightenedDuration;
     sf::Vector2f nextMove;
@@ -80,15 +84,20 @@ private:
     sf::Vector2f lastTile;
     sf::Vector2f targetTile;
     sf::Vector2f initialPosition;
-    bool isDead = false;
     float maxSpeed = 3;
     float speed;
     float ghostSpeed;
     float frightenedSpeed;
-    float frightenedTimer = 0;
     static int deadGhosts;
     //position ghosts exits the door
     sf::Vector2f doorPosition = {Dimensions::wallSize.x * 9, Dimensions::wallSize.y * 11};
+
+    unsigned stateIndex;
+    array<float, 7> stateTimer;
+    float frightenedTimer = 0;
+    float scatterTimer = 0;
+    float chaseTimer = 0;
+    GhostState lastState = GhostState::INIT;
 };
 
 #endif //PACMAN_GHOST_H

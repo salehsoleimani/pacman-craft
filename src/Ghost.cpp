@@ -22,6 +22,20 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
 
     configSpeed();
 
+    configTimer();
+}
+
+void Ghost::configTimer() {
+    stateIndex = 0;
+    ghostState = GhostState::SCATTER;
+    unsigned level = context->getLevel();
+    if (level >= 5) stateTimer = {7, 20, 7, 20, 5, 20, 5};
+    else if (level >= 2) stateTimer = {7, 20, 7, 20, 5, 1033, 1.0f / 60};
+    else stateTimer = {7, 20, 7, 20, 5, 1037, 1.0f / 60};
+
+    frightenedTimer = 0;
+    scatterTimer = 0;
+    chaseTimer = 0;
 }
 
 void Ghost::configSpeed() {
@@ -62,32 +76,56 @@ void Ghost::render(sf::RenderTarget *target) {
 }
 
 void Ghost::changeState(GhostState state) {
-    if (ghostState != GhostState::DEAD)
-        ghostState = state;
-
-    switch (ghostState) {
+    if (state != GhostState::FRIGHTENED && state != GhostState::DEAD)
+        lastState = ghostState;
+    switch (state) {
         case Ghost::GhostState::FRIGHTENED:
+
             speed = frightenedSpeed;
-            if (animator->getCurrentAnimationId() != "frightened")
+            if (animator->getCurrentAnimationId() != "frightened") {
                 animator->setAnimation("frightened");
+                //rotate 180 degrees
+                reverseGhost();
+            }
             frightenedTimer -= frightenedDuration.asSeconds();
             break;
         case GhostState::CHASE:
+
+            stateIndex++;
+            scatterTimer = 0;
+            ghostState = GhostState::CHASE;
+
             speed = ghostSpeed;
             break;
         case GhostState::SCATTER:
             speed = ghostSpeed;
+
+            stateIndex++;
+            chaseTimer = 0;
+            ghostState = GhostState::SCATTER;
+
+            //rotate 180 degrees on entering scatter mode
+            reverseGhost();
             break;
         case GhostState::DEAD:
+
             //doubled score after eating each ghost
             context->raiseScore((++deadGhosts) * 200);
             //doubling speed when returning home
             speed = 6;
-            isDead = true;
+            ghostState = GhostState::DEAD;
             break;
         case GhostState::INIT:
             break;
     }
+    ghostState = state;
+}
+
+void Ghost::reverseGhost() {
+    sf::Vector2f temp = nextTile;
+    nextTile = lastTile;
+    lastTile = temp;
+    setDirection(lastDirection);
 }
 
 void Ghost::update(sf::Time dt) {
@@ -116,22 +154,32 @@ void Ghost::update(sf::Time dt) {
             break;
     }
 
+    //specify target tile and handle ghost state timer
     switch (ghostState) {
         case Ghost::GhostState::FRIGHTENED:
             //handling frightened state
             frightenedTimer += dt.asSeconds();
             if (frightenedTimer >= frightenedDuration.asSeconds()) {
+//                ghostState = lastState;
+
                 frightenedTimer = 0;
-                ghostState = GhostState::CHASE;
                 deadGhosts = 0;
                 speed = ghostSpeed;
             }
             break;
         case GhostState::CHASE:
-            targetTile = targetChase;
+            chaseTimer += dt.asSeconds();
+            if (chaseTimer >= stateTimer[stateIndex] && stateIndex < 6) {
+                changeState(GhostState::SCATTER);
+            } else
+                targetTile = targetChase;
             break;
         case GhostState::SCATTER:
-            targetTile = targetScatter;
+            scatterTimer += dt.asSeconds();
+            if (scatterTimer >= stateTimer[stateIndex] && stateIndex <= 6) {
+                changeState(GhostState::CHASE);
+            } else
+                targetTile = targetScatter;
             break;
         case GhostState::DEAD:
             targetTile = initialPosition;
@@ -144,15 +192,9 @@ void Ghost::update(sf::Time dt) {
     //if ghost places in fixed size grid item
     if (isInTile()) {
         //if ghost was in dead state, and now we reach home
-        if (nextTile == initialPosition / Dimensions::wallSize.x && ghostState != GhostState::INIT) {
-            ghostState = GhostState::INIT;
-            isDead = false;
+        if (nextTile == initialPosition / Dimensions::wallSize.x && ghostState == GhostState::DEAD) {
+            changeState(lastState);
             speed = ghostSpeed;
-        }
-
-        //whenever ghost gets out of the door, switch state
-        if (nextTile == doorPosition / Dimensions::wallSize.x && ghostState != GhostState::DEAD) {
-            ghostState = GhostState::CHASE;
         }
 
         //rounding relative position to fixed size grid item
@@ -239,7 +281,8 @@ void Ghost::checkPossibleRoutes() {
         possibleRoutes.push_back({Directions::RIGHT, {relativePosition.x + 1, relativePosition.y}});
     if (board[y][x - 1] != GameObject::ObjectType::WALL)
         possibleRoutes.push_back({Directions::LEFT, {relativePosition.x - 1, relativePosition.y}});
-    if (board[y + 1][x] != GameObject::ObjectType::WALL)
+    if (board[y + 1][x] != GameObject::ObjectType::WALL && //never return to ghost house unless ghost you are dead:)
+        (board[y + 1][x] != GameObject::ObjectType::BLINKY || ghostState == GhostState::DEAD))
         possibleRoutes.push_back({Directions::DOWN, {relativePosition.x, relativePosition.y + 1}});
     if (board[y - 1][x] != GameObject::ObjectType::WALL)
         possibleRoutes.push_back({Directions::UP, {relativePosition.x, relativePosition.y - 1}});
@@ -262,9 +305,9 @@ void Ghost::setPosition(const sf::Vector2f &pos) {
     ghost.setPosition(pos);
     updateRelativePosition();
     nextTile = relativePosition;
-    ghostState = GhostState::INIT;
+    speed = ghostSpeed;
     lastTile = {0, 0};
-    frightenedTimer = 0;
+    configTimer();
 }
 
 const sf::Vector2f &Ghost::getInitialPosition() const {
@@ -272,8 +315,10 @@ const sf::Vector2f &Ghost::getInitialPosition() const {
 }
 
 void Ghost::setDirection(Directions direction) {
+    lastDirection = this->direction;
     this->direction = direction;
 
+    bool isDead = ghostState == GhostState::DEAD;
 
     //setting animation
     switch (direction) {
