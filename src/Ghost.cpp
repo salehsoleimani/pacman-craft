@@ -152,14 +152,21 @@ void Ghost::update(sf::Time dt) {
 
         Direction nextDirection;
 
+        float grid = Dimensions::wallSize.x;
+        float x = initialPosition.x, y = initialPosition.y;
+
         //if ghost is dead choose the nearest position to ghosts house
         if (isDead) {
             std::sort(possibleRoutes.begin(), possibleRoutes.end(),
                       [&](const Direction &d1, const Direction &d2) -> bool {
-                          return sqrt(pow(d1.tile.x - initialPosition.x / Dimensions::wallSize.x, 2) +
-                                      pow(d1.tile.y - initialPosition.y / Dimensions::wallSize.x, 2)) <
-                                 sqrt(pow(d2.tile.x - initialPosition.x / Dimensions::wallSize.x, 2) +
-                                      pow(d2.tile.y - initialPosition.y / Dimensions::wallSize.x, 2));
+                          float side1 = sqrt(pow(d1.tile.x - x / grid, 2) +
+                                             pow(d1.tile.y - y / grid, 2));
+                          float side2 = sqrt(pow(d2.tile.x - x / grid, 2) +
+                                             pow(d2.tile.y - y / grid, 2));
+                          //if distance is same perform with directions priority
+                          if (side1 == side2)
+                              return d1.direction < d2.direction;
+                          return side1 < side2;
                       });
             // we want the smallest way which ghost doesn't have to turn back
             int index = 0;

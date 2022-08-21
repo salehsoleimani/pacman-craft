@@ -53,6 +53,8 @@ void ButtonView::eventHandler(const sf::Event &e, const sf::Vector2f &mousePosit
             case sf::Event::MouseButtonReleased:
                 onClick();
                 break;
+            default:
+                break;
         }
     } else {
         //if long click state lost (moving mouse to another area)

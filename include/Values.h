@@ -65,7 +65,7 @@ namespace Path {
 }
 
 enum class Directions {
-    INIT = 0, UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4
+    INIT = 0, UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4
 };
 
 #endif //PACMAN_VALUES_H
