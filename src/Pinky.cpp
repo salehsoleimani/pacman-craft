@@ -10,6 +10,27 @@ Pinky::Pinky(sf::Vector2f position, GameForm *context) : Ghost(position, context
     targetScatter = {Dimensions::wallSize.x, 4 * Dimensions::wallSize.x};
 }
 
-Pinky::~Pinky() {
+Pinky::~Pinky() = default;
 
+void Pinky::update(sf::Time dt) {
+
+    targetChase = context->getPacmanPosition();
+    switch (context->getPacmanDirection()) {
+        case Directions::UP:
+            targetChase = targetChase - sf::Vector2f{Dimensions::wallSize.x * 4, Dimensions::wallSize.y * 4};
+            break;
+        case Directions::DOWN:
+            targetChase = targetChase + sf::Vector2f{Dimensions::wallSize.x, Dimensions::wallSize.y * 4};
+            break;
+        case Directions::LEFT:
+            targetChase = targetChase - sf::Vector2f{Dimensions::wallSize.x * 4, Dimensions::wallSize.y};
+            break;
+        case Directions::RIGHT:
+            targetChase = targetChase + sf::Vector2f{Dimensions::wallSize.x * 4, Dimensions::wallSize.y};
+            break;
+        case Directions::INIT:
+            break;
+    }
+
+    Ghost::update(dt);
 }

@@ -60,6 +60,8 @@ unsigned Fruit::getPpt() const {
             return 1000;
         case FruitType::BANANA:
             return 2000;
+        default:
+            break;
     }
 }
 

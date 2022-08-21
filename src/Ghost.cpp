@@ -79,6 +79,7 @@ void Ghost::changeState(GhostState state) {
             speed = ghostSpeed;
             break;
         case GhostState::DEAD:
+            //doubled score after eating each ghost
             context->raiseScore((++deadGhosts) * 200);
             //doubling speed when returning home
             speed = 6;
@@ -127,6 +128,7 @@ void Ghost::update(sf::Time dt) {
             }
             break;
         case GhostState::CHASE:
+            targetTile = targetChase;
             break;
         case GhostState::SCATTER:
             targetTile = targetScatter;
@@ -149,8 +151,8 @@ void Ghost::update(sf::Time dt) {
         }
 
         //whenever ghost gets out of the door, switch state
-        if (nextTile == doorPosition / Dimensions::wallSize.x) {
-            ghostState = GhostState::SCATTER;
+        if (nextTile == doorPosition / Dimensions::wallSize.x && ghostState != GhostState::DEAD) {
+            ghostState = GhostState::CHASE;
         }
 
         //rounding relative position to fixed size grid item
@@ -302,4 +304,8 @@ void Ghost::setDirection(Directions direction) {
         case Directions::INIT:
             break;
     }
+}
+
+const Ghost::GhostType &Ghost::getGhost() const {
+    return ghostType;
 }

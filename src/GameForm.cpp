@@ -376,3 +376,13 @@ void GameForm::playSound(SoundTracks soundTrack) {
             break;
     }
 }
+
+const sf::Vector2f &GameForm::getPacmanPosition() const {
+    if (pacman)
+        return pacman->getPosition();
+}
+
+const Directions &GameForm::getPacmanDirection() const {
+    if (pacman)
+        return pacman->getDirection();
+}

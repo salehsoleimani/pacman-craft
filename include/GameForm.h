@@ -43,6 +43,9 @@ public:
 
     void playSound(SoundTracks);
 
+    const sf::Vector2f& getPacmanPosition() const;
+    const Directions& getPacmanDirection() const;
+
 private:
 
     void pollEvents(sf::Event &, sf::RenderWindow *) override;

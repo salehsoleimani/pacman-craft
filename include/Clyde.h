@@ -10,6 +10,8 @@ public:
 
     ~Clyde();
 
+    void update(sf::Time) override;
+
 };
 
 

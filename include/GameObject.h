@@ -20,7 +20,7 @@ public:
         INIT
     };
 
-    GameObject(sf::Vector2f position) : position(position) {}
+    explicit GameObject(sf::Vector2f position) : position(position) {}
 
     virtual ~GameObject() = default;
 

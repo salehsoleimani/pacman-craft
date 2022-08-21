@@ -9,6 +9,8 @@ public:
     Blinky(sf::Vector2f, GameForm *);
 
     ~Blinky();
+
+    void update(sf::Time) override;
 };
 
 

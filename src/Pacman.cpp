@@ -163,7 +163,6 @@ void Pacman::update(sf::Time dt) {
         } else
             lastMove = nextMove;
     }
-
 }
 
 bool Pacman::checkCollision(float x, float y) {
@@ -203,6 +202,14 @@ bool Pacman::checkCollision(float x, float y) {
 void Pacman::updateRelativePosition() {
     relativePosition = {pacman.getPosition().x / Dimensions::wallSize.x,
                         pacman.getPosition().y / Dimensions::wallSize.x};
+}
+
+const sf::Vector2f &Pacman::getPosition() const {
+    return pacman.getPosition();
+}
+
+const Directions &Pacman::getDirection() const {
+    return direction;
 }
 
 void Pacman::render(sf::RenderTarget *target) {

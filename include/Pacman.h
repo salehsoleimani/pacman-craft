@@ -11,13 +11,19 @@ class Pacman : public GameObject {
 public:
     Pacman(sf::Vector2f, GameForm *);
 
-    ~Pacman();
+    ~Pacman() override;
 
     void pollEvents(sf::Event &);
 
     void update(sf::Time) override;
 
     void render(sf::RenderTarget *) override;
+
+
+    const sf::Vector2f &getPosition() const;
+
+    const Directions &getDirection() const;
+
 
 private:
     //using game context and it's properties

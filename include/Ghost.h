@@ -9,6 +9,9 @@
 
 class Ghost : public GameObject {
 public:
+    enum class GhostType {
+        INIT, INKY, BLINKY, PINKY, CLYDE
+    };
     enum class GhostState {
         INIT, CHASE, SCATTER, FRIGHTENED, DEAD
     };
@@ -42,6 +45,8 @@ public:
 
     void setDirection(Directions direction);
 
+    const GhostType& getGhost() const;
+
 protected:
     //using game context and it's properties
     GameForm *context = nullptr;
@@ -52,9 +57,13 @@ protected:
     //randomly choose a route between possibleRoutes
     vector<Direction> possibleRoutes;
 
+    //setting target tile for chase and scatter mode
     sf::Vector2f targetScatter;
+    sf::Vector2f targetChase;
 
+    GhostType ghostType = GhostType::INIT;
 
+    sf::Sprite ghost;
 private:
     void configSpeed();
 
@@ -71,7 +80,6 @@ private:
     sf::Vector2f lastTile;
     sf::Vector2f targetTile;
     sf::Vector2f initialPosition;
-    sf::Sprite ghost;
     bool isDead = false;
     float maxSpeed = 3;
     float speed;
