@@ -8,7 +8,7 @@ class Clyde : public Ghost {
 public:
     Clyde(sf::Vector2f, GameForm *);
 
-    ~Clyde();
+    ~Clyde() override;
 
     void update(sf::Time) override;
 

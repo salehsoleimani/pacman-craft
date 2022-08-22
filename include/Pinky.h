@@ -8,7 +8,7 @@ class Pinky : public Ghost {
 public:
     Pinky(sf::Vector2f, GameForm *);
 
-    ~Pinky();
+    ~Pinky() override;
 
     void update(sf::Time) override;
 };

@@ -26,8 +26,8 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
 }
 
 void Ghost::configTimer() {
-    stateIndex = 0;
-    ghostState = GhostState::SCATTER;
+    stateIndex = -1;
+    ghostState = GhostState::INIT;
     unsigned level = context->getLevel();
     if (level >= 5) stateTimer = {7, 20, 7, 20, 5, 20, 5};
     else if (level >= 2) stateTimer = {7, 20, 7, 20, 5, 1033, 1.0f / 60};
@@ -76,8 +76,10 @@ void Ghost::render(sf::RenderTarget *target) {
 }
 
 void Ghost::changeState(GhostState state) {
+    //don't panic if you are dead:)
+    if (state == GhostState::FRIGHTENED && ghostState == GhostState::DEAD) return;
     //we need lastState to switch to initial mode after frightened or dead mode are done
-    if (state != GhostState::FRIGHTENED && state != GhostState::DEAD)
+    if (state != GhostState::FRIGHTENED && state != GhostState::DEAD && state != GhostState::INIT)
         lastState = ghostState;
 
     this->ghostState = state;
@@ -162,22 +164,23 @@ void Ghost::update(sf::Time dt) {
             break;
         case GhostState::CHASE:
             chaseTimer += dt.asSeconds();
-            if (chaseTimer >= stateTimer[stateIndex] && stateIndex < 6) {
+            if (chaseTimer >= stateTimer[stateIndex] && stateIndex < 6)
                 changeState(GhostState::SCATTER);
-            } else
+            else
                 targetTile = targetChase;
             break;
         case GhostState::SCATTER:
             scatterTimer += dt.asSeconds();
-            if (scatterTimer >= stateTimer[stateIndex] && stateIndex <= 6) {
+            if (scatterTimer >= stateTimer[stateIndex] && stateIndex <= 6)
                 changeState(GhostState::CHASE);
-            } else
+            else
                 targetTile = targetScatter;
             break;
         case GhostState::DEAD:
             targetTile = initialPosition;
             break;
         case GhostState::INIT:
+            //game starts with initial state so that ghosts exit the door
             targetTile = doorPosition;
             break;
     }
@@ -188,6 +191,11 @@ void Ghost::update(sf::Time dt) {
         if (nextTile == initialPosition / Dimensions::wallSize.x && ghostState == GhostState::DEAD) {
             changeState(lastState);
             speed = ghostSpeed;
+        }
+
+        //if pacman gets to door
+        if (lastTile == doorPosition / Dimensions::wallSize.x && ghostState == GhostState::INIT) {
+            changeState(GhostState::SCATTER);
         }
 
         //rounding relative position to fixed size grid item
@@ -238,7 +246,6 @@ void Ghost::update(sf::Time dt) {
 
 }
 
-
 bool Ghost::isInTile() {
     updateRelativePosition();
     //approximately placed in tile
@@ -263,7 +270,6 @@ bool Ghost::isInTile() {
     }
     return false;
 }
-
 
 void Ghost::checkPossibleRoutes() {
     //check if neighbour tiles are free

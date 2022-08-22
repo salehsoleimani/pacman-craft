@@ -8,7 +8,7 @@ class Blinky : public Ghost {
 public:
     Blinky(sf::Vector2f, GameForm *);
 
-    ~Blinky();
+    ~Blinky() override;
 
     void update(sf::Time) override;
 };
