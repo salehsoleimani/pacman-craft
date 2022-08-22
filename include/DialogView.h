@@ -6,7 +6,7 @@
 #include <functional>
 #include <sstream>
 
-//inherits a rectangleshape as it's transparent background
+//inherits a rectangle-shape as it's transparent background
 class DialogView : public sf::RectangleShape {
 public:
     DialogView();

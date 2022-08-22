@@ -28,6 +28,8 @@ Fruit::Fruit(sf::Vector2f position, FruitType fruitType) : Snack(position), frui
         case FruitType::BANANA:
             texturePath += "banana.png";
             break;
+        default:
+            break;
     }
 
     fruitTexture = new sf::Texture;

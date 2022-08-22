@@ -266,7 +266,7 @@ void GameForm::render(sf::RenderWindow *window) {
     for (auto snack: snacks) snack->render(window);
     for (auto ghost: ghosts) ghost->render(window);
     for (auto heart: hearts) window->draw(heart);
-    if(pacman) pacman->render(window);
+    if (pacman) pacman->render(window);
     window->draw(btnBackIc);
     window->draw(btnSound);
 }
@@ -378,11 +378,9 @@ void GameForm::playSound(SoundTracks soundTrack) {
 }
 
 const sf::Vector2f &GameForm::getPacmanPosition() const {
-    if (pacman)
-        return pacman->getPosition();
+    return pacman->getPosition();
 }
 
 const Directions &GameForm::getPacmanDirection() const {
-    if (pacman)
-        return pacman->getDirection();
+    return pacman->getDirection();
 }

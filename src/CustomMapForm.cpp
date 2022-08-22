@@ -5,7 +5,6 @@ CustomMapForm::CustomMapForm(Application &context) : Form("../res/custom_map.txt
     initTexts();
     initButtons();
 
-    //drawing blank fileds is common for all forms
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             if (board[i][j] == GameObject::ObjectType::BLANK) {
@@ -32,8 +31,9 @@ void CustomMapForm::initButtons() {
         File input("../res/custom_map.txt");
         input.open(ios::in);
 
-        int index = 0;
+        bool isPacmanDrawn = false;
 
+        int index = 0;
         for (int i = 0; i < 26; ++i) {
             string line = input.getline();
             for (int j = 0; j < line.size(); ++j) {
@@ -46,6 +46,7 @@ void CustomMapForm::initButtons() {
                             break;
                         case GameObject::ObjectType::PACMAN:
                             output << 'A';
+                            isPacmanDrawn = true;
                             break;
                         case GameObject::ObjectType::PELLET:
                             output << 'F';
@@ -85,12 +86,14 @@ void CustomMapForm::initButtons() {
         output.close();
         input.close();
 
-        getApplicationContext().pushForm(new GameForm(getApplicationContext(), "../res/new_map.txt"));
-        //pop main menu
-        getApplicationContext().resetGame();
-        //pop the custom game itself
-        getApplicationContext().resetGame();
-        getApplicationContext().getDialog().hide();
+        //don't create the map if we have no pacman
+        if (isPacmanDrawn) {
+            getApplicationContext().pushForm(new GameForm(getApplicationContext(), "../res/new_map.txt"));
+            //pop main menu
+            getApplicationContext().resetGame();
+            //pop the custom game itself
+            getApplicationContext().resetGame();
+        }
     });
 }
 
