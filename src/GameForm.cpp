@@ -280,7 +280,7 @@ void GameForm::lose() {
         delete pacman;
         pacman = new Pacman(pacmanPosition, this);
 
-        for (auto ghost: ghosts) ghost->setPosition(ghost->getInitialPosition());
+        for (auto ghost: ghosts) ghost->setPosition(ghost->getInitialPosition(), true);
 
         score -= 20;
     } else {

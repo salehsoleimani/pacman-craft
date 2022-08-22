@@ -41,7 +41,7 @@ public:
 
     const sf::Vector2f &getInitialPosition() const;
 
-    void setPosition(const sf::Vector2f &pos);
+    void setPosition(const sf::Vector2f &pos, bool isPacmanDead = false);
 
     void setDirection(Directions direction);
 

@@ -300,13 +300,17 @@ bool Ghost::isColided(const sf::Rect<float> &rect) const {
     return ghost.getGlobalBounds().intersects(rect);
 }
 
-void Ghost::setPosition(const sf::Vector2f &pos) {
+void Ghost::setPosition(const sf::Vector2f &pos, bool isPacmanDead) {
     ghost.setPosition(pos);
     updateRelativePosition();
     nextTile = relativePosition;
     speed = ghostSpeed;
     lastTile = {0, 0};
-    configTimer();
+    //if pacman is dead, and we haven't reached to next level, don't reset timers!
+    if (!isPacmanDead)
+        configTimer();
+    else
+        ghostState = GhostState::INIT;
 }
 
 const sf::Vector2f &Ghost::getInitialPosition() const {
