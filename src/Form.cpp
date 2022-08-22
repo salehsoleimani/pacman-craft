@@ -54,6 +54,7 @@ void Form::initGrid() {
                     board[i][j] = GameObject::ObjectType::HEART;
                     break;
                 case 'Z':
+                    board[i][j] = GameObject::ObjectType::BLANK;
                 default:
                     break;
             }

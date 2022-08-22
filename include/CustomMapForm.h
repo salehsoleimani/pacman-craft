@@ -9,6 +9,7 @@
 #include "GameForm.h"
 #include "OptionsForm.h"
 #include "DialogView.h"
+#include "BlankTile.h"
 
 class CustomMapForm : public Form {
 public:
@@ -17,6 +18,10 @@ public:
     ~CustomMapForm();
 
 private:
+    sf::Keyboard::Key lastEnteredKey;
+
+    vector<BlankTile *> blanks;
+
     TextView *txtGuide;
 
     ButtonView *btnPlay;

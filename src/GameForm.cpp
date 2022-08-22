@@ -6,7 +6,7 @@
 #include "Clyde.h"
 #include "Pinky.h"
 
-GameForm::GameForm(Application &context,string mapFile) : Form(mapFile, context) {
+GameForm::GameForm(Application &context, string mapFile) : Form(mapFile, context) {
     initGame();
     initSprites();
     initSounds();
@@ -142,8 +142,7 @@ GameForm::~GameForm() {
 }
 
 void GameForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
-    sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window).x,
-                                              sf::Mouse::getPosition((*window)).y);
+    sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window));
     switch (event.type) {
         case sf::Event::MouseButtonReleased:
             if (btnSound.getGlobalBounds().contains(mousePosition)) {

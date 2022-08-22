@@ -36,46 +36,39 @@ void MainForm::initImages() {
 }
 
 void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
-    switch (event.type) {
-        case sf::Event::Closed:
-            window->close();
-            break;
-        case sf::Event::KeyPressed:
-            switch (event.key.code) {
-                //switching between menu items
-                case sf::Keyboard::Enter:
-                    switch (menuView->getSelectedItemIndex()) {
-                        //resume game
-                        case 0:
-                            getApplicationContext().popForm();
-                            break;
-                            //design map
-                        case 1:
-                            //map form replaces the game
-                            getApplicationContext().pushForm(new CustomMapForm(getApplicationContext()));
-                            break;
-                            //options
-                        case 2:
-                            getApplicationContext().pushForm(new OptionsForm(getApplicationContext()));
-                            break;
-                            //quit
-                        case 3:
-                            window->close();
-                            break;
-                    }
-                    break;
-                case sf::Keyboard::Down:
-                    menuView->selectItem(menuView->getSelectedItemIndex() + 1);
-                    break;
-                case sf::Keyboard::Up:
-                    menuView->selectItem(menuView->getSelectedItemIndex() - 1);
-                    break;
-                default:
-                    break;
-            }
-        default:
-            break;
-    }
+    if (event.type == sf::Event::KeyPressed)
+        switch (event.key.code) {
+            //switching between menu items
+            case sf::Keyboard::Enter:
+                switch (menuView->getSelectedItemIndex()) {
+                    //resume game
+                    case 0:
+                        getApplicationContext().popForm();
+                        break;
+                        //design map
+                    case 1:
+                        //map form replaces the game
+                        getApplicationContext().pushForm(new CustomMapForm(getApplicationContext()));
+                        break;
+                        //options
+                    case 2:
+                        getApplicationContext().pushForm(new OptionsForm(getApplicationContext()));
+                        break;
+                        //quit
+                    case 3:
+                        window->close();
+                        break;
+                }
+                break;
+            case sf::Keyboard::Down:
+                menuView->selectItem(menuView->getSelectedItemIndex() + 1);
+                break;
+            case sf::Keyboard::Up:
+                menuView->selectItem(menuView->getSelectedItemIndex() - 1);
+                break;
+            default:
+                break;
+        }
 }
 
 void MainForm::update(sf::RenderWindow *window, const sf::Time &dt) {

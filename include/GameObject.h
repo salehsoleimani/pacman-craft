@@ -17,6 +17,7 @@ public:
         PINKY,
         HEART,
         EMPTY,
+        BLANK,
         INIT
     };
 
