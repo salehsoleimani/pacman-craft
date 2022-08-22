@@ -13,15 +13,17 @@ public:
 
     void render(sf::RenderTarget *) override;
 
-    void setObjectType(const ObjectType &objectType);
+    void setObjectType(ObjectType objectType);
 
     const sf::Rect<float> &getGlobalBounds() const;
 
+    ObjectType getObjectType();
+
+    ObjectType objectType = GameObject::ObjectType::BLANK;
 private:
     sf::RectangleShape *wall;
     sf::Sprite tileSprite;
     sf::Texture *texture;
-    ObjectType objectType = GameObject::ObjectType::INIT;
 };
 
 

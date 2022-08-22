@@ -3,6 +3,8 @@
 #include <iostream>
 
 BlankTile::BlankTile(sf::Vector2f position) : GameObject(position) {
+    this->objectType = GameObject::ObjectType::BLANK;
+
     wall = new sf::RectangleShape;
     wall->setPosition(position);
     //set anchor to center
@@ -36,11 +38,15 @@ const sf::FloatRect &BlankTile::getGlobalBounds() const {
     return wall->getGlobalBounds();
 }
 
-void BlankTile::setObjectType(const ObjectType &objectType) {
-    //switching blank tile types
+GameObject::ObjectType BlankTile::getObjectType(){
+    return objectType;
+}
+
+//switching blank tile types
+void BlankTile::setObjectType(ObjectType objectType) {
 
     //delete previous sprite if clicked again and switched the tile mode
-    if (this->objectType != ObjectType::INIT && objectType != this->objectType) {
+    if (this->objectType != ObjectType::EMPTY && objectType != this->objectType && this->objectType != ObjectType::BLANK ) {
         texture->loadFromFile("../res/empty.png", {0, 0, 30, 30});
         tileSprite.setTexture(*texture);
     }

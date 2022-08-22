@@ -8,9 +8,10 @@ CustomMapForm::CustomMapForm(Application &context) : Form("../res/custom_map.txt
     //drawing blank fileds is common for all forms
     for (int i = 0; i < 26; ++i) {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
-            if (board[i][j] == GameObject::ObjectType::BLANK)
+            if (board[i][j] == GameObject::ObjectType::BLANK) {
                 blanks.push_back(new BlankTile({j * Dimensions::wallSize.x,
                                                 i * Dimensions::wallSize.y - 90}));
+            }
         }
     }
 }
@@ -23,20 +24,80 @@ CustomMapForm::~CustomMapForm() {
 
 void CustomMapForm::initButtons() {
     btnPlay = new ButtonView("play", {463, 679}, ButtonView::ButtonSize::SMALL, [&]() -> void {
-        getApplicationContext().pushForm(new GameForm(getApplicationContext(),"../res/custom_map.txt"));
+
+        File output("../res/new_map.txt");
+        output.open(ios::out);
+
+
+        File input("../res/custom_map.txt");
+        input.open(ios::in);
+
+        int index = 0;
+
+        for (int i = 0; i < 26; ++i) {
+            string line = input.getline();
+            for (int j = 0; j < line.size(); ++j) {
+                GameObject::ObjectType objectType = blanks[i][j].objectType;
+                objectType = objectType;
+                if (line[j] == 'Z') {
+                    switch (blanks[index]->getObjectType()) {
+                        case GameObject::ObjectType::WALL:
+                            output << 'W';
+                            break;
+                        case GameObject::ObjectType::PACMAN:
+                            output << 'A';
+                            break;
+                        case GameObject::ObjectType::PELLET:
+                            output << 'F';
+                            break;
+                        case GameObject::ObjectType::PELLET_POWER:
+                            output << 'S';
+                            break;
+                        case GameObject::ObjectType::INKY:
+                            output << 'I';
+                            break;
+                        case GameObject::ObjectType::BLINKY:
+                            output << 'B';
+                            break;
+                        case GameObject::ObjectType::CLYDE:
+                            output << 'C';
+                            break;
+                        case GameObject::ObjectType::PINKY:
+                            output << 'P';
+                            break;
+                        case GameObject::ObjectType::HEART:
+                            output << 'H';
+                            break;
+                        case GameObject::ObjectType::EMPTY:
+                        case GameObject::ObjectType::BLANK:
+                        case GameObject::ObjectType::INIT:
+                            output << 'E';
+                            break;
+                    }
+                    index++;
+                } else {
+                    output << line[j];
+                }
+            }
+            if (i != 25)
+                output << "\n";
+        }
+        output.close();
+        input.close();
+
+        getApplicationContext().pushForm(new GameForm(getApplicationContext(), "../res/new_map.txt"));
         //pop main menu
         getApplicationContext().resetGame();
         //pop the custom game itself
         getApplicationContext().resetGame();
-        getApplicationContext().currentForm()->setGameBoard(board);
         getApplicationContext().getDialog().hide();
     });
 }
 
 void CustomMapForm::initTexts() {
     txtGuide = new TextView("-I inky    -P pinky    -C clyde\n"
-                            "-W wall  -P power   -B blinky  \n"
-                            "-A pacman                     -Z undo", {30, 684});
+                            "-W wall  -S power   -B blinky  \n"
+                            "-A pacman   -P pellet   -Z undo", {30, 684});
     txtGuide->setCharacterSize(Font::smallFontSize);
     txtGuide->setFillColor(sf::Color::White);
 }

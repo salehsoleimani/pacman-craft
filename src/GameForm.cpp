@@ -205,7 +205,8 @@ void GameForm::update(sf::RenderWindow *window, const sf::Time &dt) {
     }
 
     //updating other views
-    pacman->update(dt);
+    if (pacman)
+        pacman->update(dt);
 
     updateFruits(dt);
 
@@ -265,7 +266,7 @@ void GameForm::render(sf::RenderWindow *window) {
     for (auto snack: snacks) snack->render(window);
     for (auto ghost: ghosts) ghost->render(window);
     for (auto heart: hearts) window->draw(heart);
-    pacman->render(window);
+    if(pacman) pacman->render(window);
     window->draw(btnBackIc);
     window->draw(btnSound);
 }

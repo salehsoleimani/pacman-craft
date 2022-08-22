@@ -21,6 +21,7 @@ private:
     sf::Keyboard::Key lastEnteredKey;
 
     vector<BlankTile *> blanks;
+//    array<array<BlankTile *, 19>, 26> blanks;
 
     TextView *txtGuide;
 

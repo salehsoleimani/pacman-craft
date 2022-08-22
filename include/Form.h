@@ -36,10 +36,6 @@ public:
 
     Application &getApplicationContext();
 
-    void setGameBoard(array<array<GameObject::ObjectType, 19>, 26> &board) {
-        this->board = board;
-    }
-
 private:
     Application &context;
 
