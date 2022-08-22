@@ -6,7 +6,7 @@
 #include "Clyde.h"
 #include "Pinky.h"
 
-GameForm::GameForm(Application &context) : Form("../res/map.txt", context) {
+GameForm::GameForm(Application &context,string mapFile) : Form(mapFile, context) {
     initGame();
     initSprites();
     initSounds();

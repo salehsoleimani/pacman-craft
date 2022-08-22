@@ -26,7 +26,7 @@ public:
     };
 
     //initializes base class context property
-    GameForm(Application &);
+    GameForm(Application &, string mapFile = "../res/map.txt");
 
     ~GameForm();
 
@@ -43,8 +43,9 @@ public:
 
     void playSound(SoundTracks);
 
-    const sf::Vector2f& getPacmanPosition() const;
-    const Directions& getPacmanDirection() const;
+    const sf::Vector2f &getPacmanPosition() const;
+
+    const Directions &getPacmanDirection() const;
 
 private:
 

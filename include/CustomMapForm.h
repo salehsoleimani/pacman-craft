@@ -12,28 +12,24 @@
 
 class CustomMapForm : public Form {
 public:
-    CustomMapForm(Application&);
+    CustomMapForm(Application &);
+
     ~CustomMapForm();
+
 private:
-    MenuView *menuView;
+    TextView *txtGuide;
 
-    TextView *txtCredits;
-
-    sf::Texture logoSrc;
-    sf::RectangleShape *logoIV;
+    ButtonView *btnPlay;
 
     void pollEvents(sf::Event &, sf::RenderWindow *) override;
 
-    void update(sf::RenderWindow *,const sf::Time&) override;
+    void update(sf::RenderWindow *, const sf::Time &) override;
 
     void render(sf::RenderWindow *) override;
 
     void initTexts();
 
-    void initMenuView();
-
-    void initImages();
+    void initButtons();
 };
-
 
 #endif //PACMAN_CUSTOMMAPFORM_H

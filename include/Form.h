@@ -18,7 +18,7 @@ class Application;
 //each application state
 class Form {
 public:
-    Form(string, Application &);
+    Form(string, Application &, float offset = 0);
 
     virtual ~Form();
 
@@ -43,6 +43,9 @@ private:
     void initGrid();
 
     vector<Wall *> walls;
+
+    //to set offset to map
+    float offset = 0;
 
     //initizalized by class constructor
     string mapFileName;

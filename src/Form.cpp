@@ -1,7 +1,7 @@
 #include "Form.h"
 #include "GameObject.h"
 
-Form::Form(string mapFileName, Application &context) : mapFileName(mapFileName), context(context) {
+Form::Form(string mapFileName, Application &context,float offset) : mapFileName(mapFileName), context(context),offset(offset) {
     initGrid();
 }
 
@@ -53,6 +53,9 @@ void Form::initGrid() {
                 case 'H':
                     board[i][j] = GameObject::ObjectType::HEART;
                     break;
+                case 'Z':
+                default:
+                    break;
             }
         }
     }
@@ -62,7 +65,7 @@ void Form::initGrid() {
         for (int j = 0; j < Dimensions::WALL_COL; ++j) {
             if (board[i][j] == GameObject::ObjectType::WALL)
                 walls.push_back(new Wall({j * Dimensions::wallSize.x,
-                                          i * Dimensions::wallSize.y}));
+                                          i * Dimensions::wallSize.y + offset}));
         }
     }
 }

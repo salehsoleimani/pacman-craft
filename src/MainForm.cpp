@@ -51,6 +51,8 @@ void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
                             break;
                             //design map
                         case 1:
+                            //map form replaces the game
+                            getApplicationContext().pushForm(new CustomMapForm(getApplicationContext()));
                             break;
                             //options
                         case 2:

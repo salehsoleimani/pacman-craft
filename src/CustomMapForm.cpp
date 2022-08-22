@@ -1,86 +1,49 @@
-#include "MainForm.h"
+#include "CustomMapForm.h"
 
-MainForm::MainForm(Application &context) : Form("../res/map_menu.txt", context) {
+CustomMapForm::CustomMapForm(Application &context) : Form("../res/custom_map.txt", context, -90) {
     initTexts();
-    initMenuView();
-    initImages();
+    initButtons();
 }
 
-MainForm::~MainForm() {
-    delete menuView;
-    delete logoIV;
-    delete txtCredits;
+CustomMapForm::~CustomMapForm() {
+    delete txtGuide;
+    delete btnPlay;
 }
 
-void MainForm::initTexts() {
-    txtCredits = new TextView("made with <3 by saleh", {155, 629});
-    txtCredits->setCharacterSize(Font::smallFontSize);
-    txtCredits->setFillColor(Colors::colorCyan);
+void CustomMapForm::initButtons() {
+    btnPlay = new ButtonView("play", {463, 679}, ButtonView::ButtonSize::SMALL, [&]() -> void {
+        getApplicationContext().pushForm(new GameForm(getApplicationContext(), "../res/custom_map.txt"));
+        //pop main menu
+        getApplicationContext().resetGame();
+        //pop the custom game itself
+        getApplicationContext().resetGame();
+        getApplicationContext().getDialog().hide();
+    });
 }
 
-void MainForm::initMenuView() {
-    menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 325));
-    menuView->pushItem("continue");
-    menuView->pushItem("Design map");
-    menuView->pushItem("options");
-    menuView->pushItem("quit");
-    menuView->selectItem(0);
+void CustomMapForm::initTexts() {
+    txtGuide = new TextView("key codes:\n"
+                            "-W wall         -F pellet\n"
+                            "-P power        ", {30, 684});
+    txtGuide->setCharacterSize(Font::smallFontSize);
+    txtGuide->setFillColor(sf::Color::White);
 }
 
-void MainForm::initImages() {
-    logoIV = new sf::RectangleShape({385, 91});
-    logoIV->setOrigin(logoIV->getLocalBounds().width / 2, 0);
-    logoIV->setPosition(Config::videoMode.width / 2, 187);
-    if (!logoSrc.loadFromFile("../res/images/logo.png")) throw runtime_error("Cannot open resource");
-    logoIV->setTexture(&logoSrc);
-}
-
-void MainForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
+void CustomMapForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
+    btnPlay->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*window)));
     switch (event.type) {
         case sf::Event::Closed:
             window->close();
             break;
-        case sf::Event::KeyPressed:
-            switch (event.key.code) {
-                //switching between menu items
-                case sf::Keyboard::Enter:
-                    switch (menuView->getSelectedItemIndex()) {
-                        //resume game
-                        case 0:
-                            getApplicationContext().popForm();
-                            break;
-                            //design map
-                        case 1:
-                            break;
-                            //options
-                        case 2:
-                            getApplicationContext().pushForm(new OptionsForm(getApplicationContext()));
-                            break;
-                            //quit
-                        case 3:
-                            window->close();
-                            break;
-                    }
-                    break;
-                case sf::Keyboard::Down:
-                    menuView->selectItem(menuView->getSelectedItemIndex() + 1);
-                    break;
-                case sf::Keyboard::Up:
-                    menuView->selectItem(menuView->getSelectedItemIndex() - 1);
-                    break;
-                default:
-                    break;
-            }
         default:
             break;
     }
 }
 
-void MainForm::update(sf::RenderWindow *window, const sf::Time &dt) {
+void CustomMapForm::update(sf::RenderWindow *window, const sf::Time &dt) {
 }
 
-void MainForm::render(sf::RenderWindow *window) {
-    menuView->render(window);
-    txtCredits->render(window);
-    window->draw(*logoIV);
+void CustomMapForm::render(sf::RenderWindow *window) {
+    txtGuide->render(window);
+    btnPlay->render(window);
 }

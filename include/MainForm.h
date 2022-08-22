@@ -8,6 +8,7 @@
 #include "MenuView.h"
 #include "GameForm.h"
 #include "OptionsForm.h"
+#include "CustomMapForm.h"
 #include "DialogView.h"
 
 class MainForm : public Form {
