@@ -76,11 +76,14 @@ void Ghost::render(sf::RenderTarget *target) {
 }
 
 void Ghost::changeState(GhostState state) {
+    //we need lastState to switch to initial mode after frightened or dead mode are done
     if (state != GhostState::FRIGHTENED && state != GhostState::DEAD)
         lastState = ghostState;
+
+    this->ghostState = state;
+
     switch (state) {
         case Ghost::GhostState::FRIGHTENED:
-
             speed = frightenedSpeed;
             if (animator->getCurrentAnimationId() != "frightened") {
                 animator->setAnimation("frightened");
@@ -90,35 +93,26 @@ void Ghost::changeState(GhostState state) {
             frightenedTimer -= frightenedDuration.asSeconds();
             break;
         case GhostState::CHASE:
-
             stateIndex++;
             scatterTimer = 0;
-            ghostState = GhostState::CHASE;
-
             speed = ghostSpeed;
             break;
         case GhostState::SCATTER:
-            speed = ghostSpeed;
-
             stateIndex++;
+            speed = ghostSpeed;
             chaseTimer = 0;
-            ghostState = GhostState::SCATTER;
-
             //rotate 180 degrees on entering scatter mode
             reverseGhost();
             break;
         case GhostState::DEAD:
-
             //doubled score after eating each ghost
             context->raiseScore((++deadGhosts) * 200);
             //doubling speed when returning home
             speed = 6;
-            ghostState = GhostState::DEAD;
             break;
         case GhostState::INIT:
             break;
     }
-    ghostState = state;
 }
 
 void Ghost::reverseGhost() {
@@ -160,8 +154,7 @@ void Ghost::update(sf::Time dt) {
             //handling frightened state
             frightenedTimer += dt.asSeconds();
             if (frightenedTimer >= frightenedDuration.asSeconds()) {
-//                ghostState = lastState;
-
+                changeState(lastState);
                 frightenedTimer = 0;
                 deadGhosts = 0;
                 speed = ghostSpeed;

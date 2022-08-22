@@ -108,18 +108,18 @@ void GameForm::initSprites() {
                     snack->setRelativePosition(sf::Vector2f(sf::Vector2i{j, i}));
                     snacks.push_back(snack);
                     break;
-//                case GameObject::ObjectType::INKY:
-//                    ghosts.push_back(new Inky(position, this));
-//                    break;
+                case GameObject::ObjectType::INKY:
+                    ghosts.push_back(new Inky(position, this));
+                    break;
                 case GameObject::ObjectType::BLINKY:
                     ghosts.push_back(new Blinky(position, this));
                     break;
-//                case GameObject::ObjectType::CLYDE:
-//                    ghosts.push_back(new Clyde(position, this));
-//                    break;
-//                case GameObject::ObjectType::PINKY:
-//                    ghosts.push_back(new Pinky(position, this));
-//                    break;
+                case GameObject::ObjectType::CLYDE:
+                    ghosts.push_back(new Clyde(position, this));
+                    break;
+                case GameObject::ObjectType::PINKY:
+                    ghosts.push_back(new Pinky(position, this));
+                    break;
                 default:
                     break;
             }
@@ -380,11 +380,9 @@ void GameForm::playSound(SoundTracks soundTrack) {
 const sf::Vector2f &GameForm::getPacmanPosition() const {
     if (pacman)
         return pacman->getPosition();
-    return {0,0};
 }
 
 const Directions &GameForm::getPacmanDirection() const {
     if (pacman)
         return pacman->getDirection();
-    return Directions::INIT;
 }
