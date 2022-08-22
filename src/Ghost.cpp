@@ -188,15 +188,14 @@ void Ghost::update(sf::Time dt) {
     //if ghost places in fixed size grid item
     if (isInTile()) {
         //if ghost was in dead state, and now we reach home
-        if (nextTile == initialPosition / Dimensions::wallSize.x && ghostState == GhostState::DEAD) {
+        if (lastTile == initialPosition / Dimensions::wallSize.x && ghostState == GhostState::DEAD) {
             changeState(lastState);
             speed = ghostSpeed;
         }
 
         //if pacman gets to door
-        if (lastTile == doorPosition / Dimensions::wallSize.x && ghostState == GhostState::INIT) {
+        if (lastTile == doorPosition / Dimensions::wallSize.x && ghostState == GhostState::INIT)
             changeState(GhostState::SCATTER);
-        }
 
         //rounding relative position to fixed size grid item
         if (relativePosition != nextTile) {

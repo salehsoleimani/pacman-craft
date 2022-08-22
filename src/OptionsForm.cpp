@@ -82,7 +82,7 @@ void OptionsForm::render(sf::RenderWindow *window) {
 }
 
 void OptionsForm::initMenuView() {
-    menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 355));
+    menuView = new MenuView(sf::Vector2f(Config::videoMode.width / 2.f, 325));
     menuView->pushItem("reset");
     menuView->pushItem("clear score");
     menuView->pushItem("back to menu");
@@ -92,7 +92,7 @@ void OptionsForm::initMenuView() {
 void OptionsForm::initImages() {
     logoIV = new sf::RectangleShape({385, 91});
     logoIV->setOrigin(logoIV->getLocalBounds().width / 2, 0);
-    logoIV->setPosition(Config::videoMode.width / 2, 208);
+    logoIV->setPosition(Config::videoMode.width / 2, 187);
     if (!logoSrc.loadFromFile("../res/images/logo.png")) throw runtime_error("Cannot open resource");
     logoIV->setTexture(&logoSrc);
 }
