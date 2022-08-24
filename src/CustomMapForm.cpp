@@ -110,7 +110,7 @@ void CustomMapForm::pollEvents(sf::Event &event, sf::RenderWindow *window) {
     btnPlay->eventHandler(event, sf::Vector2f(sf::Mouse::getPosition(*window)));
 
     switch (event.type) {
-        case sf::Event::MouseButtonPressed: {
+        case sf::Event::MouseButtonReleased :{
             GameObject::ObjectType temp = GameObject::ObjectType::INIT;
 
             switch (lastEnteredKey) {

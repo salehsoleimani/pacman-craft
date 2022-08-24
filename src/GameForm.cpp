@@ -6,7 +6,8 @@
 #include "Clyde.h"
 #include "Pinky.h"
 
-GameForm::GameForm(Application &context, string mapFile) : Form(mapFile, context) {
+GameForm::GameForm(Application &context, string mapFile, bool useTheDoor) : Form(mapFile, context),
+                                                                            useTheDoor(useTheDoor) {
     initGame();
     initSprites();
     initSounds();
@@ -109,16 +110,16 @@ void GameForm::initSprites() {
                     snacks.push_back(snack);
                     break;
                 case GameObject::ObjectType::INKY:
-                    ghosts.push_back(new Inky(position, this));
+                    ghosts.push_back(new Inky(position, this, useTheDoor));
                     break;
                 case GameObject::ObjectType::BLINKY:
-                    ghosts.push_back(new Blinky(position, this));
+                    ghosts.push_back(new Blinky(position, this,useTheDoor));
                     break;
                 case GameObject::ObjectType::CLYDE:
-                    ghosts.push_back(new Clyde(position, this));
+                    ghosts.push_back(new Clyde(position, this,useTheDoor));
                     break;
                 case GameObject::ObjectType::PINKY:
-                    ghosts.push_back(new Pinky(position, this));
+                    ghosts.push_back(new Pinky(position, this,useTheDoor));
                     break;
                 default:
                     break;

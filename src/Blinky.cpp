@@ -1,6 +1,6 @@
 #include "Blinky.h"
 
-Blinky::Blinky(sf::Vector2f position, GameForm *context) : Ghost(position, context) {
+Blinky::Blinky(sf::Vector2f position, GameForm *context,bool useTheDoor) : Ghost(position, context,useTheDoor) {
     ghostType = GhostType::BLINKY;
 
     animator->add("right", sf::milliseconds(300), "../res/sprites/blinky.png", sf::Vector2i(120, 0), 2);

@@ -1,7 +1,7 @@
 #include "Inky.h"
 #include "Blinky.h"
 
-Inky::Inky(sf::Vector2f position, GameForm *context) : Ghost(position, context) {
+Inky::Inky(sf::Vector2f position, GameForm *context,bool useTheDoor) : Ghost(position, context,useTheDoor) {
     ghostType = GhostType::INKY;
 
     animator->add("right", sf::milliseconds(300), "../res/sprites/inky.png", sf::Vector2i(120, 0), 2);

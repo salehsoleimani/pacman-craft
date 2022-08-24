@@ -6,7 +6,7 @@
 //customizable based on Pinky's special behaviors
 class Pinky : public Ghost {
 public:
-    Pinky(sf::Vector2f, GameForm *);
+    Pinky(sf::Vector2f, GameForm *,bool useTheDoor);
 
     ~Pinky() override;
 

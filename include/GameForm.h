@@ -26,7 +26,7 @@ public:
     };
 
     //initializes base class context property
-    GameForm(Application &, string mapFile = "../res/map.txt");
+    GameForm(Application &, string mapFile = "../res/map.txt", bool useTheDoor = true);
 
     ~GameForm();
 
@@ -69,6 +69,8 @@ private:
     void storeRecord();
 
     void updateFruits(const sf::Time &dt);
+
+    bool useTheDoor;
 
     //handling fruit visibility duration
     float fruitTimer = 0;

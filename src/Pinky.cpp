@@ -1,6 +1,6 @@
 #include "Pinky.h"
 
-Pinky::Pinky(sf::Vector2f position, GameForm *context) : Ghost(position, context) {
+Pinky::Pinky(sf::Vector2f position, GameForm *context, bool useTheDoor) : Ghost(position, context, useTheDoor) {
 
     animator->add("right", sf::milliseconds(300), "../res/sprites/pinky.png", sf::Vector2i(120, 0), 2);
     animator->add("left", sf::milliseconds(300), "../res/sprites/pinky.png", sf::Vector2i(60, 0), 2);

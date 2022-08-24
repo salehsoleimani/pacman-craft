@@ -3,7 +3,8 @@
 
 int Ghost::deadGhosts = 0;
 
-Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), context(context) {
+Ghost::Ghost(sf::Vector2f position, GameForm *context, bool useTheDoor) : GameObject(position), context(context),
+                                                                          useTheDoor(useTheDoor) {
     ghost.setPosition(position);
     initialPosition = position;
 
@@ -26,8 +27,13 @@ Ghost::Ghost(sf::Vector2f position, GameForm *context) : GameObject(position), c
 }
 
 void Ghost::configTimer() {
-    stateIndex = -1;
-    ghostState = GhostState::INIT;
+    if (useTheDoor) {
+        stateIndex = -1;
+        ghostState = GhostState::INIT;
+    } else {
+        stateIndex = 0;
+        ghostState = GhostState::SCATTER;
+    }
     unsigned level = context->getLevel();
     if (level >= 5) stateTimer = {7, 20, 7, 20, 5, 20, 5};
     else if (level >= 2) stateTimer = {7, 20, 7, 20, 5, 1033, 1.0f / 60};
@@ -194,7 +200,7 @@ void Ghost::update(sf::Time dt) {
         }
 
         //if pacman gets to door
-        if (lastTile == doorPosition / Dimensions::wallSize.x && ghostState == GhostState::INIT)
+        if (lastTile == doorPosition / Dimensions::wallSize.x && ghostState == GhostState::INIT && useTheDoor)
             changeState(GhostState::SCATTER);
 
         //rounding relative position to fixed size grid item

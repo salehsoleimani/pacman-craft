@@ -21,7 +21,7 @@ public:
         sf::Vector2f tile;
     };
 
-    Ghost(sf::Vector2f, GameForm *);
+    Ghost(sf::Vector2f, GameForm *,bool useTheDoor = true);
 
     ~Ghost() override;
 
@@ -77,6 +77,8 @@ private:
     void reverseGhost();
 
     void configTimer();
+
+    bool useTheDoor;
 
     sf::Time frightenedDuration;
     sf::Vector2f nextMove;
