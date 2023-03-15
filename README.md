@@ -7,7 +7,7 @@ normally c++ and sfml doesnt offer an architecture for building your apps. it's 
 
 here's a review from what i've done:
 
-<img src="https://github.com/salehsoleimani/Cpp-Pacman/blob/master/pic.png"  width="300">
+<img src="https://github.com/salehsoleimani/Cpp-Pacman/blob/master/pic.png"  width="600">
 
 ## Views
 i also created custom views, implemented with animations(e.g. animation for button click) extended from `view` class implementing it's abstract methods
