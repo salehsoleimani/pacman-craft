@@ -7,13 +7,6 @@ a cool nostalgic graphical pac-man game written with cpp
 - C++ Compiler (GCC is recommended)
 
 ## Run the project
-```
-cmake . -B build
-```
-```
-make -C build
-```
-
 1. Open a terminal or command prompt and navigate to the root directory of the CMake project.
 
 2. Create a new directory for the build output files. This can be done by running the following command in the terminal:
