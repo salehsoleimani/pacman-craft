@@ -1,5 +1,5 @@
 # Cpp-Pacman
-a cool nostalgic graphical pac-man game written with cpp
+a cool nostalgic graphical pac-man game written in cpp
 
 # Installation
 ## Prerequisites
