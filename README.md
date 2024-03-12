@@ -1,6 +1,5 @@
 # Pacman-Craft
 craft your Pac-Man game's map yourself and play it
-this pac-man game is different!
 
 you can unleash your creativity and design the Pacman game of your dreams
 
